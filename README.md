@@ -1,4 +1,4 @@
-# Permliv
+# haugalandetmedbarn
 
 Aktiviteter for foreldre i permisjon i Haugesund, laget med React og Vite.
 
