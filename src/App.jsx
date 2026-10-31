@@ -1,69 +1,40 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { activities, categories } from "./activities.js";
 import useFavorites from "./useFavorites.js";
-import Hero from "./components/Hero.jsx";
 import About from "./components/About.jsx";
 import ActivityCard from "./components/ActivityCard.jsx";
 
 function Brand() {
   return (
-    <a className="brand" href="#">
-      permliv<span>✳</span>
-    </a>
+    <span className="brand">
+      Haugalandet med barn
+    </span>
   );
 }
 
 export default function App() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Alle aktiviteter");
-  const [onlySaved, setOnlySaved] = useState(false);
+  const onlySaved = category === "Mine favoritter";
   const [favorites, toggleFavorite] = useFavorites();
-  const activitySection = useRef(null);
   const normalizedQuery = query.toLocaleLowerCase("nb");
   const shown = activities.filter(
     (activity) =>
-      (category === "Alle aktiviteter" || activity.category === category) &&
-      (!onlySaved || favorites.has(activity.id)) &&
-      `${activity.title} ${activity.description} ${activity.place} ${activity.category}`
+      (onlySaved
+        ? favorites.has(activity.id)
+        : category === "Alle aktiviteter" || activity.category === category) &&
+      `${activity.title} ${activity.description} ${activity.place} ${activity.municipality} ${activity.category}`
         .toLocaleLowerCase("nb")
         .includes(normalizedQuery),
   );
 
-  function toggleSavedFilter() {
-    setOnlySaved((previous) => !previous);
-    activitySection.current?.scrollIntoView({ behavior: "smooth" });
-  }
-
   return (
-    <>
-      <header>
-        <Brand />
-        <nav>
-          <a href="#aktiviteter">Finn aktiviteter</a>
-          <a href="#om">Om Permliv</a>
-          <button
-            className="saved"
-            aria-pressed={onlySaved}
-            onClick={toggleSavedFilter}
-            style={{ background: onlySaved ? "#e4eadb" : undefined }}
-          >
-            ♡ Mine favoritter <span>{favorites.size}</span>
-          </button>
-        </nav>
-      </header>
       <main>
-        <Hero />
-        <div className="intro-strip">
-          <span>✳ For mammaer og pappaer</span>
-          <span>♧ Med plass til de minste</span>
-          <span>⌁ Lokalt i Haugesund</span>
-        </div>
-        <section className="explore" id="aktiviteter" ref={activitySection}>
+        <section className="explore" id="aktiviteter">
           <div className="heading">
             <div>
-              <div className="eyebrow">Ut av huset, inn i fellesskapet</div>
               <h2>Hva har dere lyst til i dag?</h2>
-              <p>Finn et tilbud eller en enkel idé til dagen.</p>
+              <p>Aktiviteter for deg i foreldrepermisjon – finn lokale tilbud og små opplevelser du kan dele med babyen din.</p>
             </div>
             <input
               className="search"
@@ -75,7 +46,7 @@ export default function App() {
             />
           </div>
           <div className="filters" aria-label="Aktivitetskategorier">
-            {categories.map((item) => (
+            {[...categories, "Mine favoritter"].map((item) => (
               <button
                 key={item}
                 className={`filter ${category === item ? "active" : ""}`}
@@ -87,8 +58,7 @@ export default function App() {
             ))}
           </div>
           <div className="count" role="status" aria-live="polite">
-            {shown.length} {onlySaved ? "favoritter" : "aktiviteter og ideer"} ·
-            Haugesund
+            {shown.length} {shown.length === 1 ? "aktivitet" : "aktiviteter"}
           </div>
           <div className="grid">
             {shown.length ? (
@@ -102,8 +72,9 @@ export default function App() {
               ))
             ) : (
               <div className="empty">
-                Ingen treff akkurat nå. Prøv en annen kategori eller et annet
-                søk.
+                {onlySaved
+                  ? "Ingen favoritter å vise. Lagre aktiviteter med hjertet, eller prøv et annet søk."
+                  : "Ingen treff akkurat nå. Prøv en annen kategori eller et annet søk."}
               </div>
             )}
           </div>
@@ -113,10 +84,9 @@ export default function App() {
           <Brand />
           <p>
             Laget for små mennesker og deres store. ♡<br />
-            En uavhengig guide til permisjonslivet i Haugesund.
+            En uavhengig guide til aktiviteter med barn på Haugalandet.
           </p>
         </footer>
       </main>
-    </>
   );
 }

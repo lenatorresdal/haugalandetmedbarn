@@ -32,7 +32,7 @@ const scenes = {
 
 export default function ActivityArt({ scene, background }) {
   return (
-    <svg viewBox="0 0 360 180" aria-hidden="true">
+    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <rect width="360" height="180" fill={background} />
       {scenes[scene]}
     </svg>

@@ -1,9 +1,9 @@
 export const activities = [
   {
     "id": "apen",
+    "municipality": "Haugesund",
     "title": "Åpen barnehage",
     "category": "Lek & fellesskap",
-    "badge": "Lokalt tilbud",
     "place": "KFUK-KFUM-huset · Haraldsgata 70",
     "time": "Se gjeldende åpningstider hos arrangøren",
     "description": "Et sted å leke, møte andre foreldre og dele en rolig stund med de små. For barn fra 0 til 6 år.",
@@ -15,9 +15,9 @@ export const activities = [
   },
   {
     "id": "sang",
+    "municipality": "Haugesund",
     "title": "Små stemmer, store smil",
     "category": "Sang & musikk",
-    "badge": "Babysang",
     "place": "Haugesund Misjonskirke · Tømmerdalen 21",
     "time": "Torsdager 10.30 · bekreft neste samling",
     "description": "Sang, rytmer og bevegelse, med tid til mat og prat etterpå. Ta med babyteppe og niste. Påmelding hos arrangøren.",
@@ -29,9 +29,9 @@ export const activities = [
   },
   {
     "id": "tur",
+    "municipality": "Haugesund",
     "title": "En liten tur i Djupadalen",
     "category": "Ut på tur",
-    "badge": "På egen hånd",
     "place": "Djupadalen · Haugesund",
     "time": "Når det passer dere",
     "description": "Pakk en termos og ta en rolig tur i det grønne. Velg en trasé som passer vognen og dagens føre.",
@@ -43,9 +43,9 @@ export const activities = [
   },
   {
     "id": "kaffe",
+    "municipality": "Haugesund",
     "title": "Kaffe og en liten pustepause",
     "category": "Kafé & kos",
-    "badge": "På egen hånd",
     "place": "Haugesund sentrum",
     "time": "I deres eget tempo",
     "description": "Avtal en kaffedate med noen i barselgruppa. Finn et sted med plass til vogn, og la praten ta den tiden den tar.",
@@ -57,9 +57,9 @@ export const activities = [
   },
   {
     "id": "sjo",
+    "municipality": "Haugesund",
     "title": "Trilletur med sjøluft",
     "category": "Ut på tur",
-    "badge": "På egen hånd",
     "place": "Indre kai · Haugesund",
     "time": "Når dere vil ut en liten tur",
     "description": "En liten pause ved vannet. Ta en tur langs kaien, se på båtene og finn et fint sted å stoppe underveis.",

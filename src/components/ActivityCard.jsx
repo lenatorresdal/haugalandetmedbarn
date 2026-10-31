@@ -5,7 +5,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
     <article className="card">
       <div className="picture">
         <ActivityArt scene={activity.scene} background={activity.bg} />
-        <span className="badge">{activity.badge}</span>
+        <span className="place-badge">{activity.municipality}</span>
         <button
           className="heart"
           onClick={() => onToggleFavorite(activity.id)}
