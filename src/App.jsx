@@ -4,6 +4,8 @@ import useFavorites from "./useFavorites.js";
 import About from "./components/About.jsx";
 import ActivityCard from "./components/ActivityCard.jsx";
 
+const municipalities = ["Alle steder", ...new Set(activities.map((activity) => activity.municipality))];
+
 function Brand() {
   return (
     <span className="brand">
@@ -15,15 +17,17 @@ function Brand() {
 export default function App() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Alle aktiviteter");
+  const [municipality, setMunicipality] = useState("Alle steder");
   const onlySaved = category === "Mine favoritter";
   const [favorites, toggleFavorite] = useFavorites();
   const normalizedQuery = query.toLocaleLowerCase("nb");
   const shown = activities.filter(
     (activity) =>
+      (municipality === "Alle steder" || activity.municipality === municipality) &&
       (onlySaved
         ? favorites.has(activity.id)
         : category === "Alle aktiviteter" || activity.category === category) &&
-      `${activity.title} ${activity.description} ${activity.place} ${activity.municipality} ${activity.category}`
+      `${activity.title} ${activity.description} ${activity.place ?? ""} ${activity.locations?.map((location) => location.place).join(" ") ?? ""} ${activity.municipality} ${activity.category}`
         .toLocaleLowerCase("nb")
         .includes(normalizedQuery),
   );
@@ -45,7 +49,21 @@ export default function App() {
               aria-label="Søk etter aktivitet eller sted"
             />
           </div>
-          <div className="filters" aria-label="Aktivitetskategorier">
+          <div className="filter-label" id="place-filter-label">Sted</div>
+          <div className="filters" role="group" aria-labelledby="place-filter-label">
+            {municipalities.map((item) => (
+              <button
+                key={item}
+                className={`filter ${municipality === item ? "active" : ""}`}
+                aria-pressed={municipality === item}
+                onClick={() => setMunicipality(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <div className="filter-label" id="activity-filter-label">Aktivitet</div>
+          <div className="filters" role="group" aria-labelledby="activity-filter-label">
             {[...categories, "Mine favoritter"].map((item) => (
               <button
                 key={item}
@@ -73,8 +91,8 @@ export default function App() {
             ) : (
               <div className="empty">
                 {onlySaved
-                  ? "Ingen favoritter å vise. Lagre aktiviteter med hjertet, eller prøv et annet søk."
-                  : "Ingen treff akkurat nå. Prøv en annen kategori eller et annet søk."}
+                  ? "Ingen favoritter å vise. Lagre aktiviteter med hjertet, eller prøv et annet sted eller søk."
+                  : "Ingen treff akkurat nå. Prøv et annet sted, en annen kategori eller et annet søk."}
               </div>
             )}
           </div>
