@@ -1,13 +1,27 @@
-export default function About() {
+export default function About({ onContact }) {
   return (
-    <aside className="about" id="om">
+    <aside className="about" id="om" aria-labelledby="about-heading">
+      <h2 id="about-heading">Nettsiden er under utvikling 🌱</h2>
       <p>
-        Haugalandet med barn skal være en guide til aktiviteter for
-        barnefamilier på Haugalandet. Foreløpig finner du permisjonsaktiviteter
-        her, med både organiserte tilbud og forslag til ting dere kan gjøre
-        selv. Tidspunkter og priser kan endre seg, så sjekk alltid hos
-        arrangøren før dere drar.
+        Målet med denne nettsiden er å gjøre det enklere for barnefamilier å
+        finne aktiviteter og opplevelser på Haugalandet.
       </p>
+      <p>
+        Siden er fortsatt under utvikling, og jeg setter stor pris på tips og
+        tilbakemeldinger underveis.
+      </p>
+      <p>
+        <strong>
+          Vet du om en aktivitet som mangler, har forslag til forbedringer eller
+          har oppdaget noe som ikke stemmer?
+        </strong>{" "}
+        Da vil jeg veldig gjerne høre fra deg.
+      </p>
+      <p>Tusen takk for at du bidrar!</p>
+      <p>- Lena</p>
+      <button className="primary-button" onClick={onContact}>
+        Send meg et tips
+      </button>
     </aside>
   );
 }

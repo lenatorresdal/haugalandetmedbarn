@@ -10,6 +10,20 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('aktivitetsoversikten', () => {
+  it('finner Sveio med mellomrom og lar brukeren fjerne begrensende filtre', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.type(screen.getByRole('searchbox'), ' sveio ');
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByRole('heading', { name: 'Babysong i Sveio soknehus' })).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Karmøy' }));
+    await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
+    expect(screen.queryAllByRole('article')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Søk etter «sveio» i alle aktiviteter og steder' }));
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByRole('searchbox').value).toBe(' sveio ');
+  });
+
   it('kombinerer sted med kategori, søk og favoritter', async () => {
     const user = userEvent.setup();
     localStorage.setItem('permliv-favorites', '["tur", "babysang-norheim"]');
@@ -20,9 +34,9 @@ describe('aktivitetsoversikten', () => {
     await user.click(screen.getByRole('button', { name: 'Vann & svømming' }));
     expect(screen.queryAllByRole('article')).toHaveLength(0);
     await user.click(screen.getByRole('button', { name: 'Sang & musikk' }));
-    await user.type(screen.getByRole('searchbox'), 'Norheim');
+    await user.type(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }), 'Norheim');
     expect(screen.getAllByRole('article')).toHaveLength(1);
-    await user.clear(screen.getByRole('searchbox'));
+    await user.clear(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }));
     await user.click(screen.getByRole('button', { name: 'Mine favoritter' }));
     expect(screen.getAllByRole('article')).toHaveLength(1);
     expect(screen.getByRole('heading', { name: 'Babysang i Norheim kirke' })).toBeTruthy();
@@ -46,11 +60,11 @@ describe('aktivitetsoversikten', () => {
     await user.click(filter);
     expect(screen.getByRole('button', { name: 'Ut på tur' }).getAttribute('aria-pressed')).toBe('false');
     expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.type(screen.getByRole('searchbox'), 'En liten tur');
+    await user.type(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }), 'En liten tur');
     expect(screen.getAllByRole('article')).toHaveLength(1);
     await user.click(screen.getByRole('button', { name: /Fjern En liten tur/ }));
     expect(screen.queryAllByRole('article')).toHaveLength(0);
-    await user.clear(screen.getByRole('searchbox'));
+    await user.clear(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }));
     expect(screen.getAllByRole('article')).toHaveLength(1);
     await user.click(filter);
     expect(filter.getAttribute('aria-pressed')).toBe('true');
@@ -65,7 +79,7 @@ describe('aktivitetsoversikten', () => {
     expect(screen.getAllByRole('article')).toHaveLength(activities.length);
     await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
     expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.type(screen.getByRole('searchbox'), 'DJUPADALEN');
+    await user.type(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }), 'DJUPADALEN');
     expect(screen.getAllByRole('article')).toHaveLength(1);
     await user.click(screen.getByRole('button', { name: 'Sang & musikk' }));
     expect(screen.queryAllByRole('article')).toHaveLength(0);

@@ -20,6 +20,13 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
         <h3>{activity.title}</h3>
         <p className="description">{activity.description}</p>
         <div className="meta">
+          {activity.age && <div className="activity-age">
+            <svg className="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="7" r="3" />
+              <path d="M9 5.5c0-2 3-3 4-1M5 20v-2a7 7 0 0 1 14 0v2M9 16v4m6-4v4" />
+            </svg>{' '}
+            Alder: {activity.age}
+          </div>}
           {(activity.locations ?? [{ place: activity.place, time: activity.time }]).map((location) => (
             <div className="activity-location" key={location.place}>
               <svg className="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -35,14 +42,6 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
               </>}
             </div>
           ))}
-          {activity.price && (
-            <div className="activity-price">
-              <svg className="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M20 13l-7 7a2 2 0 0 1-3 0l-7-7V4h9l8 6a2 2 0 0 1 0 3Z" />
-                <circle cx="7.5" cy="8.5" r="1" />
-              </svg>{' '}{activity.price}
-            </div>
-          )}
         </div>
         {activity.email && (
           <p className="activity-contact">

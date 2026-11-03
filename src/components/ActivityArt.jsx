@@ -1,4 +1,140 @@
 const scenes = {
+  adventure: <>
+      <path d="M0 132q90-15 180 0t180-8v56H0Z" fill="#b9c8b2" />
+      <path d="M98 180q8-34 67-43t73-29" fill="none" stroke="#eadfc6" strokeWidth="20" />
+      <path d="M39 85h70v55H39ZM119 75h65v54h-65ZM250 87h68v49h-68Z" fill="#fff8e7" />
+      <path d="M33 85l41-33 41 33ZM113 75l38-31 39 31ZM244 87l40-32 40 32Z" fill="#af8264" />
+      <path d="M51 99h14v16H51Zm31 0h14v16H82Zm49-10h14v16h-14Zm27 0h14v16h-14Zm105 12h14v16h-14Zm27 0h14v16h-14Z" fill="#a3beb7" />
+      <path d="M70 140v-23h15v23M145 129v-20h15v20" fill="#657f70" />
+      <path d="M221 129V64" stroke="#7a8066" strokeWidth="5" />
+      <circle cx="221" cy="57" r="26" fill="#829377" />
+      <path d="M164 142l26-8 24 8 25-8v31l-25 8-24-8-26 8Z" fill="#fff8e7" stroke="#c1ae91" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M190 134v31m24-23v31" stroke="#d9c9b1" strokeWidth="2" />
+      <path d="M175 154q13-16 28 0t24-6" fill="none" stroke="#bf9278" strokeWidth="2" strokeDasharray="3 4" />
+      <path d="M221 144l8 8m0-8-8 8" stroke="#657f70" strokeWidth="3" strokeLinecap="round" />
+    </>,
+  dokken: <>
+      <path d="M0 111h360v69H0Z" fill="#a3beb7" />
+      <path d="M0 135l95-13 228 10 37 48H0Z" fill="#b9c8b2" />
+      <path d="M30 81h92v62H30Z" fill="#fff8e7" />
+      <path d="M22 82l54-39 54 39Z" fill="#af8264" />
+      <path d="M142 76h65v61h-65Z" fill="#bf9278" />
+      <path d="M136 77l38-34 39 34Z" fill="#655b48" />
+      <path d="M225 94h89v48h-89Z" fill="#eadfc6" />
+      <path d="M217 94l52-32 53 32Z" fill="#829377" />
+      <path d="M43 96h18v22H43Zm47 0h18v22H90Zm63-7h14v18h-14Zm28 0h14v18h-14Zm56 17h16v18h-16Zm48 0h16v18h-16Z" fill="#a3beb7" stroke="#fff8e7" strokeWidth="2" />
+      <path d="M69 143v-33h15v33m83-6v-23h16v23m75 5v-27h17v27" fill="#657f70" />
+      <path d="M92 180q35-34 103-34t82 34" fill="#eadfc6" />
+      <path d="M0 156l53-7-12 15H12Z" fill="#af8264" />
+      <path d="M8 174h36m279-22h27" stroke="#cbdcd1" strokeWidth="3" strokeLinecap="round" />
+    </>,
+  vikingFarm: <>
+      <path d="M0 111q80-19 180 0t180-9v78H0Z" fill="#afbf9d" />
+      <path d="M47 94h214v56H47Z" fill="#af8264" />
+      <path d="M32 96l49-57h139l57 57Z" fill="#829377" />
+      <path d="M45 89l41-42h129l44 42Z" fill="#9eae89" />
+      <path d="M54 101v44m26-44v44m27-44v44m97-44v44m27-44v44m23-44v44" stroke="#926b51" strokeWidth="3" />
+      <path d="M126 150v-38q24-28 48 0v38" fill="#655b48" />
+      <path d="M117 148v-39l33-23 33 23v39" fill="none" stroke="#eadfc6" strokeWidth="5" />
+      <path d="M71 42l-9-13m158 13 10-13" stroke="#655b48" strokeWidth="5" strokeLinecap="round" />
+      <path d="M119 180l22-30h22l37 30" fill="#eadfc6" />
+      <circle cx="288" cy="136" r="23" fill="#bf9278" stroke="#eadfc6" strokeWidth="4" />
+      <path d="M288 114v44m-22-22h44" stroke="#eadfc6" strokeWidth="3" />
+      <circle cx="288" cy="136" r="6" fill="#7a8066" />
+    </>,
+  historyCenter: <>
+      <path d="M0 102q100-23 180 5t180-5v78H0Z" fill="#b9c8b2" />
+      <path d="M251 89V50h48v42" fill="#d0c3a8" />
+      <path d="M245 51l30-21 30 21ZM259 32V13h18v25" fill="#7a8066" />
+      <path d="M54 116q100-78 239 0v31H54Z" fill="#af8264" />
+      <path d="M48 113q116-84 251 0" fill="none" stroke="#829377" strokeWidth="14" strokeLinecap="round" />
+      <path d="M71 119q99-58 204 0v22H71Z" fill="#a3beb7" />
+      <path d="M101 104v37m32-48v48m32-53v53m33-50v50m33-40v40m-158-20h200" stroke="#657f70" strokeWidth="3" />
+      <path d="M151 147v-31h31v31" fill="#435e57" />
+      <path d="M124 180l31-33h24l54 33" fill="#eadfc6" />
+      <path d="M40 151l-3-54 17-7 10 59Z" fill="#c1ae91" />
+      <path d="M45 104l8 6-7 7 9 7-7 9" fill="none" stroke="#7a8066" strokeWidth="2" />
+      <circle cx="293" cy="152" r="17" fill="#bf9278" />
+      <path d="M293 140v24m-12-12h24" stroke="#eadfc6" strokeWidth="3" />
+    </>,
+  minigolf: <>
+      <path d="M0 145q90-30 180-5t180-10v50H0Z" fill="#bdceb3" />
+      <path d="M101 157l34-99h84l45 99Z" fill="#af8264" />
+      <path d="M110 151l30-86h74l40 86Z" fill="#829377" />
+      <ellipse cx="178" cy="85" rx="7" ry="3" fill="#435e57" />
+      <path d="M178 83V34l29 10-29 9" fill="#bf9278" stroke="#657f70" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M247 70l-28 69 17 5" fill="none" stroke="#657f70" strokeWidth="5" strokeLinecap="round" />
+      <circle cx="192" cy="134" r="5" fill="#fff8e7" />
+      <path d="M55 143V86M44 122l13-54 17 54ZM284 134V82M270 115l17-55 17 55Z" fill="#6f8a6a" />
+    </>,
+  trampoline: <>
+      <rect width="360" height="180" fill="#e7e9df" />
+      <path d="M0 137h360v43H0Z" fill="#cbd9cc" />
+      <path d="M30 28v109M330 28v109M30 28h300" fill="none" stroke="#9caf9f" strokeWidth="5" strokeLinecap="round" />
+      <path d="M50 30v102M76 30v102M102 30v102M128 30v102M154 30v102M180 30v102M206 30v102M232 30v102M258 30v102M284 30v102M310 30v102M32 54h296M32 80h296M32 106h296" stroke="#cfdbcf" strokeWidth="1" />
+      <path d="M73 151l-4 17M286 151l5 17" stroke="#657f70" strokeWidth="6" strokeLinecap="round" />
+      <ellipse cx="180" cy="145" rx="123" ry="21" fill="#829377" />
+      <ellipse cx="180" cy="142" rx="103" ry="13" fill="#526e65" />
+      <path d="M84 142h18M258 142h18M180 126v7M180 151v7M111 131l10 6M239 149l10 5M111 153l10-6M239 136l10-5" stroke="#cbdcd1" strokeWidth="2" strokeLinecap="round" />
+      <ellipse cx="181" cy="143" rx="26" ry="4" fill="#435e57" />
+      <circle cx="180" cy="55" r="13" fill="#dbb28b" />
+      <path d="M167 54q-2-18 14-17 15 1 12 17l-9-9q-6 8-17 9Z" fill="#655b48" />
+      <path d="M174 65v7h12v-7" fill="#dbb28b" />
+      <path d="M168 73q12-7 24 0l4 25h-32Z" fill="#bf9278" />
+      <path d="M168 76l-17-12-10-14M192 76l17-12 10-14" fill="none" stroke="#dbb28b" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M170 98l-14 15-12-5M188 98l14 15 12-5" fill="none" stroke="#657f70" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M141 107l-5-2M216 107l5-2" stroke="#f9f5e9" strokeWidth="7" strokeLinecap="round" />
+      <path d="M175 59q5 4 10 0" fill="none" stroke="#926b51" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M122 88l-6 12M238 88l6 12M128 116l-5 7M232 116l5 7" stroke="#afbf9d" strokeWidth="3" strokeLinecap="round" />
+    </>,
+  playCenter: <>
+      <rect width="360" height="180" fill="#eeeade" />
+      <path d="M0 140h360v40H0Z" fill="#d0ddce" />
+      <path d="M24 140h312" stroke="#bdcdb9" strokeWidth="3" />
+      <rect x="69" y="45" width="104" height="96" rx="7" fill="#cbdcd1" />
+      <path d="M79 55h84v77H79ZM79 93h84M107 55v77M135 55v77" fill="none" stroke="#9ab6a7" strokeWidth="2" />
+      <path d="M83 56l76 72M83 80l52 48M107 56l52 48M159 56l-76 72M135 56l-52 48M159 80l-52 48" stroke="#b3c9bc" strokeWidth="1" />
+      <path d="M69 139V46h104v93M69 94h104" fill="none" stroke="#657f70" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M91 139v-33m23 33v-33M91 116h23M91 128h23" stroke="#af8264" strokeWidth="5" strokeLinecap="round" />
+      <path d="M176 81c33 0 27 55 64 55h28" fill="none" stroke="#bf9278" strokeWidth="25" strokeLinecap="round" />
+      <path d="M176 78c33 0 27 55 64 55h28" fill="none" stroke="#e0bb8e" strokeWidth="16" strokeLinecap="round" />
+      <rect x="64" y="38" width="114" height="12" rx="6" fill="#829377" />
+      <rect x="222" y="143" width="87" height="20" rx="8" fill="#829377" />
+      <g>
+        <circle cx="234" cy="144" r="6" fill="#d4a776" />
+        <circle cx="248" cy="148" r="6" fill="#bf9278" />
+        <circle cx="262" cy="142" r="6" fill="#f9f5e9" />
+        <circle cx="276" cy="147" r="6" fill="#a3beb7" />
+        <circle cx="291" cy="143" r="6" fill="#d4a776" />
+      </g>
+      <rect x="39" y="144" width="29" height="22" rx="4" fill="#bf9278" />
+      <path d="M42 140l12-19 12 19Z" fill="#d4a776" />
+      <circle cx="202" cy="46" r="10" fill="#dbb28b" />
+      <path d="M197 58l-8 23 19 6 4-24Z" fill="#829377" />
+      <path d="M193 81l13 13 10-2M201 64l16 8M198 82l-10 13" fill="none" stroke="#dbb28b" strokeWidth="6" strokeLinecap="round" />
+    </>,
+  swimKids: <>
+      <rect width="360" height="94" fill="#e6ede8" />
+      <path d="M0 30h360M0 58h360M0 86h360M30 0v94M60 0v94M90 0v94M120 0v94M150 0v94M180 0v94M210 0v94M240 0v94M270 0v94M300 0v94M330 0v94" stroke="#c7d6d0" />
+      <rect y="84" width="360" height="13" fill="#f9f5e9" />
+      <rect y="97" width="360" height="8" fill="#729b9b" />
+      <rect y="105" width="360" height="75" fill="#9bc8ce" />
+      <path d="M0 109h360" stroke="#dceef0" strokeWidth="3" />
+      <path d="M43 126V79a8 8 0 0 1 16 0v18M76 126V79a8 8 0 0 1 16 0v18M43 109h33M43 121h33" fill="none" stroke="#657f80" strokeWidth="4" strokeLinecap="round" />
+      <path d="M96 157h238" stroke="#e5eee4" strokeWidth="5" strokeDasharray="12 9" strokeLinecap="round" />
+      <ellipse cx="197" cy="134" rx="70" ry="7" fill="#83b7bf" />
+      <path d="M156 124l-27-5-16 8M158 131l-27 1-16 9" fill="none" stroke="#dbb28b" strokeWidth="8" strokeLinecap="round" />
+      <path d="M151 120q26-8 49 3l-4 13-45-6Z" fill="#657f70" />
+      <path d="M194 122l19-8 13 7-16 14-16 1Z" fill="#dbb28b" />
+      <circle cx="225" cy="106" r="15" fill="#dbb28b" />
+      <path d="M210 104a15 15 0 0 1 30-2l-15-5Z" fill="#bf9278" />
+      <path d="M212 105l24 3" stroke="#657f80" strokeWidth="3" />
+      <rect x="225" y="103" width="12" height="7" rx="3" fill="#e4f1ee" stroke="#657f80" strokeWidth="2" />
+      <path d="M231 115q4 2 7-1" fill="none" stroke="#926b51" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M204 126l26 3 27-9M189 123l-7-18 22-17" fill="none" stroke="#dbb28b" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M104 116l-6-5M105 134l-9 2M261 112l4-6M269 121l7-2" stroke="#e4f1ee" strokeWidth="3" strokeLinecap="round" />
+      <path d="M132 141h40M190 145h35M246 138h31M42 155h30" stroke="#dceef0" strokeWidth="3" strokeLinecap="round" />
+    </>,
   library: <>
       <path d="M0 133q90-18 180-4t180-1v52H0Z" fill="#b9c8b2"/>
       <path d="M155 180l37-49h27l55 49" fill="#eadfc6"/>
@@ -20,14 +156,28 @@ const scenes = {
       <path d="M106 142v14M82 145l16 2M114 147l15-2" fill="none" stroke="#c1ae91" strokeWidth="1.5" strokeLinecap="round"/>
     </>,
   swim: <>
-      <path d="M0 118q45-14 90 0t90 0t90 0t90 0v62H0Z" fill="#a3beb7" />
-      <ellipse cx="182" cy="120" rx="60" ry="18" fill="#d4a776" />
-      <ellipse cx="182" cy="116" rx="36" ry="9" fill="#dce9e5" />
-      <circle cx="182" cy="87" r="19" fill="#dbb28b" />
-      <path d="M156 115q26-30 52 0" fill="#829377" />
-      <circle cx="257" cy="85" r="18" fill="#e0bb8e" />
-      <path d="M240 81q17 8 34 0M257 67q-10 18 0 36" fill="none" stroke="#fff8e7" strokeWidth="2" />
-      <path d="M55 145q25-9 50 0t50 0M214 151q25-9 50 0t50 0" fill="none" stroke="#cbdcd1" strokeWidth="3" />
+      <rect width="360" height="94" fill="#e6ede8" />
+      <path d="M0 30h360M0 58h360M0 86h360M30 0v94M60 0v94M90 0v94M120 0v94M150 0v94M180 0v94M210 0v94M240 0v94M270 0v94M300 0v94M330 0v94" stroke="#c7d6d0" strokeWidth="1" />
+      <rect y="84" width="360" height="13" fill="#f9f5e9" />
+      <rect y="97" width="360" height="8" fill="#729b9b" />
+      <rect y="105" width="360" height="75" fill="#9bc8ce" />
+      <path d="M0 109h360" stroke="#dceef0" strokeWidth="3" />
+      <path d="M43 126V79a8 8 0 0 1 16 0v18M76 126V79a8 8 0 0 1 16 0v18M43 109h33M43 121h33" fill="none" stroke="#657f80" strokeWidth="4" strokeLinecap="round" />
+      <ellipse cx="183" cy="137" rx="63" ry="8" fill="#83b7bf" />
+      <path d="M142 100q20-17 41 0l9 35h-59Z" fill="#657f70" />
+      <path d="M156 85v13q7 7 14 0V85" fill="#dbb28b" />
+      <circle cx="163" cy="69" r="19" fill="#dbb28b" />
+      <path d="M144 71q-5-27 19-27 23 0 20 24l-11-13q-9 13-28 16Z" fill="#655b48" />
+      <path d="M168 77q4 4 8-1" fill="none" stroke="#926b51" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M194 105q9-7 20 0l10 20-28 5-8-14Z" fill="#e0bb8e" />
+      <circle cx="207" cy="92" r="13" fill="#e0bb8e" />
+      <path d="M202 80q1-7 7-4" fill="none" stroke="#af8264" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M201 97q5 5 10 0" fill="none" stroke="#926b51" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M196 118l22-2 6 10-25 5Z" fill="#bf9278" />
+      <path d="M145 106q10 27 53 20M179 104q10 12 37 5" fill="none" stroke="#dbb28b" strokeWidth="10" strokeLinecap="round" />
+      <path d="M197 107l-10-6M216 106l9-5" stroke="#e0bb8e" strokeWidth="5" strokeLinecap="round" />
+      <path d="M126 137q19-4 35 0t35 0t37 0" fill="none" stroke="#dceef0" strokeWidth="3" strokeLinecap="round" />
+      <path d="M111 139h35M160 148h46M219 137h34M279 151h30M66 163h49M230 168h41" fill="none" stroke="#dceef0" strokeWidth="3" strokeLinecap="round" />
     </>,
   play: <>
       <ellipse cx="180" cy="151" rx="106" ry="9" fill="#d9c9b1"/>
