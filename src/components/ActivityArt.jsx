@@ -1,4 +1,43 @@
+import tripScenes from './TripScenes.jsx';
+import cafeScenes from './CafeScenes.jsx';
+
 const scenes = {
+  iceSkating: <>
+    <ellipse cx="180" cy="145" rx="150" ry="25" fill="#f7fbfc" />
+    <path d="M75 153q90-25 205 0M98 164q80-20 152-3" fill="none" stroke="#b5cdd5" strokeWidth="2" />
+    <circle cx="177" cy="47" r="13" fill="#d0a786" />
+    <path d="M162 42q14-23 30 0" fill="#365c46" />
+    <path d="M174 66l-15 40 36 5-5-43Z" fill="#b98263" />
+    <path d="M168 78l-35 18m53-18 35 8M170 110l-17 28m36-27 21 22" fill="none" stroke="#365c46" strokeWidth="10" strokeLinecap="round" />
+    <path d="M141 146h29m31-5h28" stroke="#687268" strokeWidth="4" strokeLinecap="round" />
+  </>,
+  climbing: <>
+    <path d="M65 166 90 20h180l25 146Z" fill="#d1c3a8" />
+    {[ [110,45],[165,35],[225,50],[130,85],[200,90],[250,115],[105,130],[170,145] ].map(([x,y]) => <rect key={`${x}-${y}`} x={x} y={y} width="14" height="8" rx="4" fill={x % 3 ? '#829377' : '#b98263'} transform={`rotate(-20 ${x} ${y})`} />)}
+    <path d="M185 20v63" stroke="#687268" strokeWidth="2" />
+    <circle cx="180" cy="68" r="11" fill="#d0a786" />
+    <path d="m174 85-10 30 25 3 2-31Z" fill="#365c46" />
+    <path d="m174 89-33-12m47 13 28-29m-45 56-20 27m35-25 24 14" fill="none" stroke="#b98263" strokeWidth="8" strokeLinecap="round" />
+  </>,
+  bowling: <>
+    <path d="M60 180 135 30h90l75 150Z" fill="#d4bc94" />
+    <path d="M100 180 150 30m110 150L210 30" stroke="#b59b73" strokeWidth="3" />
+    {[155,180,205].map((x) => <g key={x} transform={`translate(${x} 48)`}><path d="M-7 0q7-12 14 0l-2 14q12 23 1 27H-6q-11-4 1-27Z" fill="#fffaf1" /><path d="M-6 8H6m-6 5H6" stroke="#b98263" strokeWidth="3" /></g>)}
+    <circle cx="190" cy="137" r="24" fill="#365c46" />
+    <circle cx="185" cy="125" r="3" fill="#e6e9dc" /><circle cx="195" cy="129" r="3" fill="#e6e9dc" /><circle cx="183" cy="135" r="3" fill="#e6e9dc" />
+  </>,
+  artWorkshop: <>
+    <path d="M45 130h270v14H45Zm20 14v36m230-36v36" stroke="#9b8062" strokeWidth="8" />
+    <path d="m100 115 12-67 88 8-12 67Z" fill="#fffaf1" />
+    <circle cx="145" cy="79" r="13" fill="#d4b372" />
+    <path d="m111 111 27-27 22 23 17-15 15 25Z" fill="#829377" />
+    <path d="m225 124 20-66" stroke="#365c46" strokeWidth="6" />
+    <path d="m243 65 5-21q16-8 9 8Z" fill="#b98263" />
+    <path d="M218 109h42l-5 24h-32Z" fill="#a3beb7" />
+    <ellipse cx="80" cy="125" rx="21" ry="9" fill="#b98263" />
+  </>,
+  ...tripScenes,
+  ...cafeScenes,
   adventure: <>
       <path d="M0 132q90-15 180 0t180-8v56H0Z" fill="#b9c8b2" />
       <path d="M98 180q8-34 67-43t73-29" fill="none" stroke="#eadfc6" strokeWidth="20" />

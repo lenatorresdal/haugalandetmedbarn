@@ -35,3 +35,18 @@ it('validerer, beholder tekst ved feil og bekrefter bare godtatt innsending', as
   await user.click(screen.getByRole('button', { name: 'Send melding' }));
   await waitFor(() => expect(screen.getByRole('status').textContent).toContain('Meldingen er sendt'));
 });
+
+it('unngår myk rulling når redusert bevegelse er valgt', () => {
+  vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: true })));
+  const scrollIntoView = vi.fn();
+  const original = HTMLElement.prototype.scrollIntoView;
+  HTMLElement.prototype.scrollIntoView = scrollIntoView;
+  try {
+    render(<ContactForm formId="testid" />);
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'instant', block: 'start' });
+    expect(document.activeElement.id).toBe('contact-heading');
+  } finally {
+    if (original) HTMLElement.prototype.scrollIntoView = original;
+    else delete HTMLElement.prototype.scrollIntoView;
+  }
+});

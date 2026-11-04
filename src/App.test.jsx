@@ -1,109 +1,142 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App.jsx';
 import { activities } from './activities.js';
 
-beforeEach(() => {
-  localStorage.clear();
-});
+beforeEach(() => localStorage.clear());
 afterEach(cleanup);
 
 describe('aktivitetsoversikten', () => {
-  it('finner Sveio med mellomrom og lar brukeren fjerne begrensende filtre', async () => {
+  it('lar tastaturbrukere hoppe direkte til resultatene', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.type(screen.getByRole('searchbox'), ' sveio ');
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(screen.getByRole('heading', { name: 'Babysong i Sveio soknehus' })).toBeTruthy();
-    await user.click(screen.getByRole('button', { name: 'Karmøy' }));
-    await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
-    expect(screen.queryAllByRole('article')).toHaveLength(0);
-    await user.click(screen.getByRole('button', { name: 'Søk etter «sveio» i alle aktiviteter og steder' }));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(screen.getByRole('searchbox').value).toBe(' sveio ');
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole('link', { name: 'Hopp til aktiviteter' }));
+    await user.keyboard('{Enter}');
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Aktiviteter', exact: true }));
   });
 
-  it('kombinerer sted med kategori, søk og favoritter', async () => {
+  it('starter med opplevelser og finner kurs uten å miste søk eller favoritter', async () => {
+    const user = userEvent.setup();
+    localStorage.setItem('permliv-favorites', '["babysvomming-karmoyhallen"]');
+    render(<App />);
+    expect(screen.getByRole('button', { name: 'Opplevelser og åpne tilbud' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.queryByRole('heading', { name: 'Babysvømming i Karmøyhallen' })).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Fortellerstund på biblioteket' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Babysang i Torvastad kirke' })).toBeTruthy();
+    await user.type(screen.getByRole('searchbox'), 'babysvømming');
+    await user.click(screen.getByRole('button', { name: 'Mine favoritter (1)' }));
+    expect(screen.queryAllByRole('article')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Vis disse tilbudene' }));
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByRole('heading', { name: 'Babysvømming i Karmøyhallen' })).toBeTruthy();
+    expect(screen.getByText('Kurs med påmelding')).toBeTruthy();
+    expect(screen.getByRole('searchbox').value).toBe('babysvømming');
+    expect(screen.getByRole('button', { name: 'Mine favoritter (1)' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('viser aldersspesifikke treff før alle aldre kun når alder er valgt', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
+    await user.click(screen.getByText('Alle aldre', { selector: '#age-filter-value' }));
+    await user.click(screen.getByRole('checkbox', { name: '3–5 år' }));
+    const cards = [...document.querySelectorAll('#activity-results > article')];
+    const firstAllAges = cards.findIndex(card => within(card).queryByText('Alder: Alle aldre'));
+    expect(firstAllAges).toBeGreaterThan(0);
+    expect(cards.slice(firstAllAges).every(card => within(card).queryByText('Alder: Alle aldre'))).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Velg alle aldre' }));
+    expect(screen.getAllByRole('article').map(card => within(card).getByRole('heading').textContent))
+      .toEqual(activities.map(activity => activity.title));
+  });
+
+  it('velger flere aldre og fjerner én uten å miste de andre', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
+    await user.click(screen.getByText('Alle aldre', { selector: '#age-filter-value' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Under 1 år' }));
+    await user.click(screen.getByRole('checkbox', { name: '3–5 år' }));
+    expect(screen.getByRole('heading', { name: 'Biblobaby på biblioteket' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Fortellerstund på biblioteket' })).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Biblobarn på biblioteket' })).toBeNull();
+    await user.click(screen.getByRole('button', { name: 'Fjern filter: Under 1 år' }));
+    expect(screen.queryByRole('heading', { name: 'Biblobaby på biblioteket' })).toBeNull();
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Aktiviteter', exact: true }));
+    expect(screen.getByRole('checkbox', { name: '3–5 år' }).checked).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Velg alle aldre' }));
+    expect(screen.getAllByRole('article')).toHaveLength(activities.length);
+  });
+
+  it('kombinerer søk, sted og kategori og kan fjerne ett filter uten å miste søket', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
+    await user.type(screen.getByRole('searchbox'), ' babysong ');
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    await user.selectOptions(screen.getByLabelText('Sted'), 'Karmøy');
+    expect(screen.queryAllByRole('article')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Vis alle steder' }));
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByRole('searchbox').value).toBe(' babysong ');
+    await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
+    expect(screen.queryAllByRole('article')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Fjern filter: Ut på tur' }));
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+  });
+
+  it('kombinerer favoritter med kategori, alder og sted', async () => {
     const user = userEvent.setup();
     localStorage.setItem('permliv-favorites', '["tur", "babysang-norheim"]');
     render(<App />);
-    await user.click(screen.getByRole('button', { name: 'Karmøy' }));
-    expect(screen.getAllByRole('article')).toHaveLength(activities.filter((activity) => activity.municipality === 'Karmøy').length);
-    expect(screen.getByRole('button', { name: 'Alle steder' }).getAttribute('aria-pressed')).toBe('false');
-    await user.click(screen.getByRole('button', { name: 'Vann & svømming' }));
-    expect(screen.queryAllByRole('article')).toHaveLength(0);
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
+    await user.click(screen.getByRole('button', { name: 'Mine favoritter (2)' }));
+    expect(screen.getAllByRole('article')).toHaveLength(2);
     await user.click(screen.getByRole('button', { name: 'Sang & musikk' }));
-    await user.type(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }), 'Norheim');
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    await user.clear(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }));
-    await user.click(screen.getByRole('button', { name: 'Mine favoritter' }));
+    await user.click(screen.getByText('Alle aldre', { selector: '#age-filter-value' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Under 1 år' }));
+    await user.selectOptions(screen.getByLabelText('Sted'), 'Karmøy');
     expect(screen.getAllByRole('article')).toHaveLength(1);
     expect(screen.getByRole('heading', { name: 'Babysang i Norheim kirke' })).toBeTruthy();
-    await user.click(screen.getByRole('button', { name: 'Alle steder' }));
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.click(screen.getByRole('button', { name: 'Alle aktiviteter' }));
-    expect(screen.getAllByRole('article')).toHaveLength(activities.length);
-  });
-
-  it('velger enten favoritter eller kategori og oppdaterer ved søk og fjerning', async () => {
-    const user = userEvent.setup();
-    localStorage.setItem('permliv-favorites', '["tur", "apen"]');
-    render(<App />);
-    const filter = screen.getByRole('button', { name: 'Mine favoritter' });
-    await user.click(filter);
-    expect(filter.getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
-    expect(filter.getAttribute('aria-pressed')).toBe('false');
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.click(filter);
-    expect(screen.getByRole('button', { name: 'Ut på tur' }).getAttribute('aria-pressed')).toBe('false');
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.type(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }), 'En liten tur');
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    await user.click(screen.getByRole('button', { name: /Fjern En liten tur/ }));
+    await user.click(screen.getByRole('button', { name: /Fjern Babysang i Norheim/ }));
     expect(screen.queryAllByRole('article')).toHaveLength(0);
-    await user.clear(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    await user.click(filter);
-    expect(filter.getAttribute('aria-pressed')).toBe('true');
-    await user.click(screen.getByRole('button', { name: 'Alle aktiviteter' }));
-    expect(filter.getAttribute('aria-pressed')).toBe('false');
+    await user.click(screen.getByRole('button', { name: 'Nullstill filtre' }));
     expect(screen.getAllByRole('article')).toHaveLength(activities.length);
+    expect(screen.getByRole('button', { name: 'Mine favoritter (1)' }).getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('kombinerer søk og kategorier og viser en melding ved tomme treff', async () => {
+  it('viser alder og pris og inkluderer Havnaberg fra 2 år', async () => {
     const user = userEvent.setup();
     render(<App />);
-    expect(screen.getAllByRole('article')).toHaveLength(activities.length);
-    await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.type(screen.getByRole('searchbox', { name: 'Søk etter aktivitet eller sted' }), 'DJUPADALEN');
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    await user.click(screen.getByRole('button', { name: 'Sang & musikk' }));
-    expect(screen.queryAllByRole('article')).toHaveLength(0);
-    expect(screen.getByText(/Ingen treff akkurat nå/)).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
+    await user.click(screen.getByText('Alle aldre', { selector: '#age-filter-value' }));
+    await user.click(screen.getByRole('checkbox', { name: '1–2 år' }));
+    expect(screen.queryByRole('heading', { name: 'Fortellerstund på biblioteket' })).toBeNull();
+    const biblobarn = screen.getByRole('heading', { name: 'Biblobarn på biblioteket' }).closest('article');
+    expect(within(biblobarn).getByText('Alder: 1–2 år')).toBeTruthy();
+    expect(within(biblobarn).getByText('Gratis')).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Svømmetilbud for større barn på Havnaberg' })).toBeTruthy();
+    const unknown = screen.getByRole('region', { name: 'Sjekk alder hos arrangøren' });
+    expect(within(unknown).queryByRole('heading', { name: 'Svømmetilbud for større barn på Havnaberg' })).toBeNull();
+    await user.click(screen.getByRole('checkbox', { name: '1–2 år' }));
+    await user.click(screen.getByRole('checkbox', { name: '3–5 år' }));
+    expect(screen.queryByRole('heading', { name: 'Biblobarn på biblioteket' })).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Fortellerstund på biblioteket' })).toBeTruthy();
   });
 
-  it('beholder eksisterende favoritter og lagrer endringer mellom besøk', async () => {
+  it('lagrer favoritter mellom besøk og tåler ugyldig lagring', async () => {
     const user = userEvent.setup();
-    localStorage.setItem('permliv-favorites', '["tur"]');
+    localStorage.setItem('permliv-favorites', '{"invalid":true}');
     const view = render(<App />);
-    expect(screen.getAllByRole('article')).toHaveLength(activities.length);
-    expect(screen.getByRole('heading', { name: 'En liten tur i Djupadalen' })).toBeTruthy();
-    await user.click(screen.getByRole('button', { name: /Fjern En liten tur/ }));
-    expect(JSON.parse(localStorage.getItem('permliv-favorites'))).toEqual([]);
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
+    expect(screen.getAllByRole('button', { name: /^Lagre .* som favoritt$/ })).toHaveLength(activities.length);
     await user.click(screen.getByRole('button', { name: 'Lagre Åpen barnehage som favoritt' }));
+    expect(screen.getByText('Åpen barnehage er lagret i Mine favoritter.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Mine favoritter (1)' })).toBeTruthy();
     view.unmount();
     render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
     expect(screen.getByRole('button', { name: 'Fjern Åpen barnehage fra favoritt' }).getAttribute('aria-pressed')).toBe('true');
-  });
-
-  it('tåler ugyldige favoritter i nettleserlagringen', () => {
-    localStorage.setItem('permliv-favorites', '{"invalid":true}');
-    render(<App />);
-    expect(screen.getAllByRole('article')).toHaveLength(activities.length);
-    expect(screen.getAllByRole('button', { name: /^Lagre .* som favoritt$/ })).toHaveLength(activities.length);
   });
 });

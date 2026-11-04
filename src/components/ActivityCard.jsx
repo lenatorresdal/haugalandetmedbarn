@@ -1,4 +1,5 @@
 import ActivityArt from './ActivityArt.jsx';
+import { participationTypes } from '../participation.js';
 
 export default function ActivityCard({ activity, saved, onToggleFavorite }) {
   return (
@@ -18,14 +19,26 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
       <div className="body">
         <div className="category">{activity.category}</div>
         <h3>{activity.title}</h3>
+        <div className={`participation participation-${activity.participation}`}>
+          {participationTypes[activity.participation].label}
+        </div>
+        {activity.age && <div className="activity-age">Alder: {activity.age}</div>}
         <p className="description">{activity.description}</p>
+        {activity.changingTable !== undefined && (
+          <div className="cafe-facilities meta">
+            <div>Stellebord: {activity.changingTable === null ? 'Ikke bekreftet' : activity.changingTable ? 'Ja' : 'Nei'}</div>
+          </div>
+        )}
+        {activity.stroller && (
+          <p className="stroller-info"><strong>Med barnevogn:</strong> {activity.stroller}</p>
+        )}
         <div className="meta">
-          {activity.age && <div className="activity-age">
+          {activity.distance && <div className="activity-distance">
             <svg className="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="7" r="3" />
-              <path d="M9 5.5c0-2 3-3 4-1M5 20v-2a7 7 0 0 1 14 0v2M9 16v4m6-4v4" />
-            </svg>{' '}
-            Alder: {activity.age}
+              <circle cx="5" cy="17" r="2.5" />
+              <circle cx="19" cy="7" r="2.5" />
+              <path d="M7.5 17h6a3 3 0 0 0 0-6h-3a2 2 0 0 1 0-4h6" strokeDasharray="2 3" />
+            </svg>{' '}{activity.distance}
           </div>}
           {(activity.locations ?? [{ place: activity.place, time: activity.time }]).map((location) => (
             <div className="activity-location" key={location.place}>
@@ -43,6 +56,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
             </div>
           ))}
         </div>
+        {activity.price && <p className="activity-price"><strong>Pris:</strong> {activity.price}</p>}
         {activity.email && (
           <p className="activity-contact">
             Spørsmål og påmelding: <a href={`mailto:${activity.email}`}>{activity.email}</a>

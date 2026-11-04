@@ -6,8 +6,8 @@ export default function ContactForm({ formId = import.meta.env.VITE_FORMSPREE_FO
   const configured = /^[a-zA-Z0-9]+$/.test(formId ?? '');
 
   useEffect(() => {
-    heading.current?.focus();
-    heading.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+    heading.current?.focus({ preventScroll: true });
+    heading.current?.scrollIntoView?.({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
   }, []);
 
   async function submit(event) {
