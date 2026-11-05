@@ -6,6 +6,7 @@ import useFavorites from "./useFavorites.js";
 import About from "./components/About.jsx";
 import ActivityCard from "./components/ActivityCard.jsx";
 import ContactForm from "./components/ContactForm.jsx";
+import CoastalIllustration from "./components/CoastalIllustration.jsx";
 
 const municipalities = [
   "Alle steder",
@@ -104,7 +105,8 @@ export default function App() {
     <main>
       <a className="skip-link" href="#results-heading" onClick={() => resultsHeading.current?.focus()}>Hopp til aktiviteter</a>
       <header className="introduction">
-        <h1>En uavhengig guide til aktiviteter for barn på Haugalandet</h1>
+        <CoastalIllustration />
+        <h1>Haugalandet <span>med barn</span></h1>
         <p>
           Her finner du en oversikt over små og store opplevelser i nærområdet,
           enten du er i permisjon, har småbarn eller leter etter noe hyggelig å
