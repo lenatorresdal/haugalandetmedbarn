@@ -3,6 +3,7 @@ import { activities, categories } from "./activities.js";
 import { ageGroups, isAllAges, matchesAge } from "./ageFilters.js";
 import { activityViews, matchesView } from "./participation.js";
 import useFavorites from "./useFavorites.js";
+import useUrlFilters from "./useUrlFilters.js";
 import About from "./components/About.jsx";
 import ActivityCard from "./components/ActivityCard.jsx";
 import ContactForm from "./components/ContactForm.jsx";
@@ -16,6 +17,31 @@ const municipalities = [
 export default function App() {
   const resultsHeading = useRef(null);
   const restoreResultsFocus = useRef(false);
+  const agePicker = useRef(null);
+
+  function closeAgePicker(restoreFocus = false) {
+    if (!agePicker.current?.open) return;
+    agePicker.current.open = false;
+    if (restoreFocus) agePicker.current.querySelector("summary").focus();
+  }
+
+  useEffect(() => {
+    function onPointerDown(event) {
+      if (!agePicker.current?.contains(event.target)) closeAgePicker();
+    }
+    function onKeyDown(event) {
+      if (event.key === "Escape" && agePicker.current?.open) {
+        event.preventDefault();
+        closeAgePicker(true);
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (restoreResultsFocus.current) {
@@ -34,12 +60,12 @@ export default function App() {
   function openContact() {
     setContactRevision((previous) => previous + 1);
   }
-  const [view, setView] = useState("experiences");
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("Alle aktiviteter");
-  const [municipality, setMunicipality] = useState("Alle steder");
-  const [onlySaved, setOnlySaved] = useState(false);
-  const [selectedAges, setSelectedAges] = useState([]);
+  const [{ view, category, municipality, onlySaved, selectedAges }, setFilter] = useUrlFilters();
+  const setView = (value) => setFilter("view", value);
+  const setCategory = (value) => setFilter("category", value);
+  const setMunicipality = (value) => setFilter("municipality", value);
+  const setOnlySaved = (value) => setFilter("onlySaved", value);
+  const setSelectedAges = (value) => setFilter("selectedAges", value);
   const selectedAgeGroups = ageGroups.filter((group) => selectedAges.includes(group.value));
 
   function toggleAge(value) {
@@ -65,16 +91,12 @@ export default function App() {
     toggleFavorite(id);
   }
 
-  const normalizedQuery = query.trim().toLocaleLowerCase("nb");
   const filtered = activities.filter(
     (activity) =>
       (municipality === "Alle steder" ||
         activity.municipality === municipality) &&
       (!onlySaved || favorites.has(activity.id)) &&
-      (category === "Alle aktiviteter" || activity.category === category) &&
-      `${activity.title} ${activity.description} ${activity.place ?? ""} ${activity.locations?.map((location) => location.place).join(" ") ?? ""} ${activity.municipality} ${activity.category}`
-        .toLocaleLowerCase("nb")
-        .includes(normalizedQuery),
+      (category === "Alle aktiviteter" || activity.category === category),
   );
 
   const ageMatches = filtered
@@ -84,12 +106,10 @@ export default function App() {
   const otherViewCount = ageMatches.length - shown.length;
   const unknownAge = selectedAges.length === 0 ? [] : filtered.filter((activity) => !activity.ageRange && matchesView(activity, view));
   const activeFilters = [
-    ...(view !== "all" ? [{ label: activityViews.find((item) => item.value === view).label, clear: () => setView("all") }] : []),
     ...selectedAgeGroups.map((group) => ({ label: group.label, clear: () => toggleAge(group.value) })),
     ...(municipality !== "Alle steder" ? [{ label: municipality, clear: () => setMunicipality("Alle steder") }] : []),
     ...(category !== "Alle aktiviteter" ? [{ label: category, clear: () => setCategory("Alle aktiviteter") }] : []),
     ...(onlySaved ? [{ label: "Mine favoritter", clear: () => setOnlySaved(false) }] : []),
-    ...(normalizedQuery ? [{ label: `Søk: ${query.trim()}`, clear: () => setQuery("") }] : []),
   ];
 
   function resetFilters() {
@@ -98,7 +118,6 @@ export default function App() {
     setMunicipality("Alle steder");
     setCategory("Alle aktiviteter");
     setOnlySaved(false);
-    setQuery("");
   }
 
   return (
@@ -121,38 +140,22 @@ export default function App() {
         <div className="activity-views" role="group" aria-label="Type tilbud">
           {activityViews.map((item) => (
             <button key={item.value} className={view === item.value ? "selected" : ""}
-              aria-pressed={view === item.value} onClick={() => setView(item.value)}>{item.label}</button>
+              aria-pressed={view === item.value} onClick={() => setView(item.value)}>{item.value === "experiences" ? "Opplevelser" : item.label}</button>
           ))}
         </div>
         <p className="view-description">
           {view === "experiences"
-            ? "Dra på tur, besøk et sted eller bli med på en åpen samling. Noen besøk og treningstimer må bestilles. Sjekk åpningstider og datoer før dere drar."
+            ? "Turer, besøk og åpne samlinger – sjekk åpningstider og eventuell bestilling."
             : view === "courses"
-              ? "Tilbud som krever påmelding eller litt planlegging. Sjekk oppstart, ledige plasser og om dere melder dere på én eller flere samlinger."
+              ? "Finn kurs og faste aktiviteter som krever påmelding eller planlegging."
               : "Utforsk både opplevelser, åpne samlinger og kurs med påmelding."}
         </p>
-        <div
-          className="activity-search"
-          role="search"
-          aria-label="Søk i aktiviteter"
-        >
-          <label htmlFor="activity-search">
-            Søk etter aktivitet eller sted
-          </label>
-          <input
-            id="activity-search"
-            className="search"
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="For eksempel babysang eller Norheim"
-            aria-controls="activity-results"
-          />
-        </div>
         <div className="filter-controls">
           <div className="age-control">
             <span id="age-filter-label">Barnas alder</span>
-            <details className="age-picker">
+            <details className="age-picker" ref={agePicker} onBlur={(event) => {
+              if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) closeAgePicker();
+            }}>
               <summary aria-labelledby="age-filter-label age-filter-value" aria-describedby="age-guidance">
                 <span id="age-filter-value">{selectedAgeGroups.length === 0 ? "Alle aldre" : selectedAgeGroups.map((group) => group.label).join(", ")}</span>
                 <span aria-hidden="true">⌄</span>
@@ -167,36 +170,26 @@ export default function App() {
                 ))}
                 <button type="button" className="reset-filters" onClick={() => setSelectedAges([])}>Velg alle aldre</button>
                 <p>Viser aktiviteter som passer minst én valgt aldersgruppe.</p>
+                <p id="age-guidance">Alder er veiledende, med mindre arrangøren oppgir en aldersgrense.</p>
+                <button type="button" className="primary-button age-done" onClick={() => closeAgePicker(true)}>Ferdig</button>
               </fieldset>
             </details>
-            <p className="age-guidance" id="age-guidance">Alder er veiledende, med mindre arrangøren oppgir en aldersgrense.</p>
           </div>
           <label htmlFor="place-filter">Sted
             <select id="place-filter" value={municipality} onChange={(event) => setMunicipality(event.target.value)}>
               {municipalities.map((place) => <option key={place}>{place}</option>)}
             </select>
           </label>
+          <label htmlFor="category-filter" className="category-control">Aktivitetstype
+            <select id="category-filter" value={category} onChange={(event) => setCategory(event.target.value)}>
+              {categories.map((item) => <option key={item} value={item}>{item === "Alle aktiviteter" ? "Alle typer" : item}</option>)}
+            </select>
+          </label>
         </div>
-        <div className="filters" role="group" aria-label="Aktivitet">
-          {categories.map((item) => (
-            <button key={item} className={`filter ${category === item ? "active" : ""}`}
-              aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>
-          ))}
-        </div>
-        {activeFilters.length > 0 && (
-          <div className="active-filters" role="group" aria-label="Valgte filtre">
-            {activeFilters.map((filter) => (
-              <button key={filter.label} className="filter" onClick={() => clearFilter(filter.clear)} aria-label={`Fjern filter: ${filter.label}`}>
-                {filter.label} <span aria-hidden="true">×</span>
-              </button>
-            ))}
-            <button className="reset-filters" onClick={() => clearFilter(resetFilters)}>Nullstill filtre</button>
-          </div>
-        )}
-        <h2 id="results-heading" className="results-heading" tabIndex={-1} ref={resultsHeading}>Aktiviteter</h2>
+        <h2 id="results-heading" className="results-heading sr-only" tabIndex={-1} ref={resultsHeading}>Aktiviteter</h2>
         <div className="results-toolbar">
           <div className="count" role="status" aria-live="polite" aria-atomic="true">
-            Viser {shown.length} {shown.length === 1 ? "aktivitet" : "aktiviteter"}
+            {shown.length} {shown.length === 1 ? "aktivitet" : "aktiviteter"}
             {unknownAge.length > 0 && ` · ${unknownAge.length} med uavklart alder nedenfor`}
           </div>
           <div className="favorites-actions">
@@ -207,11 +200,15 @@ export default function App() {
             </button>
           </div>
         </div>
-        {otherViewCount > 0 && (
-          <p className="other-offers">
-            {otherViewCount} tilbud passer også valgene dine under {view === "experiences" ? "kurs og påmelding" : "opplevelser og åpne tilbud"}.
-            {" "}<button className="reset-filters" onClick={() => setView(view === "experiences" ? "courses" : "experiences")}>Vis disse tilbudene</button>
-          </p>
+        {activeFilters.length > 0 && (
+          <div className="active-filters" role="group" aria-label="Valgte filtre">
+            {activeFilters.map((filter) => (
+              <button key={filter.label} className="filter" onClick={() => clearFilter(filter.clear)} aria-label={`Fjern filter: ${filter.label}`}>
+                {filter.label} <span aria-hidden="true">×</span>
+              </button>
+            ))}
+            <button className="reset-filters" onClick={() => clearFilter(resetFilters)}>Nullstill filtre</button>
+          </div>
         )}
         <div className="favorite-notice" role="status" aria-live="polite" aria-atomic="true">
           {favoriteNotice?.text}
@@ -230,7 +227,7 @@ export default function App() {
             <div className="empty">
               <p>{onlySaved
                 ? "Ingen favoritter passer valgene dine. Lagre aktiviteter med hjertet, eller fjern et filter."
-                : "Ingen treff akkurat nå. Prøv å fjerne et filter eller endre søket."}</p>
+                : "Ingen aktiviteter passer valgene dine. Prøv å fjerne et filter eller velge en annen type tilbud."}</p>
               <div className="empty-actions">
                 {selectedAges.length > 0 && <button className="filter" onClick={() => clearFilter(() => setSelectedAges([]))}>Vis alle aldre</button>}
                 {municipality !== "Alle steder" && <button className="filter" onClick={() => clearFilter(() => setMunicipality("Alle steder"))}>Vis alle steder</button>}
@@ -249,15 +246,15 @@ export default function App() {
             </div>
           </section>
         )}
+        {otherViewCount > 0 && (
+          <p className="other-offers">
+            {otherViewCount} tilbud passer også valgene dine under {view === "experiences" ? "kurs og påmelding" : "opplevelser og åpne tilbud"}.
+            {" "}<button className="reset-filters" onClick={() => setView(view === "experiences" ? "courses" : "experiences")}>Vis disse tilbudene</button>
+          </p>
+        )}
       </section>
       <About onContact={openContact} />
       {contactRevision > 0 && <ContactForm key={contactRevision} />}
-      <footer>
-        <span className="brand">Haugalandet med barn</span>
-        <a href="#kontakt" onClick={openContact}>
-          Kontakt / Send inn tips
-        </a>
-      </footer>
     </main>
   );
 }

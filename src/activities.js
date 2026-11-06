@@ -238,7 +238,7 @@ export const activities = [
     url: "https://tysvertunet.kulturhus.no/bad",
     link: "Se åpningstider og bestill billetter",
     scene: "swimKids",
-    bg: "#dce9e5",
+    bg: "#eadccf",
   },
   {
     id: "bading-karmoyhallen",
@@ -255,7 +255,7 @@ export const activities = [
     url: "https://www.karmoy.kommune.no/innbygger/kultur-og-fritid/karmoyhallen/",
     link: "Se åpningstider og bestill billetter",
     scene: "swimKids",
-    bg: "#dce9e5",
+    bg: "#dce5d5",
   },
   {
     id: "bading-vindafjordhallen",
@@ -289,7 +289,7 @@ export const activities = [
     url: "https://www.karmoysvkl.no/apen-bading-2/",
     link: "Se tider og praktisk informasjon",
     scene: "swimKids",
-    bg: "#dce9e5",
+    bg: "#e9e1cc",
   },
   {
     id: "bading-saudahallen",
@@ -306,7 +306,7 @@ export const activities = [
     url: "https://saudahallen.no/",
     link: "Se familiebading og besøksinformasjon",
     scene: "swimKids",
-    bg: "#d9e6e3",
+    bg: "#e5dce8",
   },
   {
     id: "babysvomming",
@@ -358,7 +358,7 @@ export const activities = [
     url: "https://www.facebook.com/vannaktivitetsgruppen",
     link: "Se tilbudene på Facebook",
     scene: "swimKids",
-    bg: "#d9e6e3",
+    bg: "#eddbd7",
   },
   {
     id: "apen",
@@ -609,7 +609,7 @@ export const activities = [
     url: "https://haugesundbibliotek.no/nb/arrangementer",
     link: "Se bibliotekets program",
     scene: "library",
-    bg: "#e6e9dc",
+    bg: "#eadccf",
   },
   {
     id: "fortellerstund-biblioteket",
@@ -859,7 +859,7 @@ export const activities = [
     url: "https://www.tysver.kommune.no/kultur-idrett-og-fritid/kulturskole/undervisningstilbud/kulturskolen-0-7-ar/musikklek-og-babymassasje-0-6-maneder/",
     link: "Se kurs og påmelding",
     scene: "music",
-    bg: "#eadccf",
+    bg: "#dce9e5",
   },
   {
     id: "musikklek-baby-tysvaer",
@@ -913,7 +913,7 @@ export const activities = [
     url: "https://www.fyst.no/",
     link: "Se barseltrening og kontakt arrangøren",
     scene: "parentTraining",
-    bg: "#d9e6e3",
+    bg: "#eadccf",
   },
   {
     id: "trening-baby-gymsalen",
@@ -930,7 +930,7 @@ export const activities = [
     url: "https://www.gymsalenhaugesund.no/okter",
     link: "Se Babygym og medlemskap",
     scene: "parentTraining",
-    bg: "#d9e6e3",
+    bg: "#dce5d5",
   },
   {
     id: "trening-baby-crossfit-verftet",
@@ -949,7 +949,7 @@ export const activities = [
     url: "https://www.crossfitverftet.no/lunsjtrening",
     link: "Se lunsjtrening og booking",
     scene: "parentTraining",
-    bg: "#d9e6e3",
+    bg: "#e9e1cc",
   },
   {
     id: "trening-baby-boost",
@@ -966,7 +966,7 @@ export const activities = [
     url: "https://boosttrening.no/medlemskap",
     link: "Se medlemskap og finn aktuelle timer",
     scene: "parentTraining",
-    bg: "#d9e6e3",
+    bg: "#e5dce8",
   },
   {
     id: "musikklek-lordag-tysvaer",
@@ -983,7 +983,7 @@ export const activities = [
     url: "https://www.tysver.kommune.no/kultur-idrett-og-fritid/kulturskole/undervisningstilbud/kulturskolen-0-7-ar/musikklek-for-alle-lordag/",
     link: "Følg med på datoer og praktisk informasjon",
     scene: "music",
-    bg: "#e9e1cc",
+    bg: "#eee1cf",
   },
   {
     id: "oasen-familiepause",

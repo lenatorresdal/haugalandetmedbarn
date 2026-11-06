@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import App from './App.jsx';
 import { activities } from './activities.js';
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => { localStorage.clear(); window.history.replaceState(null, '', '/'); });
 afterEach(cleanup);
 
 describe('aktivitetsoversikten', () => {
@@ -17,22 +17,21 @@ describe('aktivitetsoversikten', () => {
     expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Aktiviteter', exact: true }));
   });
 
-  it('starter med opplevelser og finner kurs uten å miste søk eller favoritter', async () => {
+  it('starter med opplevelser og finner kurs uten å miste favoritter', async () => {
     const user = userEvent.setup();
     localStorage.setItem('permliv-favorites', '["babysvomming-karmoyhallen"]');
     render(<App />);
-    expect(screen.getByRole('button', { name: 'Opplevelser og åpne tilbud' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Opplevelser' }).getAttribute('aria-pressed')).toBe('true');
     expect(screen.queryByRole('heading', { name: 'Babysvømming i Karmøyhallen' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'Fortellerstund på biblioteket' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Babysang i Torvastad kirke' })).toBeTruthy();
-    await user.type(screen.getByRole('searchbox'), 'babysvømming');
+    expect(screen.queryByRole('searchbox')).toBeNull();
     await user.click(screen.getByRole('button', { name: 'Mine favoritter (1)' }));
     expect(screen.queryAllByRole('article')).toHaveLength(0);
     await user.click(screen.getByRole('button', { name: 'Vis disse tilbudene' }));
     expect(screen.getAllByRole('article')).toHaveLength(1);
     expect(screen.getByRole('heading', { name: 'Babysvømming i Karmøyhallen' })).toBeTruthy();
     expect(screen.getByText('Kurs med påmelding')).toBeTruthy();
-    expect(screen.getByRole('searchbox').value).toBe('babysvømming');
     expect(screen.getByRole('button', { name: 'Mine favoritter (1)' }).getAttribute('aria-pressed')).toBe('true');
   });
 
@@ -64,26 +63,47 @@ describe('aktivitetsoversikten', () => {
     await user.click(screen.getByRole('button', { name: 'Fjern filter: Under 1 år' }));
     expect(screen.queryByRole('heading', { name: 'Biblobaby på biblioteket' })).toBeNull();
     expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Aktiviteter', exact: true }));
+    await user.click(document.querySelector('.age-picker summary'));
     expect(screen.getByRole('checkbox', { name: '3–5 år' }).checked).toBe(true);
     await user.click(screen.getByRole('button', { name: 'Velg alle aldre' }));
     expect(screen.getAllByRole('article')).toHaveLength(activities.length);
   });
 
-  it('kombinerer søk, sted og kategori og kan fjerne ett filter uten å miste søket', async () => {
+  it('kombinerer sted og aktivitetstype og kan fjerne ett filter', async () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
-    await user.type(screen.getByRole('searchbox'), ' babysong ');
-    expect(screen.getAllByRole('article')).toHaveLength(1);
     await user.selectOptions(screen.getByLabelText('Sted'), 'Karmøy');
-    expect(screen.queryAllByRole('article')).toHaveLength(0);
-    await user.click(screen.getByRole('button', { name: 'Vis alle steder' }));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(screen.getByRole('searchbox').value).toBe(' babysong ');
-    await user.click(screen.getByRole('button', { name: 'Ut på tur' }));
-    expect(screen.queryAllByRole('article')).toHaveLength(0);
-    await user.click(screen.getByRole('button', { name: 'Fjern filter: Ut på tur' }));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
+    await user.selectOptions(screen.getByLabelText('Aktivitetstype'), 'Sang & musikk');
+    expect(screen.getAllByRole('article').length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('article').every(card => within(card).queryByText('Sang & musikk'))).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Fjern filter: Karmøy' }));
+    expect(screen.getByLabelText('Sted').value).toBe('Alle steder');
+    expect(screen.getByLabelText('Aktivitetstype').value).toBe('Sang & musikk');
+    expect(screen.getByRole('button', { name: 'Fjern filter: Sang & musikk' })).toBeTruthy();
+  });
+
+  it('lukker aldersmenyen uten å miste valgene', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    expect(document.querySelector('footer')).toBeNull();
+    const picker = document.querySelector('.age-picker');
+    const summary = picker.querySelector('summary');
+    await user.click(summary);
+    await user.click(screen.getByRole('checkbox', { name: '3–5 år' }).closest('label'));
+    expect(picker.open).toBe(true);
+    expect(screen.getByRole('checkbox', { name: '3–5 år' }).checked).toBe(true);
+    await user.keyboard('{Escape}');
+    expect(picker.open).toBe(false);
+    expect(document.activeElement).toBe(summary);
+    await user.click(summary);
+    expect(screen.getByRole('checkbox', { name: '3–5 år' }).checked).toBe(true);
+    await user.click(screen.getByLabelText('Sted'));
+    expect(picker.open).toBe(false);
+    await user.click(summary);
+    await user.click(screen.getByRole('button', { name: 'Ferdig' }));
+    expect(picker.open).toBe(false);
+    expect(document.activeElement).toBe(summary);
   });
 
   it('kombinerer favoritter med kategori, alder og sted', async () => {
@@ -93,7 +113,7 @@ describe('aktivitetsoversikten', () => {
     await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
     await user.click(screen.getByRole('button', { name: 'Mine favoritter (2)' }));
     expect(screen.getAllByRole('article')).toHaveLength(2);
-    await user.click(screen.getByRole('button', { name: 'Sang & musikk' }));
+    await user.selectOptions(screen.getByLabelText('Aktivitetstype'), 'Sang & musikk');
     await user.click(screen.getByText('Alle aldre', { selector: '#age-filter-value' }));
     await user.click(screen.getByRole('checkbox', { name: 'Under 1 år' }));
     await user.selectOptions(screen.getByLabelText('Sted'), 'Karmøy');

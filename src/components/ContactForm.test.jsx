@@ -11,9 +11,9 @@ it('deaktiverer sending uten konfigurasjon', () => {
   expect(screen.getByRole('button', { name: 'Send melding' }).disabled).toBe(true);
 });
 
-it('åpner kontaktskjema fra footeren', async () => {
+it('åpner kontaktskjema fra tipsknappen', async () => {
   render(<App />);
-  await userEvent.click(screen.getByRole('link', { name: 'Kontakt / Send inn tips' }));
+  await userEvent.click(screen.getByRole('button', { name: 'Send meg et tips' }));
   expect(screen.getByLabelText('Type henvendelse').value).toBe('Tips om aktivitet');
   expect(document.activeElement.id).toBe('contact-heading');
 });
