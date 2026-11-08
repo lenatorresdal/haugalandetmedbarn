@@ -26,16 +26,6 @@ const scenes = {
     <circle cx="190" cy="137" r="24" fill="#365c46" />
     <circle cx="185" cy="125" r="3" fill="#e6e9dc" /><circle cx="195" cy="129" r="3" fill="#e6e9dc" /><circle cx="183" cy="135" r="3" fill="#e6e9dc" />
   </>,
-  artWorkshop: <>
-    <path d="M45 130h270v14H45Zm20 14v36m230-36v36" stroke="#9b8062" strokeWidth="8" />
-    <path d="m100 115 12-67 88 8-12 67Z" fill="#fffaf1" />
-    <circle cx="145" cy="79" r="13" fill="#d4b372" />
-    <path d="m111 111 27-27 22 23 17-15 15 25Z" fill="#829377" />
-    <path d="m225 124 20-66" stroke="#365c46" strokeWidth="6" />
-    <path d="m243 65 5-21q16-8 9 8Z" fill="#b98263" />
-    <path d="M218 109h42l-5 24h-32Z" fill="#a3beb7" />
-    <ellipse cx="80" cy="125" rx="21" ry="9" fill="#b98263" />
-  </>,
   ...tripScenes,
   ...cafeScenes,
   adventure: <>
@@ -251,23 +241,6 @@ const scenes = {
       <ellipse cx="104" cy="85" rx="7" ry="5" fill="#bf9278"/>
       <path d="M255 118q-5-7-10-2-5 6 10 14 15-8 10-14-5-5-10 2Z" fill="#bf9278"/>
     </>,
-  forest: <> <path d="M0 160Q100 100 180 143T360 115V180H0" fill="#afbf9d"/>
-      <path d="M125 180q80-50 118-37t-9-33" stroke="#eadfc6" strokeWidth="22" fill="none"/>
-      <g fill="#6f8a6a">
-      <path d="M50 142V62h5v80zM40 112l13-68 18 68zM278 133V50h5v83zM259 107l22-77 24 77z"/>
-      </g>
-      <circle cx="111" cy="48" r="18" fill="#f3e9cb"/> </>,
-  coffee: <> <ellipse cx="180" cy="149" rx="77" ry="9" fill="#d0c3a8"/>
-      <path d="M137 77h76v34q0 33-38 33t-38-33z" fill="#f9f5e9"/>
-      <path d="M214 82q36-1 23 27-8 10-23 7" stroke="#f9f5e9" strokeWidth="9" fill="none"/>
-      <path d="M163 59q-11-12 0-25m22 25q-11-12 0-25" stroke="#aeaa8e" strokeWidth="3" fill="none"/>
-      <ellipse cx="175" cy="78" rx="38" ry="8" fill="#8e7258"/> </>,
-  sea: <> <path d="M0 110q90-20 180 0t180 0v70H0" fill="#a3beb7"/>
-      <path d="M0 145q90-20 180 0t180 0" stroke="#cbdcd1" strokeWidth="3" fill="none"/>
-      <path d="M150 111h80l-17 22h-48z" fill="#6c8577"/>
-      <path d="M185 107V38l-33 63z" fill="#fff8e7"/>
-      <path d="M190 101V48l36 53z" fill="#c4ab85"/>
-      <circle cx="282" cy="40" r="21" fill="#e9d3a0"/> </>,
 };
 
 export default function ActivityArt({ scene, background }) {

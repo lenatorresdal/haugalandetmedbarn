@@ -19,6 +19,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
         </button>
       </div>
       <div className="body">
+        <div className="card-overview"><div className="card-overview-content">
         <div className="category">{activity.category}</div>
         <h3>{activity.title}</h3>
         <div className={`participation participation-${activity.participation}`}>
@@ -42,6 +43,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
             </div>
           ))}
         </div>
+        </div></div>
         <details className="card-details">
           <summary>
             <span className="details-show">Vis detaljer</span>
@@ -69,6 +71,11 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
         <div className="card-bottom">
           <a href={activity.url} target="_blank" rel="noopener">{activity.link} ↗</a>
         </div>
+        {activity.additionalLinks?.map(({ url, label }) => (
+          <div className="card-bottom" key={url}>
+            <a href={url} target="_blank" rel="noopener">{label} ↗</a>
+          </div>
+        ))}
           </div>
         </details>
       </div>

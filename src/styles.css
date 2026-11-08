@@ -64,6 +64,7 @@ main{padding:0 22px}
 .contact label{display:block;font-size:14px;font-weight:600;margin:24px 0 10px}
 .contact input,.contact select,.contact textarea{display:block;width:100%;min-height:48px;border:1px solid #7b8578;border-radius:8px;padding:12px;background:white;color:var(--ink);font:inherit;font-size:16px}
 .contact textarea{resize:vertical}
+.contact .primary-button{margin-top:24px}
 .contact-note{font-size:14px;line-height:1.7;color:#626d63}
 .honeypot{display:none}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
@@ -149,7 +150,11 @@ main{padding:0 22px}
 .favorites-button{font-size:13px;padding:8px 10px}
 }
 
-.grid{align-items:stretch}
+.grid{align-items:start}
+.card-overview-content{display:flow-root}
+.card .activity-age{width:fit-content;max-width:100%}
+.card h3,.activity-location,.card-bottom a{overflow-wrap:anywhere}
+.card-bottom a:hover{text-decoration:underline;text-underline-offset:3px}
 .card .picture{height:150px}
 .card .body{padding:20px}
 .card .category{font-size:12px;letter-spacing:1px}
@@ -173,3 +178,17 @@ main{padding:0 22px}
 .card-details .stroller-info{margin:12px 0}
 .card-details .cafe-facilities{margin-bottom:12px}
 @media(prefers-reduced-motion:reduce){.details-chevron{transition:none}}
+
+@supports (interpolate-size:allow-keywords) and selector(details::details-content){
+  .card-details{interpolate-size:allow-keywords}
+  .card-details::details-content{
+    height:0;
+    opacity:0;
+    overflow:hidden;
+    transition:height .28s ease,opacity .2s ease,content-visibility .28s allow-discrete;
+  }
+  .card-details[open]::details-content{height:auto;opacity:1}
+  @media(prefers-reduced-motion:reduce){
+    .card-details::details-content{transition:none}
+  }
+}

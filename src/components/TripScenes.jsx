@@ -1,5 +1,89 @@
 // Stylised illustrations of the destinations, using the activity cards' palette.
 const tripScenes = {
+  flowerGarden: <>
+    <path d="M0 117q90-23 180-3t180-8v74H0Z" fill="#afbf9d" />
+    <path d="M110 180q80-36 64-63t57-35" fill="none" stroke="#eadfc6" strokeWidth="22" />
+    <path d="M42 133V35m272 99V30" stroke="#926b51" strokeWidth="7" />
+    <g fill="#829377"><circle cx="42" cy="34" r="34" /><circle cx="312" cy="30" r="36" /></g>
+    <g fill="#657f70"><ellipse cx="80" cy="128" rx="51" ry="29" /><ellipse cx="277" cy="145" rx="57" ry="30" /></g>
+    {[ [47,117],[75,103],[102,119],[61,137],[95,139],[239,135],[269,121],[299,136],[260,155],[291,157] ].map(([x,y]) => (
+      <g key={`${x}-${y}`} transform={`translate(${x} ${y})`}>
+        <g fill="#c994a5"><circle cx="-5" cy="-3" r="6" /><circle cx="5" cy="-3" r="6" /><circle cy="-8" r="6" /><circle cx="-4" cy="5" r="6" /><circle cx="5" cy="5" r="6" /></g>
+        <circle r="3" fill="#f3e9cb" />
+      </g>
+    ))}
+    <path d="M135 128V80q0-12 13-12t13 12v48Z" fill="#af8264" />
+    <path d="m137 75 4-14 7 10 8-10 4 15" fill="#926b51" />
+    <circle cx="143" cy="83" r="2" fill="#655b48" /><circle cx="153" cy="83" r="2" fill="#655b48" />
+    <path d="m144 93 4 4 5-4m-8 12 6 6-6 6" fill="none" stroke="#eadfc6" strokeWidth="2" strokeLinecap="round" />
+  </>,
+  forestClimbing: <>
+    <path d="M0 120q90-24 180 0t180-8v68H0Z" fill="#afbf9d" />
+    <path d="M0 180q67-44 130-25t120-9" fill="none" stroke="#eadfc6" strokeWidth="17" />
+    <path d="M57 144V29m119 110V22m124 123V27" stroke="#926b51" strokeWidth="12" strokeLinecap="round" />
+    <g fill="#829377">
+      <circle cx="56" cy="27" r="34" /><circle cx="174" cy="20" r="37" /><circle cx="301" cy="25" r="36" />
+    </g>
+    <path d="M60 70q58 20 113 0m8-19q58 20 116 0M60 117q58 20 113 0m8-12q58 20 116 0" fill="none" stroke="#657f70" strokeWidth="3" />
+    <path d="M76 75v46m24-41v46m24-44v45m24-49v45m48-68v54m24-49v53m24-51v52m24-56v51m16-55v50" stroke="#c1ae91" strokeWidth="2" />
+    <path d="m63 119 14 3m9 2 14 3m10 1h14m10-1 14-3m9-2 14-3M184 107l17 3m10 2 17 2m10 0 17-1m10-2 17-3m5-2 12-3" stroke="#af8264" strokeWidth="6" strokeLinecap="round" />
+    <path d="M43 119h29m90-2h28m96-12h28" stroke="#655b48" strokeWidth="7" />
+    <circle cx="111" cy="81" r="9" fill="#dbb28b" />
+    <path d="m104 92-4 21 22 1-4-22Z" fill="#bf9278" />
+    <path d="m104 95-13-10m27 10 15-14" fill="none" stroke="#dbb28b" strokeWidth="5" strokeLinecap="round" />
+    <path d="m105 113-6 12m17-12 7 14" stroke="#435e57" strokeWidth="6" strokeLinecap="round" />
+    <circle cx="240" cy="66" r="10" fill="#dbb28b" />
+    <path d="m231 79-3 24 25-1-5-24Z" fill="#657f70" />
+    <path d="m233 82-15-14m28 14 17-15" fill="none" stroke="#dbb28b" strokeWidth="5" strokeLinecap="round" />
+    <path d="m233 103-7 10m20-11 7 9" stroke="#655b48" strokeWidth="6" strokeLinecap="round" />
+  </>,
+  lakePaddling: <>
+    <circle cx="274" cy="35" r="19" fill="#f3e9cb" />
+    <path d="M0 91q55-29 119-4t119-2 122-3v98H0Z" fill="#9eae89" />
+    <path d="M0 111q90-17 180-2t180-9v80H0Z" fill="#a3beb7" />
+    <path d="M27 100V49m-16 34 18-55 19 55ZM320 98V44m-18 35 20-60 22 60Z" fill="#6f8a6a" />
+    <path d="M30 151h34m211-25h48M123 170h99m54-13h36" stroke="#dce9e5" strokeWidth="3" strokeLinecap="round" />
+    <path d="M64 126q69 15 143-2l-22 29H89Z" fill="#bf9278" />
+    <path d="M69 128q65 13 132-2" fill="none" stroke="#eadfc6" strokeWidth="4" />
+    <circle cx="110" cy="96" r="11" fill="#dbb28b" />
+    <path d="m101 109-5 20h30l-5-21Z" fill="#657f70" />
+    <path d="M102 110h18v15h-18Z" fill="#d4a776" />
+    <circle cx="164" cy="101" r="9" fill="#dbb28b" />
+    <path d="m156 112-3 17h24l-4-18Z" fill="#d4a776" />
+    <path d="m108 116-22 8m78-7 17 4" fill="none" stroke="#dbb28b" strokeWidth="5" strokeLinecap="round" />
+    <path d="m88 107 46 45" stroke="#655b48" strokeWidth="4" strokeLinecap="round" />
+    <path d="m127 143 13 7 6 13-12-4-10-11Z" fill="#eadfc6" />
+    <ellipse cx="273" cy="148" rx="48" ry="7" fill="#657f70" />
+    <path d="m258 142 20-3 17 5" fill="none" stroke="#dbb28b" strokeWidth="6" strokeLinecap="round" />
+    <path d="M271 139v-31" stroke="#435e57" strokeWidth="10" strokeLinecap="round" />
+    <path d="m266 112-3 17h19l-6-18Z" fill="#d4a776" />
+    <circle cx="271" cy="96" r="9" fill="#dbb28b" />
+    <path d="m272 116 19 5 9-9" fill="none" stroke="#dbb28b" strokeWidth="5" strokeLinecap="round" />
+    <path d="m301 96-9 56" stroke="#655b48" strokeWidth="3" />
+    <path d="m289 144-2 16q5 6 9 0l1-16Z" fill="#eadfc6" />
+  </>,
+  farmVisit: <>
+    <path d="M0 115q90-30 180 0t180-5v70H0Z" fill="#afbf9d" />
+    <path d="M55 82h125v75H55Z" fill="#bf9278" />
+    <path d="m43 83 74-53 75 53Z" fill="#657f70" />
+    <path d="M98 157v-49h39v49" fill="#655b48" />
+    <path d="M218 141h115m-105-17v44m32-44v44m32-44v44m32-44v44" stroke="#af8264" strokeWidth="5" />
+    <ellipse cx="260" cy="114" rx="25" ry="16" fill="#fff8e7" />
+    <circle cx="286" cy="108" r="10" fill="#655b48" />
+    <path d="M247 126v12m23-12v12" stroke="#655b48" strokeWidth="5" strokeLinecap="round" />
+  </>,
+  vangen: <>
+    <path d="M0 95q90-20 180 5t180-10v90H0Z" fill="#afbf9d" />
+    <ellipse cx="145" cy="145" rx="126" ry="30" fill="#a3beb7" />
+    <path d="M280 156V65m-38 0h76m-55 0v55m35-55v55m-40 3h45" fill="none" stroke="#af8264" strokeWidth="6" strokeLinecap="round" />
+    <ellipse cx="126" cy="142" rx="18" ry="9" fill="#bf9278" />
+    <circle cx="143" cy="132" r="9" fill="#657f70" />
+    <path d="m151 130 10 4-10 3Z" fill="#d4a776" />
+    <ellipse cx="75" cy="156" rx="12" ry="6" fill="#d4a776" />
+    <circle cx="87" cy="150" r="6" fill="#d4a776" />
+    <path d="M42 104V53" stroke="#926b51" strokeWidth="5" />
+    <circle cx="42" cy="42" r="28" fill="#829377" />
+  </>,
   hillCabin: <>
     <path d="M0 136q75-42 148-56t212 39v61H0Z" fill="#afbf9d" />
     <path d="M0 163q61-6 112-35t113 7l35 45H0Z" fill="#9eae89" />

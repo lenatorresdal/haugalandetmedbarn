@@ -18,6 +18,17 @@ it('åpner kontaktskjema fra tipsknappen', async () => {
   expect(document.activeElement.id).toBe('contact-heading');
 });
 
+it('beholder utkast og flytter fokus tilbake når tipsknappen brukes igjen', async () => {
+  const user = userEvent.setup();
+  render(<App />);
+  const tipButton = screen.getByRole('button', { name: 'Send meg et tips' });
+  await user.click(tipButton);
+  await user.type(screen.getByLabelText('Melding (påkrevd)'), 'Tips om en tur');
+  await user.click(tipButton);
+  expect(screen.getByLabelText('Melding (påkrevd)').value).toBe('Tips om en tur');
+  expect(document.activeElement.id).toBe('contact-heading');
+});
+
 it('validerer, beholder tekst ved feil og bekrefter bare godtatt innsending', async () => {
   const user = userEvent.setup();
   const fetchMock = vi.fn()
@@ -32,6 +43,7 @@ it('validerer, beholder tekst ved feil og bekrefter bare godtatt innsending', as
   await screen.findByRole('alert');
   expect(screen.getByLabelText('Melding (påkrevd)').value).toBe('Ny tid på onsdag');
   expect(fetchMock.mock.calls[0][1].body.get('type')).toBe('Tips om aktivitet');
+  expect(fetchMock.mock.calls[0][0]).toBe('https://formspree.io/f/testid');
   await user.click(screen.getByRole('button', { name: 'Send melding' }));
   await waitFor(() => expect(screen.getByRole('status').textContent).toContain('Meldingen er sendt'));
 });

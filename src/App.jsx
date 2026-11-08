@@ -6,12 +6,13 @@ import useFavorites from "./useFavorites.js";
 import useUrlFilters from "./useUrlFilters.js";
 import About from "./components/About.jsx";
 import ActivityCard from "./components/ActivityCard.jsx";
+import ActivityGrid from "./components/ActivityGrid.jsx";
 import ContactForm from "./components/ContactForm.jsx";
 import CoastalIllustration from "./components/CoastalIllustration.jsx";
 
 const municipalities = [
   "Alle steder",
-  ...new Set(activities.map((activity) => activity.municipality)),
+  ...[...new Set(activities.map((activity) => activity.municipality))].sort((a, b) => a.localeCompare(b, "nb")),
 ];
 
 export default function App() {
@@ -213,7 +214,7 @@ export default function App() {
         <div className="favorite-notice" role="status" aria-live="polite" aria-atomic="true">
           {favoriteNotice?.text}
         </div>
-        <div className="grid" id="activity-results">
+        <ActivityGrid id="activity-results">
           {shown.length ? (
             shown.map((activity) => (
               <ActivityCard
@@ -235,15 +236,15 @@ export default function App() {
               </div>
             </div>
           )}
-        </div>
+        </ActivityGrid>
         {unknownAge.length > 0 && (
           <section className="unknown-age" aria-labelledby="unknown-age-heading">
             <h3 id="unknown-age-heading">Sjekk alder hos arrangøren</h3>
             <p>Disse aktivitetene passer de andre valgene dine, men har uavklart alder.</p>
-            <div className="grid">
+            <ActivityGrid>
               {unknownAge.map((activity) => <ActivityCard key={activity.id} activity={activity}
                 saved={favorites.has(activity.id)} onToggleFavorite={handleToggleFavorite} />)}
-            </div>
+            </ActivityGrid>
           </section>
         )}
         {otherViewCount > 0 && (
@@ -254,7 +255,7 @@ export default function App() {
         )}
       </section>
       <About onContact={openContact} />
-      {contactRevision > 0 && <ContactForm key={contactRevision} />}
+      {contactRevision > 0 && <ContactForm focusRevision={contactRevision} />}
     </main>
   );
 }

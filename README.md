@@ -34,12 +34,15 @@ hos tjenesten. Det krever ingen nye npm-avhengigheter eller hemmelige API-nøkle
 Bekreftelse vises bare etter et vellykket svar med `ok: true` fra Formspree;
 dette bekrefter mottak hos tjenesten, ikke levering i e-postens innboks.
 
-1. Opprett et skjema på https://formspree.io og angi en egen mottakeradresse.
-   Bekreft adressen og aktiver e-postvarsling i kontrollpanelet.
-2. Kopier `.env.example` til `.env.local`. Sett `VITE_FORMSPREE_FORM_ID` til ID-en
-   fra skjemaets URL, for eksempel bare ID-delen i `https://formspree.io/f/ID`.
-3. Start Vite på nytt. I produksjon må samme variabel settes i byggmiljøet før
-   `npm run build`; publiser deretter den nye `dist`-mappen.
+Skjemaet bruker `https://formspree.io/f/xaeegwdg` som standard, både lokalt og
+i produksjonsbygget. React-komponenten håndterer innsending med `fetch`, så
+`@formspree/react` er ikke nødvendig.
+
+1. Bekreft mottakeradressen og aktiver e-postvarsling i Formspree-kontrollpanelet.
+2. For å bytte skjema kan du kopiere `.env.example` til `.env.local` og sette
+   `VITE_FORMSPREE_FORM_ID` til den nye ID-en. Denne overstyrer standardverdien.
+3. Start Vite på nytt etter miljøendringer. For produksjon: kjør `npm run build`
+   og publiser den nye `dist`-mappen. Eventuell overstyring må settes i byggmiljøet.
 4. Aktiver tjenestens spamfilter og begrens innsending til eget domene dersom
    tilgjengelig på valgt abonnement. Skjemaet inkluderer Formsprees `_gotcha`
    honeypot. Nettleservalidering og honeypot erstatter ikke tjenestens spamvern.
