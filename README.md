@@ -24,6 +24,11 @@ Rediger `src/App.jsx` og komponentene i `src/components/`. Aktivitetene ligger i
 nettleseren med samme nøkkel som i første versjon.
 
 `dist/` er generert produksjonskode og skal ikke redigeres direkte.
+
+Tre generiske illustrasjoner i `src/components/GenericScenes.jsx` er klare til
+senere bruk. Sett `scene` på en aktivitet til `genericNature` (familietur),
+`genericCreative` (kreativt verksted) eller `genericBallPlay` (lek med ball).
+Ingen aktiviteter bruker dem foreløpig. Bakgrunn velges som ellers med `bg`.
 Sites-konfigurasjonen i `.openai/hosting.json` publiserer denne mappen.
 
 ## Søkemotorer og ferdig HTML
