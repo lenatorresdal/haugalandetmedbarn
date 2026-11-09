@@ -1,4 +1,4 @@
-export default function About({ onContact }) {
+export default function TipsInvitation({ onContact }) {
   return (
     <aside className="about" id="om" aria-labelledby="about-heading">
       <h2 id="about-heading">Har du et tips til andre barnefamilier?</h2>

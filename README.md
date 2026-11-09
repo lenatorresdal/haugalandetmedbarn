@@ -1,6 +1,6 @@
 # haugalandetmedbarn
 
-Aktiviteter for foreldre i permisjon i Haugesund, laget med React og Vite.
+Aktiviteter for barn og familier på Haugalandet, laget med React og Vite.
 
 ## Lokal utvikling
 
@@ -23,13 +23,23 @@ Rediger `src/App.jsx` og komponentene i `src/components/`. Aktivitetene ligger i
 `src/activities.js`, og stilene i `src/styles.css`. Favoritter lagres lokalt i
 nettleseren med samme nøkkel som i første versjon.
 
-`dist/` er generert produksjonskode og skal ikke redigeres direkte.
+## Kodestruktur
 
-Tre generiske illustrasjoner i `src/components/GenericScenes.jsx` er klare til
+- `src/activities.js`: aktivitetsdata; `scene` velger illustrasjon.
+- `src/components/`: aktivitetskort, filtrets resultatgrid, tipsfelt og kontaktskjema.
+- `src/components/icons/`: små SVG-ikoner for knapper og lenker.
+- `src/components/illustrations/`: SVG-scener for aktivitetskort og toppillustrasjonen.
+- `src/use*.js`: nettlesertilstand for filtre og favoritter.
+- `scripts/prerender.mjs`: ferdig HTML og SEO-filer ved produksjonsbygg.
+- `public/`: logo og den selvstendige personvernsiden.
+
+`dist/` er generert produksjonskode og skal ikke redigeres direkte.
+Sites-konfigurasjonen i `.openai/hosting.json` publiserer denne mappen.
+
+Tre generiske illustrasjoner i `src/components/illustrations/GenericScenes.jsx` er klare til
 senere bruk. Sett `scene` på en aktivitet til `genericNature` (familietur),
 `genericCreative` (kreativt verksted) eller `genericBallPlay` (lek med ball).
 Ingen aktiviteter bruker dem foreløpig. Bakgrunn velges som ellers med `bg`.
-Sites-konfigurasjonen i `.openai/hosting.json` publiserer denne mappen.
 
 ## Søkemotorer og ferdig HTML
 

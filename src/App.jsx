@@ -4,13 +4,13 @@ import { ageGroups, isAllAges, matchesAge } from "./ageFilters.js";
 import { activityViews, matchesView } from "./participation.js";
 import useFavorites from "./useFavorites.js";
 import useUrlFilters from "./useUrlFilters.js";
-import About from "./components/About.jsx";
+import TipsInvitation from "./components/TipsInvitation.jsx";
 import ActivityCard from "./components/ActivityCard.jsx";
 import ActivityGrid from "./components/ActivityGrid.jsx";
 import ContactForm from "./components/ContactForm.jsx";
-import CoastalIllustration from "./components/CoastalIllustration.jsx";
-import HeartIcon from "./components/HeartIcon.jsx";
-import ArrowIcon from "./components/ArrowIcon.jsx";
+import CoastalIllustration from "./components/illustrations/CoastalIllustration.jsx";
+import HeartIcon from "./components/icons/HeartIcon.jsx";
+import ArrowIcon from "./components/icons/ArrowIcon.jsx";
 
 const municipalities = [
   "Alle steder",
@@ -258,7 +258,7 @@ export default function App() {
           </p>
         )}
       </section>
-      <About onContact={openContact} />
+      <TipsInvitation onContact={openContact} />
       {contactRevision > 0 && <ContactForm focusRevision={contactRevision} />}
       <footer className="site-footer">
         <a href="/personvern.html">Personvern</a>
