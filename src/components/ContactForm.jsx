@@ -48,6 +48,7 @@ export default function ContactForm({
       <h2 id="contact-heading" tabIndex={-1} ref={heading}>
         Send et tips eller en melding
       </h2>
+      <p>Du kan også sende e-post til <a href="mailto:haugalandetmedbarn@gmail.com">haugalandetmedbarn@gmail.com</a>.</p>
       {status === "sent" ? (
         <p role="status">Takk for tipset! Meldingen er sendt.</p>
       ) : (
@@ -102,6 +103,11 @@ export default function ContactForm({
                 senere.
               </p>
             )}
+            <p className="contact-privacy">
+              Meldingen sendes via Formspree. Oppgir du e-postadresse, brukes den
+              til å svare deg. Unngå sensitive opplysninger og personopplysninger
+              om barn. <a href="/personvern.html">Les personverninformasjonen</a>.
+            </p>
             <button
               className="primary-button"
               type="submit"

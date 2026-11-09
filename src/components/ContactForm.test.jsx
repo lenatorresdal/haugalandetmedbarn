@@ -18,6 +18,18 @@ it('åpner kontaktskjema fra tipsknappen', async () => {
   expect(document.activeElement.id).toBe('contact-heading');
 });
 
+it('åpner kontaktskjema direkte fra personvernsiden og viser personvernlenke', () => {
+  window.history.replaceState(null, '', '/?kontakt=1#kontakt');
+  try {
+    render(<App />);
+    expect(screen.getByLabelText('Melding (påkrevd)')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Les personverninformasjonen' }).getAttribute('href')).toBe('/personvern.html');
+    expect(document.activeElement.id).toBe('contact-heading');
+  } finally {
+    window.history.replaceState(null, '', '/');
+  }
+});
+
 it('beholder utkast og flytter fokus tilbake når tipsknappen brukes igjen', async () => {
   const user = userEvent.setup();
   render(<App />);

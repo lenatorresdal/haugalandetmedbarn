@@ -1,4 +1,6 @@
 import ActivityArt from './ActivityArt.jsx';
+import HeartIcon from './HeartIcon.jsx';
+import ArrowIcon from './ArrowIcon.jsx';
 import { participationTypes } from '../participation.js';
 
 export default function ActivityCard({ activity, saved, onToggleFavorite }) {
@@ -15,7 +17,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
           aria-label={`${saved ? 'Fjern' : 'Lagre'} ${activity.title} ${saved ? 'fra' : 'som'} favoritt`}
           aria-pressed={saved}
         >
-          {saved ? '♥' : '♡'}
+          <HeartIcon filled={saved} />
         </button>
       </div>
       <div className="body">
@@ -49,7 +51,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
             <span className="details-show">Vis detaljer</span>
             <span className="details-hide">Skjul detaljer</span>
             <span className="sr-only"> om {activity.title}</span>
-            <span className="details-chevron" aria-hidden="true">⌄</span>
+            <ArrowIcon direction="down" className="details-chevron" />
           </summary>
           <div className="card-details-content">
         {activity.distance && <div className="meta">{activity.distance}</div>}
@@ -69,11 +71,11 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
           <p className="stroller-info"><strong>Med barnevogn:</strong> {activity.stroller}</p>
         )}
         <div className="card-bottom">
-          <a href={activity.url} target="_blank" rel="noopener">{activity.link} ↗</a>
+          <a href={activity.url} target="_blank" rel="noopener">{activity.link} <ArrowIcon direction="external" /></a>
         </div>
         {activity.additionalLinks?.map(({ url, label }) => (
           <div className="card-bottom" key={url}>
-            <a href={url} target="_blank" rel="noopener">{label} ↗</a>
+            <a href={url} target="_blank" rel="noopener">{label} <ArrowIcon direction="external" /></a>
           </div>
         ))}
           </div>

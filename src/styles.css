@@ -1,4 +1,7 @@
 :root{--ink:#253e35;--green:#365c46;--muted:#71796f;--paper:#faf9f5;--line:#e5e7dd}
+.site-footer{margin-top:auto;padding:24px 0 32px;border-top:1px solid var(--line);text-align:center;font-size:14px}
+.site-footer a,.contact-privacy a{text-underline-offset:3px}
+.contact-privacy{font-size:14px;line-height:1.7;color:var(--muted)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-block:24px}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif}
@@ -18,9 +21,10 @@ h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
 .card{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:transform .2s;display:flex;flex-direction:column}
 .card:hover{transform:translateY(-4px)}
 .picture{height:180px;position:relative;display:grid;place-items:center;overflow:hidden}
-.picture svg{width:100%;height:100%}
+.picture > svg{width:100%;height:100%}
 .place-badge{position:absolute;left:14px;top:17px;background:#fffdf4e8;padding:5px 9px;border-radius:5px;font-size:14px;font-weight:600}
-.heart{position:absolute;right:14px;top:14px;background:#ffffffdf;border:0;border-radius:50%;width:44px;height:44px;font-size:21px;color:var(--green)}
+.heart{position:absolute;right:14px;top:14px;background:#ffffffdf;border:0;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;padding:0;color:var(--green)}
+.heart-icon{display:block;flex-shrink:0;width:20px;height:22px}
 .heart[aria-pressed=true]{background:var(--green);color:white}
 .body{padding:26px;display:flex;flex-direction:column;flex:1}
 .category{font-size:14px;text-transform:uppercase;letter-spacing:1.4px;color:#526541}
@@ -86,7 +90,6 @@ main{padding:0 22px}
 .results-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px}
 .favorites-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-left:auto}
 .favorites-button{display:inline-flex;align-items:center;gap:8px;background:white}
-.favorites-button span{font-size:21px;line-height:1}
 .favorite-notice:empty{display:none}
 .favorite-notice{position:static;margin-bottom:16px;max-width:100%;border-radius:8px;padding:12px 18px;background:var(--ink);color:white;font-size:14px;line-height:1.5;box-shadow:0 4px 18px #253e3526;pointer-events:none}
 @media(max-width:580px){.results-toolbar{gap:12px}.favorites-actions{gap:8px}.favorites-button{padding:10px 13px}}
@@ -111,8 +114,9 @@ main{padding:0 22px}
 .view-description{max-width:680px;text-align:center;margin:14px auto 24px}
 .participation{align-self:flex-start;font-size:14px;line-height:1.5;font-weight:600;margin:0 0 12px;color:var(--green)}
 .participation-course,.participation-signup,.participation-check{color:#805731}
-.other-offers{font-size:14px;line-height:1.7;color:#626d63;margin:0 0 24px}
-.other-offers .reset-filters{font-size:14px}
+.other-offers{font-size:14px;line-height:1.7;color:#626d63;margin:28px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.other-offers .reset-filters{font-size:14px;font-weight:600;color:var(--green);text-underline-offset:4px;min-height:44px;padding:8px 0}
+.arrow-icon{display:inline-block;flex-shrink:0;width:16px;height:16px;vertical-align:-3px}
 @media(max-width:580px){.activity-views button{flex-basis:40%}.activity-views button:last-child{flex-basis:100%}}
 .stroller-info{font-size:14px;line-height:1.8;background:#f1f4ed;border-left:3px solid #829377;border-radius:4px;padding:10px 12px;margin:0 0 20px;color:var(--ink)}
 
@@ -138,7 +142,6 @@ main{padding:0 22px}
 .active-filters{justify-content:flex-start;align-items:center;margin-bottom:20px;gap:8px}
 .active-filters .filter{padding:7px 12px;min-height:36px;font-size:13px}
 .active-filters .reset-filters{margin-left:auto}
-.other-offers{margin:24px 0 0;padding:16px 20px;background:#eef1e8;border-radius:10px}
 @media(max-width:580px){
 .filter-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;padding:16px}
 .filter-controls .category-control{grid-column:1/-1}
@@ -171,7 +174,7 @@ main{padding:0 22px}
 .card-details .details-hide{display:none}
 .card-details[open] .details-show{display:none}
 .card-details[open] .details-hide{display:inline}
-.details-chevron{margin-left:auto;font-size:18px;transition:transform .15s}
+.details-chevron{margin-left:auto;transition:transform .15s}
 .card-details[open] .details-chevron{transform:rotate(180deg)}
 .card-details-content{padding-top:12px}
 .card-details .card-bottom{padding-top:16px;text-align:left;line-height:1.6}

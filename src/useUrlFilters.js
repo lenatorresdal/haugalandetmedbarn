@@ -10,6 +10,7 @@ const defaultFilters = {
 const municipalities = new Set(activities.map(activity => activity.municipality));
 
 function readFilters() {
+  if (typeof window === 'undefined') return { ...defaultFilters, selectedAges: [] };
   const params = new URLSearchParams(window.location.search);
   return {
     view: activityViews.some(view => view.value === params.get('tilbud')) ? params.get('tilbud') : defaultFilters.view,

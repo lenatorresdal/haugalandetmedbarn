@@ -26,7 +26,35 @@ nettleseren med samme nøkkel som i første versjon.
 `dist/` er generert produksjonskode og skal ikke redigeres direkte.
 Sites-konfigurasjonen i `.openai/hosting.json` publiserer denne mappen.
 
+## Søkemotorer og ferdig HTML
+
+`npm run build` bygger React og forhåndsgenererer deretter forsidens innhold
+direkte i `dist/index.html`. Aktivitetsoversikten kan dermed leses uten
+JavaScript. Når JavaScript starter, tar React over med fungerende filtre og
+lokale favoritter. Filtervalg og favoritter endrer ikke den genererte HTML-filen.
+
+Den offentlige hovedadressen er satt i `.env.production` med `SITE_URL`.
+Denne filen inneholder bare offentlig konfigurasjon; legg aldri hemmeligheter der.
+Byggingen bruker adressen til canonical-tag, `dist/sitemap.xml` og sitemap-lenken
+i `dist/robots.txt`. Alle filtervarianter peker til samme canonical-adresse;
+de er ikke egne landingssider. Ved domenebytte: oppdater `SITE_URL` og bygg på nytt.
+Uten `SITE_URL` varsler byggingen og utelater canonical og sitemap.
+
+Etter publisering kan sitemap sendes inn i Google Search Console. Oppsettet her
+verifiserer ikke domeneeierskap eller om Google har indeksert nettstedet.
+
 ## Kontakt og tips (Formspree)
+
+Personverninformasjonen ligger i `public/personvern.html`, med lenke nederst
+på forsiden og ved innsending. Den er tilgjengelig uten JavaScript. Før publisering
+må eieren bekrefte behandlingsgrunnlag og opplysninger om leverandører og eventuelle overføringer basert på
+de faktiske avtalene. Kommentarer i HTML-filen markerer det som må avklares.
+Lenken `/?kontakt=1#kontakt` åpner kontaktskjemaet direkte.
+
+Ansvarlig er Lena Tørresdal, med kontaktadresse `haugalandetmedbarn@gmail.com`.
+Kontakthenvendelser skal slettes i både Formspree og Gmail innen tre måneder
+etter ferdig behandling. Dette er en rutine eieren må følge opp; nettsidekoden
+utfører ikke sletting hos disse tjenestene.
 
 Siden er statisk React/Vite uten backend. Kontaktskjemaet sender en ekte POST
 med FormData til Formspree, som videresender til mottakeradressen du konfigurerer
@@ -38,7 +66,9 @@ Skjemaet bruker `https://formspree.io/f/xaeegwdg` som standard, både lokalt og
 i produksjonsbygget. React-komponenten håndterer innsending med `fetch`, så
 `@formspree/react` er ikke nødvendig.
 
-1. Bekreft mottakeradressen og aktiver e-postvarsling i Formspree-kontrollpanelet.
+1. Sett mottakeradressen til `haugalandetmedbarn@gmail.com`, bekreft adressen og
+   aktiver e-postvarsling i Formspree-kontrollpanelet. Mottakeradressen kan ikke
+   endres i nettsidekoden; skjemaet bruker fortsatt samme Formspree-ID.
 2. For å bytte skjema kan du kopiere `.env.example` til `.env.local` og sette
    `VITE_FORMSPREE_FORM_ID` til den nye ID-en. Denne overstyrer standardverdien.
 3. Start Vite på nytt etter miljøendringer. For produksjon: kjør `npm run build`
@@ -55,8 +85,8 @@ Miljøfiler med lokal konfigurasjon er ignorert av Git.
 
 Meldinger sendes til Formspree og mottakerens e-post. Før lansering: vurder
 leverandørens personvernvilkår/databehandleravtale og eventuelle overføringer,
-avklar sletting og lagringstid både hos tjenesten og i innboksen, og opplys om
-dette i nettstedets personverninformasjon. Skjemaet ber bare om melding og valgfri
+følg sletterutinen både hos tjenesten og i innboksen, og hold nettstedets
+personverninformasjon oppdatert. Skjemaet ber bare om melding og valgfri
 e-post; det lagrer ingen utkast lokalt og ber brukeren unngå sensitive opplysninger.
 
 Dokumentasjon: https://formspree.io/guides/framer/ og

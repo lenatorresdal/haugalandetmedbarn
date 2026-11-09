@@ -9,6 +9,8 @@ import ActivityCard from "./components/ActivityCard.jsx";
 import ActivityGrid from "./components/ActivityGrid.jsx";
 import ContactForm from "./components/ContactForm.jsx";
 import CoastalIllustration from "./components/CoastalIllustration.jsx";
+import HeartIcon from "./components/HeartIcon.jsx";
+import ArrowIcon from "./components/ArrowIcon.jsx";
 
 const municipalities = [
   "Alle steder",
@@ -56,7 +58,9 @@ export default function App() {
     action();
   }
 
-  const [contactRevision, setContactRevision] = useState(0);
+  const [contactRevision, setContactRevision] = useState(() =>
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('kontakt') === '1' ? 1 : 0,
+  );
 
   function openContact() {
     setContactRevision((previous) => previous + 1);
@@ -159,7 +163,7 @@ export default function App() {
             }}>
               <summary aria-labelledby="age-filter-label age-filter-value" aria-describedby="age-guidance">
                 <span id="age-filter-value">{selectedAgeGroups.length === 0 ? "Alle aldre" : selectedAgeGroups.map((group) => group.label).join(", ")}</span>
-                <span aria-hidden="true">⌄</span>
+                <ArrowIcon direction="down" />
               </summary>
               <fieldset className="age-options">
                 <legend>Velg én eller flere aldersgrupper</legend>
@@ -197,7 +201,7 @@ export default function App() {
             {onlySaved && <button className="reset-filters" onClick={() => clearFilter(() => setOnlySaved(false))}>Vis alle aktiviteter</button>}
             <button className={`filter favorites-button ${onlySaved ? "active" : ""}`}
               aria-pressed={onlySaved} onClick={() => setOnlySaved((previous) => !previous)}>
-              <span aria-hidden="true">{onlySaved ? "♥" : "♡"}</span> Mine favoritter ({favoriteCount})
+              <HeartIcon filled={onlySaved} /> Mine favoritter ({favoriteCount})
             </button>
           </div>
         </div>
@@ -249,13 +253,16 @@ export default function App() {
         )}
         {otherViewCount > 0 && (
           <p className="other-offers">
-            {otherViewCount} tilbud passer også valgene dine under {view === "experiences" ? "kurs og påmelding" : "opplevelser og åpne tilbud"}.
-            {" "}<button className="reset-filters" onClick={() => setView(view === "experiences" ? "courses" : "experiences")}>Vis disse tilbudene</button>
+            <span>{otherViewCount} tilbud passer også valgene dine under {view === "experiences" ? "kurs og påmelding" : "opplevelser og åpne tilbud"}.</span>
+            {" "}<button className="reset-filters" onClick={() => setView(view === "experiences" ? "courses" : "experiences")}>Vis disse tilbudene <ArrowIcon /></button>
           </p>
         )}
       </section>
       <About onContact={openContact} />
       {contactRevision > 0 && <ContactForm focusRevision={contactRevision} />}
+      <footer className="site-footer">
+        <a href="/personvern.html">Personvern</a>
+      </footer>
     </main>
   );
 }

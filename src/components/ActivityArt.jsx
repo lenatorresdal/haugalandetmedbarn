@@ -1,5 +1,6 @@
 import tripScenes from './TripScenes.jsx';
 import cafeScenes from './CafeScenes.jsx';
+import discoveryScenes from './DiscoveryScenes.jsx';
 
 const scenes = {
   iceSkating: <>
@@ -28,6 +29,7 @@ const scenes = {
   </>,
   ...tripScenes,
   ...cafeScenes,
+  ...discoveryScenes,
   adventure: <>
       <path d="M0 132q90-15 180 0t180-8v56H0Z" fill="#b9c8b2" />
       <path d="M98 180q8-34 67-43t73-29" fill="none" stroke="#eadfc6" strokeWidth="20" />
