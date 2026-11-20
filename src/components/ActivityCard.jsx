@@ -1,21 +1,29 @@
+import { useEffect, useRef } from 'react';
 import ActivityArt from './illustrations/ActivityArt.jsx';
 import HeartIcon from './icons/HeartIcon.jsx';
-import ArrowIcon from './icons/ArrowIcon.jsx';
 import { participationTypes } from '../participation.js';
 
-export default function ActivityCard({ activity, saved, onToggleFavorite }) {
+export default function ActivityCard({ activity, saved, onToggleFavorite, initiallyOpen = false }) {
+  const cardRef = useRef(null);
+  useEffect(() => {
+    if (!initiallyOpen || !cardRef.current) return;
+    cardRef.current.scrollIntoView?.({ block: 'start' });
+    cardRef.current.focus({ preventScroll: true });
+  }, [initiallyOpen, activity.id]);
+
   const locations = activity.locations ?? [{ place: activity.place, time: activity.time }];
 
   return (
-    <article className="card">
+    <article className="card" ref={cardRef} tabIndex={initiallyOpen ? -1 : undefined}>
       <div className="picture">
         <ActivityArt scene={activity.scene} background={activity.bg} />
         <span className="place-badge">{activity.municipality}</span>
         <button
           className="heart"
           onClick={() => onToggleFavorite(activity.id)}
-          aria-label={`${saved ? 'Fjern' : 'Lagre'} ${activity.title} ${saved ? 'fra' : 'som'} favoritt`}
+          aria-label={`Favoritt: ${activity.title}`}
           aria-pressed={saved}
+          title={saved ? 'Fjern fra favoritter' : 'Lagre som favoritt'}
         >
           <HeartIcon filled={saved} />
         </button>
@@ -24,7 +32,7 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
         <div className="card-overview">
           <div className="card-overview-content">
             <div className="category">{activity.category}</div>
-            <h3>{activity.title}</h3>
+            <h3><a className="card-link" href={`/aktiviteter/${activity.id}/`}>{activity.title}</a></h3>
             <div className={`participation participation-${activity.participation}`}>
               {participationTypes[activity.participation].label}
             </div>
@@ -48,40 +56,6 @@ export default function ActivityCard({ activity, saved, onToggleFavorite }) {
             </div>
           </div>
         </div>
-        <details className="card-details">
-          <summary>
-            <span className="details-show">Vis detaljer</span>
-            <span className="details-hide">Skjul detaljer</span>
-            <span className="sr-only"> om {activity.title}</span>
-            <ArrowIcon direction="down" className="details-chevron" />
-          </summary>
-          <div className="card-details-content">
-            {activity.distance && <div className="meta">{activity.distance}</div>}
-            {activity.changingTable !== undefined && (
-              <div className="cafe-facilities meta">
-                <div>Stellebord: {activity.changingTable === null ? 'Ikke bekreftet' : activity.changingTable ? 'Ja' : 'Nei'}</div>
-              </div>
-            )}
-            {activity.email && (
-              <p className="activity-contact">
-                Spørsmål og påmelding: <a href={`mailto:${activity.email}`}>{activity.email}</a>
-              </p>
-            )}
-            <p className="description">{activity.description}</p>
-            {activity.price && <p className="activity-price"><strong>Pris:</strong> {activity.price}</p>}
-            {activity.stroller && (
-              <p className="stroller-info"><strong>Med barnevogn:</strong> {activity.stroller}</p>
-            )}
-            <div className="card-bottom">
-              <a href={activity.url} target="_blank" rel="noopener">{activity.link} <ArrowIcon direction="external" /></a>
-            </div>
-            {activity.additionalLinks?.map(({ url, label }) => (
-              <div className="card-bottom" key={url}>
-                <a href={url} target="_blank" rel="noopener">{label} <ArrowIcon direction="external" /></a>
-              </div>
-            ))}
-          </div>
-        </details>
       </div>
     </article>
   );

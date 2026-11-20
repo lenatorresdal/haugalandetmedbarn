@@ -51,8 +51,12 @@ lokale favoritter. Filtervalg og favoritter endrer ikke den genererte HTML-filen
 Den offentlige hovedadressen er satt i `.env.production` med `SITE_URL`.
 Denne filen inneholder bare offentlig konfigurasjon; legg aldri hemmeligheter der.
 Byggingen bruker adressen til canonical-tag, `dist/sitemap.xml` og sitemap-lenken
-i `dist/robots.txt`. Alle filtervarianter peker til samme canonical-adresse;
-de er ikke egne landingssider. Ved domenebytte: oppdater `SITE_URL` og bygg på nytt.
+i `dist/robots.txt`. Alle filtervarianter peker til forsiden som canonical-adresse. Bygget lager også
+egen statisk side for hver aktivitet, en kursoversikt og sider for hvert sted.
+Disse sidene får egne canonical-adresser og legges i nettstedskartet. De henter
+innhold fra `src/activities.js`; oppdater aktivitetene der. Når en ny kommune
+legges til, må URL-navnet også legges i `scripts/seo-pages.mjs`.
+Ved domenebytte: oppdater `SITE_URL` og bygg på nytt.
 Uten `SITE_URL` varsler byggingen og utelater canonical og sitemap.
 
 Etter publisering kan sitemap sendes inn i Google Search Console. Oppsettet her

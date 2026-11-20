@@ -1,7 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { createServer, loadEnv } from 'vite';
 import { createElement } from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { writeSeoPages } from './seo-pages.mjs';
 
 // Use Vite's JSX and environment handling without adding a server to hosting.
 const buildEnv = { ...loadEnv('production', process.cwd(), ''), ...process.env };
@@ -19,12 +20,23 @@ try {
   const markup = renderToString(createElement(App));
   let html = await readFile('dist/index.html', 'utf8');
   html = html.replace('<div id="root"></div>', () => `<div id="root">${markup}</div>`);
+  const { default: ActivityArt } = await viteServer.ssrLoadModule('/src/components/illustrations/ActivityArt.jsx');
+  const renderActivityArt = activity => renderToStaticMarkup(createElement(ActivityArt, { scene: activity.scene, background: activity.bg }));
+  const seoPaths = await writeSeoPages(siteUrl, 'dist', renderActivityArt);
   if (siteUrl) {
     const escapedSiteUrl = siteUrl.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
-    html = html.replace('</head>', `  <link rel="canonical" href="${escapedSiteUrl}" />\n  </head>`);
+    const websiteData = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Haugalandet med barn',
+      url: siteUrl,
+      inLanguage: 'nb-NO',
+      description: 'Aktiviteter og opplevelser for barn og familier på Haugalandet.',
+    }).replaceAll('<', '\\u003c');
+    html = html.replace('</head>', `  <link rel="canonical" href="${escapedSiteUrl}" />\n    <meta property="og:url" content="${escapedSiteUrl}" />\n    <meta property="og:image" content="${escapedSiteUrl}logo.png" />\n    <meta property="og:image:alt" content="Haugalandet med barn" />\n    <script type="application/ld+json">${websiteData}</script>\n  </head>`);
     const privacyHtml = await readFile('dist/personvern.html', 'utf8');
     await writeFile('dist/personvern.html', privacyHtml.replace('</head>', `<link rel="canonical" href="${escapedSiteUrl}personvern.html" />\n  </head>`));
-    await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapedSiteUrl}</loc></url><url><loc>${escapedSiteUrl}personvern.html</loc></url></urlset>\n`);
+    await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapedSiteUrl}</loc></url><url><loc>${escapedSiteUrl}personvern.html</loc></url>${seoPaths.map(path => `<url><loc>${escapedSiteUrl}${path.slice(1)}</loc></url>`).join('')}</urlset>\n`);
   } else {
     console.warn('SITE_URL is missing: canonical and sitemap are omitted. Set it before publishing.');
   }

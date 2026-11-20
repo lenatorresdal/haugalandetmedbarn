@@ -9,8 +9,8 @@ button,input{font:inherit}
 button,a{-webkit-tap-highlight-color:transparent}
 button{cursor:pointer}
 a{color:inherit}
-.brand{font-family:Manrope,sans-serif;font-weight:800}
-main{width:100%;max-width:1240px;min-height:100vh;min-height:100dvh;margin:0 auto;padding:0 36px;display:flex;flex-direction:column}
+.app-shell{width:100%;max-width:1240px;min-height:100vh;min-height:100dvh;margin:0 auto;padding:0 36px;display:flex;flex-direction:column}
+.home-main{width:100%;display:flex;flex-direction:column;flex:1}
 .explore{padding:32px 0 40px}
 .heading{margin-bottom:32px;text-align:center}
 h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
@@ -29,13 +29,9 @@ h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
 .body{padding:26px;display:flex;flex-direction:column;flex:1}
 .category{font-size:14px;text-transform:uppercase;letter-spacing:1.4px;color:#526541}
 .card h3{font:600 17px Manrope,sans-serif;letter-spacing:-.5px;line-height:1.45;margin:12px 0}
-.description{font-size:14px;line-height:1.8;color:#626d63;margin:0 0 24px}
 .meta{font-size:14px;line-height:1.9;color:#687268}
 .location-icon{width:15px;height:15px;vertical-align:-3px}
 .activity-location + .activity-location{margin-top:16px}
-.activity-contact{font-size:14px;line-height:1.9;overflow-wrap:anywhere}
-.card-bottom{margin-top:auto;padding-top:24px;font-size:14px;text-align:right}
-.card-bottom a{text-decoration:none;font-weight:600}
 .empty{grid-column:1/-1;padding:50px;text-align:center;border:1px dashed #c6cebd;border-radius:10px}
 .about{width:100%;align-self:center;margin:20px 0 28px;padding:16px 20px;background:#eaf0e3;border-radius:10px;text-align:center}
 .about h2{font-size:18px;line-height:1.4;letter-spacing:-.4px;margin:0 0 6px}
@@ -46,7 +42,7 @@ h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
 .grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:580px){
-main{padding:0 22px}
+.app-shell{padding:0 22px}
 .grid{grid-template-columns:1fr}
 .picture{height:190px}
 .explore{padding-top:20px}
@@ -69,7 +65,6 @@ main{padding:0 22px}
 .contact input,.contact select,.contact textarea{display:block;width:100%;min-height:48px;border:1px solid #7b8578;border-radius:8px;padding:12px;background:white;color:var(--ink);font:inherit;font-size:16px}
 .contact textarea{resize:vertical}
 .contact .primary-button{margin-top:24px}
-.contact-note{font-size:14px;line-height:1.7;color:#626d63}
 .honeypot{display:none}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}.card:hover{transform:none}}
@@ -81,7 +76,6 @@ main{padding:0 22px}
 .active-filters .filter{background:#eaf0e3;overflow-wrap:anywhere;max-width:100%}
 .reset-filters{border:0;background:transparent;color:var(--green);text-decoration:underline;text-underline-offset:3px;min-height:44px;font:inherit;font-size:14px}
 .activity-age{align-self:flex-start;background:#eaf0e3;color:var(--green);font-size:14px;font-weight:600;padding:6px 10px;border-radius:6px;margin-bottom:16px}
-.activity-price{font-size:14px;line-height:1.8;color:#626d63;margin:16px 0 0}
 .unknown-age{margin-top:40px}
 .unknown-age>p{font-size:14px;color:#626d63;line-height:1.7;margin-bottom:24px}
 .empty-actions{margin:20px 0 0}
@@ -95,7 +89,6 @@ main{padding:0 22px}
 @media(max-width:580px){.results-toolbar{gap:12px}.favorites-actions{gap:8px}.favorites-button{padding:10px 13px}}
 .age-control{display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600;flex:1;min-width:160px}
 .age-picker{position:relative}
-.age-guidance{font-size:14px;font-weight:400;line-height:1.6;color:#626d63;margin:0}
 .age-picker summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;border:1px solid #7b8578;border-radius:8px;background:white;padding:10px 12px;cursor:pointer;list-style:none}
 .age-picker summary::-webkit-details-marker{display:none}
 .age-picker summary:focus-visible{outline:3px solid #253e35;outline-offset:4px;box-shadow:0 0 0 4px white}
@@ -118,7 +111,6 @@ main{padding:0 22px}
 .other-offers .reset-filters{font-size:14px;font-weight:600;color:var(--green);text-underline-offset:4px;min-height:44px;padding:8px 0}
 .arrow-icon{display:inline-block;flex-shrink:0;width:16px;height:16px;vertical-align:-3px}
 @media(max-width:580px){.activity-views button{flex-basis:40%}.activity-views button:last-child{flex-basis:100%}}
-.stroller-info{font-size:14px;line-height:1.8;background:#f1f4ed;border-left:3px solid #829377;border-radius:4px;padding:10px 12px;margin:0 0 20px;color:var(--ink)}
 
 .skip-link{position:fixed;top:12px;left:12px;z-index:40;transform:translateY(calc(-100% - 24px));background:white;color:var(--ink);padding:12px 18px;border-radius:8px;font-weight:600}
 .skip-link:focus{transform:none}
@@ -153,45 +145,63 @@ main{padding:0 22px}
 .favorites-button{font-size:13px;padding:8px 10px}
 }
 
-.grid{align-items:start}
+.grid{align-items:stretch;grid-auto-rows:1fr}
 .card-overview-content{display:flow-root}
 .card .activity-age{width:fit-content;max-width:100%}
-.card h3,.activity-location,.card-bottom a{overflow-wrap:anywhere}
-.card-bottom a:hover{text-decoration:underline;text-underline-offset:3px}
+.card h3,.activity-location{overflow-wrap:anywhere}
 .card .picture{height:150px}
 .card .body{padding:20px}
 .card .category{font-size:12px;letter-spacing:1px}
 .card h3{margin:8px 0 10px}
 .card .participation{margin-bottom:10px;font-size:13px}
 .card .activity-age{margin-bottom:12px;padding:4px 8px;font-size:13px;line-height:1.5}
-.card .description{line-height:1.65;margin-bottom:14px}
-.card .activity-price{margin:8px 0 0;font-size:13px;line-height:1.6}
-.card-place{font-weight:500;overflow-wrap:anywhere}
-.card-details{margin-top:auto;padding-top:16px}
-.card-details>summary{border-top:1px solid var(--line)}
-.card-details>summary{display:flex;align-items:center;gap:8px;min-height:44px;padding-top:6px;list-style:none;cursor:pointer;color:var(--green);font-size:14px;font-weight:600}
-.card-details>summary::-webkit-details-marker{display:none}
-.card-details .details-hide{display:none}
-.card-details[open] .details-show{display:none}
-.card-details[open] .details-hide{display:inline}
-.details-chevron{margin-left:auto;transition:transform .15s}
-.card-details[open] .details-chevron{transform:rotate(180deg)}
-.card-details-content{padding-top:12px}
-.card-details .card-bottom{padding-top:16px;text-align:left;line-height:1.6}
-.card-details .stroller-info{margin:12px 0}
-.card-details .cafe-facilities{margin-bottom:12px}
-@media(prefers-reduced-motion:reduce){.details-chevron{transition:none}}
+.card-overview{margin-bottom:16px}
 
-@supports (interpolate-size:allow-keywords) and selector(details::details-content){
-  .card-details{interpolate-size:allow-keywords}
-  .card-details::details-content{
-    height:0;
-    opacity:0;
-    overflow:hidden;
-    transition:height .28s ease,opacity .2s ease,content-visibility .28s allow-discrete;
-  }
-  .card-details[open]::details-content{height:auto;opacity:1}
-  @media(prefers-reduced-motion:reduce){
-    .card-details::details-content{transition:none}
-  }
+.shared-activity-notice{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;font-size:14px}
+
+.card{scroll-margin-top:24px}
+
+
+/* Lesbar navigasjon og tydeligere hierarki på små og store skjermer. */
+.heading p,.view-description{font-size:16px;line-height:1.6;color:#536256}
+.activity-views button{font-size:15px;line-height:1.35}
+.card .category,.card .participation,.card .activity-age{font-size:14px}
+.card .meta{color:#526158}
+.card .picture{height:160px}
+.card{box-shadow:0 2px 10px #253e3508}
+.card:hover{box-shadow:0 8px 24px #253e3514}
+#age-filter-value{overflow:visible;text-overflow:clip;white-space:normal;line-height:1.4}
+.age-picker summary .arrow-icon{flex-shrink:0}
+.filter-controls select,.contact select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23365c46' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:38px}
+.site-footer{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap;text-align:left;color:#526158}
+.site-footer nav{display:flex;gap:12px 20px;flex-wrap:wrap}
+.site-footer a{min-height:44px;display:inline-flex;align-items:center}
+.shared-activity-notice{justify-content:space-between;padding:16px 20px;background:#eef1e8;border:1px solid var(--line);border-radius:10px;text-align:left;font-size:16px}
+@media(max-width:580px){
+  .introduction p{font-size:16px}
+  .activity-views{flex-wrap:wrap}
+  .activity-views button,.activity-views button:last-child{flex:1 1 40%;font-size:14px;padding:10px 12px}
+  .activity-views button:last-child{flex-basis:100%}
+  .view-description{font-size:14px}
+  .card .picture{height:170px}
+  .site-footer{align-items:flex-start;flex-direction:column}
+}
+
+/* The title is the accessible link; its hit area covers the card. */
+.card{position:relative}
+.card-link{color:inherit;text-decoration:underline;text-decoration-color:#9cab9c;text-underline-offset:4px}
+.card-link::after{content:"";position:absolute;inset:0;z-index:1}
+.card .picture{z-index:2;pointer-events:none}
+.card .heart{pointer-events:auto}
+.card:hover .card-link,.card-link:focus-visible{text-decoration-color:currentColor}
+.card:focus-within{outline:3px solid var(--ink);outline-offset:3px}
+
+/* Readable contrast and usable controls at narrow widths and high zoom. */
+.about p,.contact-privacy,.age-options p{color:#526158}
+.filter{border-color:#788577}
+.age-options{max-height:min(70vh,32rem);max-height:min(70dvh,32rem);overflow:auto;overscroll-behavior:contain}
+.active-filters .filter{font-size:14px;min-height:44px}
+@media(forced-colors:active){
+  .filter-controls select,.contact select{appearance:auto;background-image:none}
+  .activity-views button.selected,.filter.active{outline:2px solid ButtonText;outline-offset:-3px}
 }

@@ -3,10 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // Wait until the interactive overview is ready before scrolling to it.
+      if (location.hash === '#aktiviteter') {
+        try {
+          history.replaceState(history.state, '', location.pathname + location.search);
+          window.initialActivityAnchor = true;
+        } catch {}
+      }
+    </script>
     <meta
       name="description"
-      content="Finn aktiviteter for barn og familier på Haugalandet. Utforsk turer, lek, kurs og kaféer, og lagre favorittene dine."
+      content="Finn aktiviteter for barn og familier i Haugesund, på Karmøy og resten av Haugalandet. Utforsk turer, lek, babysang, kurs og kaféer."
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nb_NO" />
+    <meta property="og:site_name" content="Haugalandet med barn" />
+    <meta property="og:title" content="Aktiviteter for barn på Haugalandet | Haugalandet med barn" />
+    <meta property="og:description" content="Finn turer, lek, babysang, kurs og kaféer for barnefamilier på Haugalandet." />
+    <meta name="twitter:card" content="summary" />
     <title>Aktiviteter for barn på Haugalandet | Haugalandet med barn</title>
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

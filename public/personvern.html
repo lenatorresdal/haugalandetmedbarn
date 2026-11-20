@@ -6,18 +6,25 @@
     <meta name="description" content="Slik behandles meldinger og lokale favoritter på Haugalandet med barn." />
     <title>Personvern | Haugalandet med barn</title>
     <link rel="icon" type="image/png" href="/logo.png" />
-    <style>
-      :root{color-scheme:light;font-family:system-ui,sans-serif;color:#253e35;background:#faf9f5}
-      *{box-sizing:border-box}body{margin:0}main{max-width:740px;margin:auto;padding:40px 24px 64px}
-      a{color:#365c46;text-underline-offset:3px}a:focus-visible{outline:3px solid #365c46;outline-offset:4px}
-      h1{font-size:clamp(30px,6vw,44px);line-height:1.2;letter-spacing:-1px;margin:32px 0 16px}
-      h2{font-size:21px;line-height:1.4;margin:32px 0 12px}p,li{line-height:1.8}li+li{margin-top:8px}
-      .updated{font-size:14px;color:#626d63}footer{border-top:1px solid #e5e7dd;margin-top:40px;padding-top:24px}
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/innhold.css" />
   </head>
   <body>
-    <main>
-      <a href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="vertical-align:-3px"><path d="M20 12H4m6-6-6 6 6 6" /></svg> Til Haugalandet med barn</a>
+    <a class="skip-link" href="#innhold">Hopp til innhold</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="site-name" href="/" aria-label="Haugalandet med barn – til forsiden"><img src="/logo.png" alt="" width="48" height="48" /><span>Haugalandet <span>med barn</span></span></a>
+        <nav class="page-nav" aria-label="Hovednavigasjon">
+          <a href="/?tilbud=all#aktiviteter">Alle aktiviteter</a>
+          <a href="/kurs/">Kurs og påmelding</a>
+          <a href="/steder/">Steder</a>
+        </nav>
+      </header>
+      <main id="innhold" tabindex="-1">
+        <nav class="breadcrumbs" aria-label="Du er her"><ol><li><a href="/?tilbud=all#aktiviteter">Alle aktiviteter</a></li><li><span aria-current="page">Personvern</span></li></ol></nav>
+        <article class="privacy-content">
+      <a class="activity-back" href="/?tilbud=all#aktiviteter">Tilbake til aktivitetsoversikten</a>
       <h1>Personvern</h1>
       <p>Her finner du informasjon om kontaktskjemaet, favorittene dine og eksterne tjenester på Haugalandet med barn.</p>
       <p class="updated">Sist oppdatert: 9. november 2026</p>
@@ -37,12 +44,14 @@
       <p>Når du lagrer en aktivitet som favoritt, lagres aktivitetens ID i nettleseren din. Favorittlisten sendes ikke til nettstedets eier. Den blir liggende mellom besøk til du fjerner favorittene eller sletter nettstedets lagrede data i nettleseren.</p>
 
       <h2>Eksterne tjenester og lenker</h2>
-      <p>Forsiden henter skrifttyper fra Google Fonts. Det innebærer at nettleseren kobler til Google, som mottar tekniske opplysninger som IP-adresse. <a href="https://developers.google.com/fonts/faq/privacy">Les om personvern i Google Fonts</a>.</p>
+      <p>Nettsiden henter skrifttyper fra Google Fonts. Det innebærer at nettleseren kobler til Google, som mottar tekniske opplysninger som IP-adresse. <a href="https://developers.google.com/fonts/faq/privacy">Les om personvern i Google Fonts</a>.</p>
       <p>Nettsiden lenker også til arrangørers egne sider. Når du følger en slik lenke, gjelder personverninformasjonen til nettstedet du besøker.</p>
 
       <h2>Dine rettigheter</h2>
       <p>Du kan kontakte den som driver siden for å be om innsyn, retting eller sletting av opplysninger om deg. Avhengig av behandlingen kan du også ha rett til å protestere eller be om begrensning. Du kan <a href="https://www.datatilsynet.no/">kontakte Datatilsynet</a> dersom du mener opplysningene dine behandles i strid med personvernreglene.</p>
-      <footer><a href="/">Tilbake til aktivitetene</a></footer>
-    </main>
+        </article>
+      </main>
+      <footer class="site-footer"><nav aria-label="Lenker nederst på siden"><a href="/kurs/">Kurs og påmelding</a><a href="/steder/">Aktiviteter etter sted</a><a href="/personvern.html" aria-current="page">Personvern</a></nav></footer>
+    </div>
   </body>
 </html>

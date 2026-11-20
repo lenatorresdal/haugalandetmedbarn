@@ -18,9 +18,32 @@ const municipalities = [
 ];
 
 export default function App() {
+  const [sharedId, setSharedId] = useState(() =>
+    typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("aktivitet"),
+  );
+  useEffect(() => {
+    const restore = () => setSharedId(new URLSearchParams(window.location.search).get("aktivitet"));
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, []);
+  const sharedActivity = activities.find((activity) => activity.id === sharedId);
+  function showAllActivities() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("aktivitet");
+    window.history.pushState(window.history.state, "", url.pathname + url.search + url.hash);
+    setSharedId(null);
+  }
   const resultsHeading = useRef(null);
+  const exploreSection = useRef(null);
   const restoreResultsFocus = useRef(false);
   const agePicker = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!window.initialActivityAnchor) return;
+    window.initialActivityAnchor = false;
+    window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}#aktiviteter`);
+    exploreSection.current?.scrollIntoView?.({ behavior: "instant", block: "start" });
+  }, []);
 
   function closeAgePicker(restoreFocus = false) {
     if (!agePicker.current?.open) return;
@@ -59,13 +82,17 @@ export default function App() {
   }
 
   const [contactRevision, setContactRevision] = useState(() =>
-    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('kontakt') === '1' ? 1 : 0,
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("kontakt") === "1" ? 1 : 0,
   );
 
   function openContact() {
     setContactRevision((previous) => previous + 1);
   }
-  const [{ view, category, municipality, onlySaved, selectedAges }, setFilter] = useUrlFilters();
+  const [{ view, category, municipality, onlySaved, selectedAges }, updateFilter] = useUrlFilters();
+  const setFilter = (key, value) => {
+    if (sharedActivity) showAllActivities();
+    updateFilter(key, value);
+  };
   const setView = (value) => setFilter("view", value);
   const setCategory = (value) => setFilter("category", value);
   const setMunicipality = (value) => setFilter("municipality", value);
@@ -90,9 +117,13 @@ export default function App() {
 
   function handleToggleFavorite(id) {
     const title = activities.find((activity) => activity.id === id).title;
-    setFavoriteNotice({ text: favorites.has(id)
-      ? `${title} er fjernet fra Mine favoritter.`
-      : `${title} er lagret i Mine favoritter.` });
+    const wasSaved = favorites.has(id);
+    if (onlySaved && wasSaved) restoreResultsFocus.current = true;
+    setFavoriteNotice({
+      text: wasSaved
+        ? `${title} er fjernet fra Mine favoritter.`
+        : `${title} er lagret i Mine favoritter.`,
+    });
     toggleFavorite(id);
   }
 
@@ -107,9 +138,11 @@ export default function App() {
   const ageMatches = filtered
     .filter((activity) => selectedAges.length === 0 || selectedAgeGroups.some((group) => matchesAge(activity, group)))
     .sort((a, b) => selectedAges.length === 0 ? 0 : Number(isAllAges(a)) - Number(isAllAges(b)));
-  const shown = ageMatches.filter((activity) => matchesView(activity, view));
-  const otherViewCount = ageMatches.length - shown.length;
-  const unknownAge = selectedAges.length === 0 ? [] : filtered.filter((activity) => !activity.ageRange && matchesView(activity, view));
+  const shown = sharedActivity ? [sharedActivity] : ageMatches.filter((activity) => matchesView(activity, view));
+  const otherViewCount = sharedActivity ? 0 : ageMatches.length - shown.length;
+  const unknownAge = sharedActivity || selectedAges.length === 0
+    ? []
+    : filtered.filter((activity) => !activity.ageRange && matchesView(activity, view));
   const activeFilters = [
     ...selectedAgeGroups.map((group) => ({ label: group.label, clear: () => toggleAge(group.value) })),
     ...(municipality !== "Alle steder" ? [{ label: municipality, clear: () => setMunicipality("Alle steder") }] : []),
@@ -126,7 +159,7 @@ export default function App() {
   }
 
   return (
-    <main>
+    <div className="app-shell">
       <a className="skip-link" href="#results-heading" onClick={() => resultsHeading.current?.focus()}>Hopp til aktiviteter</a>
       <header className="introduction">
         <CoastalIllustration />
@@ -137,132 +170,145 @@ export default function App() {
           gjøre sammen som familie.
         </p>
       </header>
-      <section className="explore" id="aktiviteter">
-        <div className="heading">
-          <h2>Hva har dere lyst til å finne på?</h2>
-          <p>Finn noe å gjøre sammen, eller planlegg en fast aktivitet.</p>
-        </div>
-        <div className="activity-views" role="group" aria-label="Type tilbud">
-          {activityViews.map((item) => (
-            <button key={item.value} className={view === item.value ? "selected" : ""}
-              aria-pressed={view === item.value} onClick={() => setView(item.value)}>{item.value === "experiences" ? "Opplevelser" : item.label}</button>
-          ))}
-        </div>
-        <p className="view-description">
-          {view === "experiences"
-            ? "Turer, besøk og åpne samlinger – sjekk åpningstider og eventuell bestilling."
-            : view === "courses"
-              ? "Finn kurs og faste aktiviteter som krever påmelding eller planlegging."
-              : "Utforsk både opplevelser, åpne samlinger og kurs med påmelding."}
-        </p>
-        <div className="filter-controls">
-          <div className="age-control">
-            <span id="age-filter-label">Barnas alder</span>
-            <details className="age-picker" ref={agePicker} onBlur={(event) => {
-              if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) closeAgePicker();
-            }}>
-              <summary aria-labelledby="age-filter-label age-filter-value" aria-describedby="age-guidance">
-                <span id="age-filter-value">{selectedAgeGroups.length === 0 ? "Alle aldre" : selectedAgeGroups.map((group) => group.label).join(", ")}</span>
-                <ArrowIcon direction="down" />
-              </summary>
-              <fieldset className="age-options">
-                <legend>Velg én eller flere aldersgrupper</legend>
-                {ageGroups.filter((group) => group.value !== "all").map((group) => (
-                  <label key={group.value}>
-                    <input type="checkbox" checked={selectedAges.includes(group.value)} onChange={() => toggleAge(group.value)} />
-                    {group.label}
-                  </label>
-                ))}
-                <button type="button" className="reset-filters" onClick={() => setSelectedAges([])}>Velg alle aldre</button>
-                <p>Viser aktiviteter som passer minst én valgt aldersgruppe.</p>
-                <p id="age-guidance">Alder er veiledende, med mindre arrangøren oppgir en aldersgrense.</p>
-                <button type="button" className="primary-button age-done" onClick={() => closeAgePicker(true)}>Ferdig</button>
-              </fieldset>
-            </details>
+      <main className="home-main">
+        <section className="explore" id="aktiviteter" ref={exploreSection}>
+          <div className="heading">
+            <h2>Hva har dere lyst til å finne på?</h2>
+            <p>Finn noe å gjøre sammen, eller planlegg en fast aktivitet.</p>
           </div>
-          <label htmlFor="place-filter">Sted
-            <select id="place-filter" value={municipality} onChange={(event) => setMunicipality(event.target.value)}>
-              {municipalities.map((place) => <option key={place}>{place}</option>)}
-            </select>
-          </label>
-          <label htmlFor="category-filter" className="category-control">Aktivitetstype
-            <select id="category-filter" value={category} onChange={(event) => setCategory(event.target.value)}>
-              {categories.map((item) => <option key={item} value={item}>{item === "Alle aktiviteter" ? "Alle typer" : item}</option>)}
-            </select>
-          </label>
-        </div>
-        <h2 id="results-heading" className="results-heading sr-only" tabIndex={-1} ref={resultsHeading}>Aktiviteter</h2>
-        <div className="results-toolbar">
-          <div className="count" role="status" aria-live="polite" aria-atomic="true">
-            {shown.length} {shown.length === 1 ? "aktivitet" : "aktiviteter"}
-            {unknownAge.length > 0 && ` · ${unknownAge.length} med uavklart alder nedenfor`}
-          </div>
-          <div className="favorites-actions">
-            {onlySaved && <button className="reset-filters" onClick={() => clearFilter(() => setOnlySaved(false))}>Vis alle aktiviteter</button>}
-            <button className={`filter favorites-button ${onlySaved ? "active" : ""}`}
-              aria-pressed={onlySaved} onClick={() => setOnlySaved((previous) => !previous)}>
-              <HeartIcon filled={onlySaved} /> Mine favoritter ({favoriteCount})
-            </button>
-          </div>
-        </div>
-        {activeFilters.length > 0 && (
-          <div className="active-filters" role="group" aria-label="Valgte filtre">
-            {activeFilters.map((filter) => (
-              <button key={filter.label} className="filter" onClick={() => clearFilter(filter.clear)} aria-label={`Fjern filter: ${filter.label}`}>
-                {filter.label} <span aria-hidden="true">×</span>
-              </button>
-            ))}
-            <button className="reset-filters" onClick={() => clearFilter(resetFilters)}>Nullstill filtre</button>
-          </div>
-        )}
-        <div className="favorite-notice" role="status" aria-live="polite" aria-atomic="true">
-          {favoriteNotice?.text}
-        </div>
-        <ActivityGrid id="activity-results">
-          {shown.length ? (
-            shown.map((activity) => (
-              <ActivityCard
-                key={activity.id}
-                activity={activity}
-                saved={favorites.has(activity.id)}
-                onToggleFavorite={handleToggleFavorite}
-              />
-            ))
-          ) : (
-            <div className="empty">
-              <p>{onlySaved
-                ? "Ingen favoritter passer valgene dine. Lagre aktiviteter med hjertet, eller fjern et filter."
-                : "Ingen aktiviteter passer valgene dine. Prøv å fjerne et filter eller velge en annen type tilbud."}</p>
-              <div className="empty-actions">
-                {selectedAges.length > 0 && <button className="filter" onClick={() => clearFilter(() => setSelectedAges([]))}>Vis alle aldre</button>}
-                {municipality !== "Alle steder" && <button className="filter" onClick={() => clearFilter(() => setMunicipality("Alle steder"))}>Vis alle steder</button>}
-                {activeFilters.length > 0 && <button className="filter" onClick={() => clearFilter(resetFilters)}>Nullstill alle valg</button>}
+          {sharedActivity && <div className="shared-activity-notice" role="status">
+            <span>Du ser en delt aktivitet. Gå til oversikten for å bruke filtrene.</span>
+            <button className="reset-filters" onClick={() => clearFilter(showAllActivities)}>Til aktivitetsoversikten</button>
+          </div>}
+          {!sharedActivity && <>
+            <div className="activity-views" role="group" aria-label="Type tilbud">
+              {activityViews.map((item) => (
+                <button key={item.value} className={view === item.value ? "selected" : ""}
+                  aria-pressed={view === item.value} onClick={() => setView(item.value)}>{item.value === "experiences" ? "Opplevelser" : item.label}</button>
+              ))}
+            </div>
+            <p className="view-description">
+              {view === "experiences"
+                ? "Turer, besøk og åpne samlinger – sjekk åpningstider og eventuell bestilling."
+                : view === "courses"
+                  ? "Finn kurs og faste aktiviteter som krever påmelding eller planlegging."
+                  : "Utforsk både opplevelser, åpne samlinger og kurs med påmelding."}
+            </p>
+            <div className="filter-controls">
+              <div className="age-control">
+                <span id="age-filter-label">Barnas alder</span>
+                <details className="age-picker" ref={agePicker} onBlur={(event) => {
+                  if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) closeAgePicker();
+                }}>
+                  <summary aria-labelledby="age-filter-label age-filter-value" aria-describedby="age-guidance">
+                    <span id="age-filter-value">{selectedAgeGroups.length === 0 ? "Alle aldre" : selectedAgeGroups.map((group) => group.label).join(", ")}</span>
+                    <ArrowIcon direction="down" />
+                  </summary>
+                  <fieldset className="age-options">
+                    <legend>Velg én eller flere aldersgrupper</legend>
+                    {ageGroups.filter((group) => group.value !== "all").map((group) => (
+                      <label key={group.value}>
+                        <input type="checkbox" checked={selectedAges.includes(group.value)} onChange={() => toggleAge(group.value)} />
+                        {group.label}
+                      </label>
+                    ))}
+                    <button type="button" className="reset-filters" onClick={() => setSelectedAges([])}>Velg alle aldre</button>
+                    <p>Viser aktiviteter som passer minst én valgt aldersgruppe.</p>
+                    <p id="age-guidance">Alder er veiledende, med mindre arrangøren oppgir en aldersgrense.</p>
+                    <button type="button" className="primary-button age-done" onClick={() => closeAgePicker(true)}>Ferdig</button>
+                  </fieldset>
+                </details>
               </div>
+              <label htmlFor="place-filter">Sted
+                <select id="place-filter" value={municipality} onChange={(event) => setMunicipality(event.target.value)}>
+                  {municipalities.map((place) => <option key={place}>{place}</option>)}
+                </select>
+              </label>
+              <label htmlFor="category-filter" className="category-control">Aktivitetstype
+                <select id="category-filter" value={category} onChange={(event) => setCategory(event.target.value)}>
+                  {categories.map((item) => <option key={item} value={item}>{item === "Alle aktiviteter" ? "Alle typer" : item}</option>)}
+                </select>
+              </label>
+            </div>
+          </>}
+          <h2 id="results-heading" className="results-heading sr-only" tabIndex={-1} ref={resultsHeading}>Aktiviteter</h2>
+          <div className="results-toolbar">
+            <div className="count" role="status" aria-live="polite" aria-atomic="true">
+              {shown.length} {shown.length === 1 ? "aktivitet" : "aktiviteter"}
+              {unknownAge.length > 0 && ` · ${unknownAge.length} med uavklart alder nedenfor`}
+            </div>
+            {!sharedActivity && <div className="favorites-actions">
+              {onlySaved && <button className="reset-filters" onClick={() => clearFilter(() => setOnlySaved(false))}>Vis alle aktiviteter</button>}
+              <button className={`filter favorites-button ${onlySaved ? "active" : ""}`}
+                aria-pressed={onlySaved} onClick={() => setOnlySaved((previous) => !previous)}>
+                <HeartIcon filled={onlySaved} /> Mine favoritter ({favoriteCount})
+              </button>
+            </div>}
+          </div>
+          {!sharedActivity && activeFilters.length > 0 && (
+            <div className="active-filters" role="group" aria-label="Valgte filtre">
+              {activeFilters.map((filter) => (
+                <button key={filter.label} className="filter" onClick={() => clearFilter(filter.clear)} aria-label={`Fjern filter: ${filter.label}`}>
+                  {filter.label} <span aria-hidden="true">×</span>
+                </button>
+              ))}
+              <button className="reset-filters" onClick={() => clearFilter(resetFilters)}>Nullstill filtre</button>
             </div>
           )}
-        </ActivityGrid>
-        {unknownAge.length > 0 && (
-          <section className="unknown-age" aria-labelledby="unknown-age-heading">
-            <h3 id="unknown-age-heading">Sjekk alder hos arrangøren</h3>
-            <p>Disse aktivitetene passer de andre valgene dine, men har uavklart alder.</p>
-            <ActivityGrid>
-              {unknownAge.map((activity) => <ActivityCard key={activity.id} activity={activity}
-                saved={favorites.has(activity.id)} onToggleFavorite={handleToggleFavorite} />)}
-            </ActivityGrid>
-          </section>
-        )}
-        {otherViewCount > 0 && (
-          <p className="other-offers">
-            <span>{otherViewCount} tilbud passer også valgene dine under {view === "experiences" ? "kurs og påmelding" : "opplevelser og åpne tilbud"}.</span>
-            {" "}<button className="reset-filters" onClick={() => setView(view === "experiences" ? "courses" : "experiences")}>Vis disse tilbudene <ArrowIcon /></button>
-          </p>
-        )}
-      </section>
-      <TipsInvitation onContact={openContact} />
-      {contactRevision > 0 && <ContactForm focusRevision={contactRevision} />}
+          <div className="favorite-notice" role="status" aria-live="polite" aria-atomic="true">
+            {favoriteNotice?.text}
+          </div>
+          <ActivityGrid id="activity-results">
+            {shown.length ? (
+              shown.map((activity) => (
+                <ActivityCard
+                  key={activity.id}
+                  activity={activity}
+                  initiallyOpen={Boolean(sharedActivity)}
+                  saved={favorites.has(activity.id)}
+                  onToggleFavorite={handleToggleFavorite}
+                />
+              ))
+            ) : (
+              <div className="empty">
+                <p>{onlySaved
+                  ? "Ingen favoritter passer valgene dine. Lagre aktiviteter med hjertet, eller fjern et filter."
+                  : "Ingen aktiviteter passer valgene dine. Prøv å fjerne et filter eller velge en annen type tilbud."}</p>
+                <div className="empty-actions">
+                  {selectedAges.length > 0 && <button className="filter" onClick={() => clearFilter(() => setSelectedAges([]))}>Vis alle aldre</button>}
+                  {municipality !== "Alle steder" && <button className="filter" onClick={() => clearFilter(() => setMunicipality("Alle steder"))}>Vis alle steder</button>}
+                  {activeFilters.length > 0 && <button className="filter" onClick={() => clearFilter(resetFilters)}>Nullstill alle valg</button>}
+                </div>
+              </div>
+            )}
+          </ActivityGrid>
+          {unknownAge.length > 0 && (
+            <section className="unknown-age" aria-labelledby="unknown-age-heading">
+              <h3 id="unknown-age-heading">Sjekk alder hos arrangøren</h3>
+              <p>Disse aktivitetene passer de andre valgene dine, men har uavklart alder.</p>
+              <ActivityGrid>
+                {unknownAge.map((activity) => <ActivityCard key={activity.id} activity={activity}
+                  saved={favorites.has(activity.id)} onToggleFavorite={handleToggleFavorite} />)}
+              </ActivityGrid>
+            </section>
+          )}
+          {otherViewCount > 0 && (
+            <p className="other-offers">
+              <span>{otherViewCount} tilbud passer også valgene dine under {view === "experiences" ? "kurs og påmelding" : "opplevelser og åpne tilbud"}.</span>
+              {" "}<button className="reset-filters" onClick={() => clearFilter(() => setView(view === "experiences" ? "courses" : "experiences"))}>Vis disse tilbudene <ArrowIcon /></button>
+            </p>
+          )}
+        </section>
+        <TipsInvitation onContact={openContact} />
+        {contactRevision > 0 && <ContactForm focusRevision={contactRevision} />}
+      </main>
       <footer className="site-footer">
-        <a href="/personvern.html">Personvern</a>
+        <nav aria-label="Lenker nederst på siden">
+          <a href="/kurs/">Kurs og påmelding</a>
+          <a href="/steder/">Aktiviteter etter sted</a>
+          <a href="/personvern.html">Personvern</a>
+        </nav>
       </footer>
-    </main>
+    </div>
   );
 }

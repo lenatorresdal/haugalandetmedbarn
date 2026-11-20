@@ -22,3 +22,8 @@ it('har eksplisitte og gyldige aldersdata for alle aktiviteter', () => {
     }
   }
 });
+
+it('viser aktiviteter uten aldersgrenser i alle aldersgrupper', () => {
+  const unrestricted = { ageRange: { minMonths: 0, maxMonths: null } };
+  for (const group of ageGroups) expect(matchesAge(unrestricted, group)).toBe(true);
+});
