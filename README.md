@@ -64,7 +64,7 @@ verifiserer ikke domeneeierskap eller om Google har indeksert nettstedet.
 
 ## Kontakt og tips (Formspree)
 
-Personverninformasjonen ligger i `public/personvern.html`, med lenke nederst
+Personverninformasjonen ligger i `public/personvern/index.html`, med lenke nederst
 på forsiden og ved innsending. Den er tilgjengelig uten JavaScript. Før publisering
 må eieren bekrefte behandlingsgrunnlag og opplysninger om leverandører og eventuelle overføringer basert på
 de faktiske avtalene. Kommentarer i HTML-filen markerer det som må avklares.

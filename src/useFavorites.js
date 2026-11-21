@@ -41,7 +41,14 @@ export default function useFavorites() {
       }
     }
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    function onPageShow(event) {
+      if (event.persisted) setFavorites(readFavorites());
+    }
+    window.addEventListener('pageshow', onPageShow);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', onPageShow);
+    };
   }, []);
 
   function toggleFavorite(id) {

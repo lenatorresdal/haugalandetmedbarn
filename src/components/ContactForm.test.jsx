@@ -23,7 +23,7 @@ it('åpner kontaktskjema direkte fra personvernsiden og viser personvernlenke', 
   try {
     render(<App />);
     expect(screen.getByLabelText('Melding (påkrevd)')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Les personverninformasjonen' }).getAttribute('href')).toBe('/personvern.html');
+    expect(screen.getByRole('link', { name: 'Les personverninformasjonen' }).getAttribute('href')).toBe('/personvern');
     expect(document.activeElement.id).toBe('contact-heading');
   } finally {
     window.history.replaceState(null, '', '/');

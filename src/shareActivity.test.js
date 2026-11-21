@@ -12,30 +12,66 @@ afterEach(() => {
 
 function setup(writeText) {
   Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
-  document.body.innerHTML = `<div class="share-activity" data-share-path="/aktiviteter/test/"><button hidden>Del aktivitet</button><div class="share-activity-fallback" hidden><label>Kopier lenken<input readonly></label></div><div role="status"></div></div>`;
+  document.body.innerHTML = `<div class="share-activity" data-share-path="/aktiviteter/test/">
+    <button aria-expanded="false" aria-controls="activity-share-panel" hidden>Del aktivitet</button>
+    <div class="share-activity-panel" id="activity-share-panel" hidden>
+      <label>Lenke til aktiviteten<input readonly></label>
+      <button>Kopier lenke</button>
+      <span class="share-activity-check" aria-hidden="true" hidden>✓</span>
+      <div role="status"></div>
+    </div>
+  </div>`;
   initShareActivity();
-  return document.querySelector('.share-activity');
+  const panel = document.querySelector('.share-activity-panel');
+  return {
+    panel,
+    toggle: document.querySelector('[aria-controls="activity-share-panel"]'),
+    copy: panel.querySelector('button'),
+    check: panel.querySelector('.share-activity-check'),
+    input: panel.querySelector('input'),
+    notice: panel.querySelector('[role="status"]'),
+  };
 }
 
-it('kopierer lenke til aktivitetssiden og bekrefter det', async () => {
-  const copy = vi.fn().mockResolvedValue(undefined);
-  const container = setup(copy);
-  expect(container.querySelector('button').hidden).toBe(false);
-  fireEvent.click(container.querySelector('button'));
-  await waitFor(() => expect(copy).toHaveBeenCalledWith(`${window.location.origin}/aktiviteter/test/`));
-  expect(container.querySelector('[role="status"]').textContent).toBe('Lenken er kopiert.');
+it('viser lenken før den kopieres og lar boksen lukkes igjen', async () => {
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  const { panel, toggle, copy, check, input, notice } = setup(writeText);
+  expect(toggle.hidden).toBe(false);
+  expect(panel.hidden).toBe(true);
+  fireEvent.click(toggle);
+  expect(panel.hidden).toBe(false);
+  expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  expect(input.value).toBe(`${window.location.origin}/aktiviteter/test/`);
+  expect(writeText).not.toHaveBeenCalled();
+  expect(check.hidden).toBe(true);
+
+  fireEvent.click(copy);
+  expect(writeText).toHaveBeenCalledWith(input.value);
+  await waitFor(() => expect(notice.textContent).toBe('Lenken er kopiert.'));
+  expect(check.hidden).toBe(false);
+  expect(panel.hidden).toBe(false);
+
+  fireEvent.click(toggle);
+  expect(panel.hidden).toBe(true);
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+  expect(check.hidden).toBe(true);
+
+  fireEvent.click(toggle);
+  input.focus();
+  fireEvent.keyDown(input, { key: 'Escape' });
+  expect(panel.hidden).toBe(true);
+  expect(document.activeElement).toBe(toggle);
 });
 
-it('viser og markerer lenken når den ikke kan kopieres automatisk', async () => {
-  const container = setup(vi.fn().mockRejectedValue(new Error('Ingen tilgang')));
-  fireEvent.click(container.querySelector('button'));
-  const input = container.querySelector('input');
-  await waitFor(() => expect(container.querySelector('.share-activity-fallback').hidden).toBe(false));
-  expect(input.value).toBe(`${window.location.origin}/aktiviteter/test/`);
-  expect(document.activeElement).toBe(input);
+it('markerer lenken for manuell kopiering når nettleseren avviser kopiering', async () => {
+  const { panel, toggle, copy, input, notice } = setup(vi.fn().mockRejectedValue(new Error('Ingen tilgang')));
+  fireEvent.click(toggle);
+  fireEvent.click(copy);
+  await waitFor(() => expect(document.activeElement).toBe(input));
+  expect(panel.hidden).toBe(false);
   expect(input.selectionStart).toBe(0);
   expect(input.selectionEnd).toBe(input.value.length);
-  expect(container.querySelector('[role="status"]').textContent).toBe('');
+  expect(notice.textContent).toBe('Kopier den markerte lenken manuelt.');
 });
 
 it('tar med oversiktsfiltre tilbake når brukeren kom fra forsiden', () => {

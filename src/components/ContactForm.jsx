@@ -106,7 +106,7 @@ export default function ContactForm({
             <p className="contact-privacy">
               Meldingen sendes via Formspree. Oppgir du e-postadresse, brukes den
               til å svare deg. Unngå sensitive opplysninger og personopplysninger
-              om barn. <a href="/personvern.html">Les personverninformasjonen</a>.
+              om barn. <a href="/personvern">Les personverninformasjonen</a>.
             </p>
             <button
               className="primary-button"

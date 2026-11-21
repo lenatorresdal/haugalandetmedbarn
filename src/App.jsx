@@ -306,7 +306,7 @@ export default function App() {
         <nav aria-label="Lenker nederst på siden">
           <a href="/kurs/">Kurs og påmelding</a>
           <a href="/steder/">Aktiviteter etter sted</a>
-          <a href="/personvern.html">Personvern</a>
+          <a href="/personvern">Personvern</a>
         </nav>
       </footer>
     </div>

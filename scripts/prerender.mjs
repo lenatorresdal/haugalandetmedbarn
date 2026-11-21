@@ -34,9 +34,9 @@ try {
       description: 'Aktiviteter og opplevelser for barn og familier på Haugalandet.',
     }).replaceAll('<', '\\u003c');
     html = html.replace('</head>', `  <link rel="canonical" href="${escapedSiteUrl}" />\n    <meta property="og:url" content="${escapedSiteUrl}" />\n    <meta property="og:image" content="${escapedSiteUrl}logo.png" />\n    <meta property="og:image:alt" content="Haugalandet med barn" />\n    <script type="application/ld+json">${websiteData}</script>\n  </head>`);
-    const privacyHtml = await readFile('dist/personvern.html', 'utf8');
-    await writeFile('dist/personvern.html', privacyHtml.replace('</head>', `<link rel="canonical" href="${escapedSiteUrl}personvern.html" />\n  </head>`));
-    await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapedSiteUrl}</loc></url><url><loc>${escapedSiteUrl}personvern.html</loc></url>${seoPaths.map(path => `<url><loc>${escapedSiteUrl}${path.slice(1)}</loc></url>`).join('')}</urlset>\n`);
+    const privacyHtml = await readFile('dist/personvern/index.html', 'utf8');
+    await writeFile('dist/personvern/index.html', privacyHtml.replace('</head>', `<link rel="canonical" href="${escapedSiteUrl}personvern" />\n  </head>`));
+    await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapedSiteUrl}</loc></url><url><loc>${escapedSiteUrl}personvern</loc></url>${seoPaths.map(path => `<url><loc>${escapedSiteUrl}${path.slice(1)}</loc></url>`).join('')}</urlset>\n`);
   } else {
     console.warn('SITE_URL is missing: canonical and sitemap are omitted. Set it before publishing.');
   }

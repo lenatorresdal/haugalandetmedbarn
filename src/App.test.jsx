@@ -129,7 +129,7 @@ describe('aktivitetsoversikten', () => {
   it('lukker aldersmenyen uten å miste valgene', async () => {
     const user = userEvent.setup();
     render(<App />);
-    expect(within(document.querySelector('footer')).getByRole('link', { name: 'Personvern' }).getAttribute('href')).toBe('/personvern.html');
+    expect(within(document.querySelector('footer')).getByRole('link', { name: 'Personvern' }).getAttribute('href')).toBe('/personvern');
     const picker = document.querySelector('.age-picker');
     const summary = picker.querySelector('summary');
     await user.click(summary);

@@ -63,7 +63,7 @@ describe('forhåndsgenererte innholdssider', () => {
   });
 
   it('har samme navigasjon på personvernsiden og de øvrige innholdssidene', async () => {
-    const privacy = new DOMParser().parseFromString(await readFile('public/personvern.html', 'utf8'), 'text/html');
+    const privacy = new DOMParser().parseFromString(await readFile('public/personvern/index.html', 'utf8'), 'text/html');
     const activity = await documentFor('/aktiviteter/babysvomming/');
     const links = (doc, selector) => [...doc.querySelectorAll(selector)].map(a => [a.textContent.trim(), a.getAttribute('href')]);
     expect(links(privacy, '.page-nav a')).toEqual(links(activity, '.page-nav a'));
@@ -74,7 +74,7 @@ describe('forhåndsgenererte innholdssider', () => {
   });
 
   it('har egne landemerker for navigasjon, hovedinnhold og footer', async () => {
-    const privacy = new DOMParser().parseFromString(await readFile('public/personvern.html', 'utf8'), 'text/html');
+    const privacy = new DOMParser().parseFromString(await readFile('public/personvern/index.html', 'utf8'), 'text/html');
     const pages = [privacy, await documentFor('/aktiviteter/babysvomming/'), await documentFor('/kurs/'), await documentFor('/steder/'), await documentFor('/steder/karmoy/')];
     for (const document of pages) {
       const shell = document.querySelector('.site-shell');

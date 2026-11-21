@@ -56,7 +56,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
       </header>
       <main id="innhold" tabindex="-1">${breadcrumbHtml}${body}</main>
       <footer class="site-footer">
-        <nav aria-label="Lenker nederst på siden"><a href="/kurs/">Kurs og påmelding</a><a href="/steder/">Aktiviteter etter sted</a><a href="/personvern.html">Personvern</a></nav>
+        <nav aria-label="Lenker nederst på siden"><a href="/kurs/">Kurs og påmelding</a><a href="/steder/">Aktiviteter etter sted</a><a href="/personvern">Personvern</a></nav>
       </footer>
     </div>
   </body>
@@ -73,15 +73,31 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     const details = locations.map(location => row('Sted', location.place) + row('Tid', location.time)).join('') + row('Alder', activity.age) + row('Pris', activity.price) + row('Tilbud', participationTypes[activity.participation].label) + row('Tur', activity.distance) + row('Barnevogn', activity.stroller) + (activity.changingTable !== undefined ? row('Stellebord', activity.changingTable === null ? 'Ikke bekreftet' : activity.changingTable ? 'Ja' : 'Nei') : '');
     const related = activities.filter(a => a.id !== activity.id && a.municipality === activity.municipality && a.category === activity.category).slice(0, 3);
     const illustration = renderActivityArt ? renderActivityArt(activity) : '';
-    const share = `<div class="share-activity" data-share-path="${escape(pathFor(activity))}"><button type="button" class="share-activity-button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>Del aktivitet</button><div class="share-activity-fallback" hidden><label>Kopier lenken<input type="text" readonly></label></div><div class="share-activity-notice" role="status" aria-live="polite" aria-atomic="true"></div></div><script type="module" src="/del-aktivitet.js"></script>`;
+    const share = `<div class="share-activity" data-share-path="${escape(pathFor(activity))}"><button type="button" class="share-activity-button" aria-expanded="false" aria-controls="activity-share-panel" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>Del aktivitet</button><div class="share-activity-panel" id="activity-share-panel" hidden>
+                <label for="activity-share-url">Lenke til aktiviteten</label>
+                <input id="activity-share-url" type="text" readonly>
+                <div class="share-activity-copy">
+                  <button type="button" class="share-activity-button">Kopier lenke</button>
+                  <span class="share-activity-check" aria-hidden="true" hidden>✓</span>
+                </div>
+                <div class="share-activity-notice" role="status"></div>
+              </div></div><script type="module" src="/del-aktivitet.js"></script>`;
     const body = `<a class="activity-back" href="/?tilbud=all#aktiviteter">Tilbake til aktivitetsoversikten</a>
       <article class="activity-page">
-        <header class="activity-hero">
-          <div class="activity-hero-copy">
+        <header class="activity-hero" style="--activity-background: ${escape(activity.bg)}">
+          <div class="activity-hero-heading">
             <p class="page-kicker">${escape(activity.category)} · ${escape(activity.municipality)}</p>
             <h1>${escape(title)}</h1>
+          </div>
+          <div class="activity-hero-copy">
             <p class="intro">${escape(activity.description)}</p>
-            ${share}
+            <div class="activity-actions">
+              <button type="button" class="share-activity-button activity-favorite" data-favorite-id="${escape(activity.id)}" aria-pressed="false" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 21 3.5 12.5a5 5 0 0 1 7-7L12 7l1.5-1.5a5 5 0 0 1 7 7Z"/></svg>
+                Favoritt
+              </button>
+              ${share}
+            </div>
           </div>
           ${illustration ? `<div class="activity-illustration">${illustration}</div>` : ''}
         </header>

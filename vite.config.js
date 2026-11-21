@@ -7,11 +7,26 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { writeSeoPages } from './scripts/seo-pages.mjs';
 
+function servePrivacyPage(directory) {
+  return async (req, res, next) => {
+    const { pathname } = new URL(req.url, 'http://localhost');
+    if (pathname !== '/personvern' && pathname !== '/personvern/') return next();
+    try {
+      const html = await readFile(join(directory, 'personvern', 'index.html'));
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.end(html);
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
 function seoPagesInDevelopment() {
   return {
     name: 'seo-pages-in-development',
-    apply: (config, env) => env.command === 'serve' && !process.env.VITEST && !config.server.middlewareMode,
+    apply: (config, env) => env.command === 'serve' && !process.env.VITEST && !config.server?.middlewareMode,
     async configureServer(server) {
+      server.middlewares.use(servePrivacyPage(server.config.publicDir));
       const directory = await mkdtemp(join(tmpdir(), 'haugalandet-pages-'));
       const { default: ActivityArt } = await server.ssrLoadModule('/src/components/illustrations/ActivityArt.jsx');
       const renderActivityArt = activity => renderToStaticMarkup(createElement(ActivityArt, { scene: activity.scene, background: activity.bg }));
@@ -30,6 +45,9 @@ function seoPagesInDevelopment() {
       server.watcher.on('change', file => {
         if (/\/(src\/(?:activities|participation)\.js|src\/components\/illustrations\/[^/]+\.jsx|scripts\/seo-pages\.mjs)$/.test(file)) server.restart();
       });
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(servePrivacyPage(join(server.config.root, server.config.build.outDir)));
     },
   };
 }
