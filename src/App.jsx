@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { activities, categories } from "./activities.js";
 import { ageGroups, isAllAges, matchesAge } from "./ageFilters.js";
 import { activityViews, matchesView } from "./participation.js";
+import { fitsParentalLeave } from "./parentalLeave.js";
 import useFavorites from "./useFavorites.js";
 import useUrlFilters from "./useUrlFilters.js";
 import TipsInvitation from "./components/TipsInvitation.jsx";
@@ -88,7 +89,7 @@ export default function App() {
   function openContact() {
     setContactRevision((previous) => previous + 1);
   }
-  const [{ view, category, municipality, onlySaved, selectedAges }, updateFilter] = useUrlFilters();
+  const [{ view, category, municipality, onlySaved, parentalLeaveOnly, selectedAges }, updateFilter] = useUrlFilters();
   const setFilter = (key, value) => {
     if (sharedActivity) showAllActivities();
     updateFilter(key, value);
@@ -97,6 +98,7 @@ export default function App() {
   const setCategory = (value) => setFilter("category", value);
   const setMunicipality = (value) => setFilter("municipality", value);
   const setOnlySaved = (value) => setFilter("onlySaved", value);
+  const setParentalLeaveOnly = (value) => setFilter("parentalLeaveOnly", value);
   const setSelectedAges = (value) => setFilter("selectedAges", value);
   const selectedAgeGroups = ageGroups.filter((group) => selectedAges.includes(group.value));
 
@@ -132,6 +134,7 @@ export default function App() {
       (municipality === "Alle steder" ||
         activity.municipality === municipality) &&
       (!onlySaved || favorites.has(activity.id)) &&
+      (!parentalLeaveOnly || fitsParentalLeave(activity)) &&
       (category === "Alle aktiviteter" || activity.category === category),
   );
 
@@ -156,6 +159,17 @@ export default function App() {
     setMunicipality("Alle steder");
     setCategory("Alle aktiviteter");
     setOnlySaved(false);
+    setParentalLeaveOnly(false);
+  }
+
+  function selectView(value) {
+    setParentalLeaveOnly(false);
+    setView(value);
+  }
+
+  function showParentalLeaveActivities() {
+    setView("all");
+    setParentalLeaveOnly(true);
   }
 
   return (
@@ -181,14 +195,18 @@ export default function App() {
             <button className="reset-filters" onClick={() => clearFilter(showAllActivities)}>Til aktivitetsoversikten</button>
           </div>}
           {!sharedActivity && <>
-            <div className="activity-views" role="group" aria-label="Type tilbud">
+            <div className="activity-views" role="group" aria-label="Vis aktiviteter">
               {activityViews.map((item) => (
-                <button key={item.value} className={view === item.value ? "selected" : ""}
-                  aria-pressed={view === item.value} onClick={() => setView(item.value)}>{item.value === "experiences" ? "Opplevelser" : item.label}</button>
+                <button key={item.value} className={!parentalLeaveOnly && view === item.value ? "selected" : ""}
+                  aria-pressed={!parentalLeaveOnly && view === item.value} onClick={() => selectView(item.value)}>{item.value === "experiences" ? "Opplevelser" : item.label}</button>
               ))}
+              <button className={parentalLeaveOnly ? "selected" : ""} aria-pressed={parentalLeaveOnly}
+                onClick={showParentalLeaveActivities}>I permisjon</button>
             </div>
             <p className="view-description">
-              {view === "experiences"
+              {parentalLeaveOnly
+                ? "Møteplasser, babysang, trening og kurs for deg som er hjemme med baby eller småbarn. Avgrens videre med alder og sted."
+                : view === "experiences"
                 ? "Turer, besøk og åpne samlinger – sjekk åpningstider og eventuell bestilling."
                 : view === "courses"
                   ? "Finn kurs og faste aktiviteter som krever påmelding eller planlegging."

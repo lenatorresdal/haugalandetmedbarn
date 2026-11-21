@@ -8,7 +8,14 @@ afterEach(() => { cleanup(); window.history.replaceState(null, '', '/'); });
 it('leser delte filtre og rydder ugyldige verdier uten å miste andre parametere eller anker', () => {
   window.history.replaceState(null, '', '/?tilbud=courses&sted=Karm%C3%B8y&alder=baby&alder=baby&alder=invalid&kategori=invalid&favoritter=1&ref=share#aktiviteter');
   const { result } = renderHook(useUrlFilters);
-  expect(result.current[0]).toEqual({ view: 'courses', municipality: 'Karmøy', selectedAges: ['baby'], category: 'Alle aktiviteter', onlySaved: true });
+  expect(result.current[0]).toEqual({
+    view: 'courses',
+    municipality: 'Karmøy',
+    selectedAges: ['baby'],
+    category: 'Alle aktiviteter',
+    onlySaved: true,
+    parentalLeaveOnly: false,
+  });
   const params = new URLSearchParams(window.location.search);
   expect(params.getAll('alder')).toEqual(['baby']);
   expect(params.has('kategori')).toBe(false);

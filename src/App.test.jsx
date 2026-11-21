@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import App from './App.jsx';
 import { activities } from './activities.js';
 import { isAllAges } from './ageFilters.js';
+import { fitsParentalLeave } from './parentalLeave.js';
 
 beforeEach(() => { localStorage.clear(); window.history.replaceState(null, '', '/'); });
 afterEach(cleanup);
@@ -75,6 +76,40 @@ describe('aktivitetsoversikten', () => {
     expect(screen.getByRole('heading', { name: 'Babysvømming i Karmøyhallen' })).toBeTruthy();
     expect(screen.getByText('Kurs med påmelding')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Mine favoritter (1)' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('samler permisjonsaktiviteter i ett valg og lar dem avgrenses videre', async () => {
+    const user = userEvent.setup();
+    const leaveActivities = activities.filter(fitsParentalLeave);
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: 'I permisjon' }));
+
+    expect(screen.getByRole('button', { name: 'I permisjon' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Alle tilbud' }).getAttribute('aria-pressed')).toBe('false');
+    expect(new URLSearchParams(window.location.search).get('permisjon')).toBe('1');
+    expect(new URLSearchParams(window.location.search).has('tilbud')).toBe(false);
+    expect(screen.getAllByRole('article')).toHaveLength(leaveActivities.length);
+    expect(screen.getByRole('heading', { name: 'Babykino på Edda' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Babymassasje hos Atlas' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Kafépause på Totalen' })).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Fortellerstund på Haugesund folkebibliotek' })).toBeNull();
+
+    await user.selectOptions(screen.getByLabelText('Sted'), 'Karmøy');
+    expect(screen.getAllByRole('article')).toHaveLength(
+      leaveActivities.filter(activity => activity.municipality === 'Karmøy').length,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Opplevelser' }));
+    expect(screen.getByRole('button', { name: 'I permisjon' }).getAttribute('aria-pressed')).toBe('false');
+    expect(new URLSearchParams(window.location.search).has('permisjon')).toBe(false);
+  });
+
+  it('åpner en delt permisjonsvisning fra URL-en', () => {
+    window.history.replaceState(null, '', '/?permisjon=1&tilbud=courses');
+    render(<App />);
+    expect(screen.getByRole('button', { name: 'I permisjon' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByRole('article')).toHaveLength(activities.filter(fitsParentalLeave).length);
   });
 
   it('viser aldersspesifikke treff før alle aldre kun når alder er valgt', async () => {
@@ -170,7 +205,7 @@ describe('aktivitetsoversikten', () => {
     expect(screen.getByRole('button', { name: 'Mine favoritter (1)' }).getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('viser alder og inkluderer Havnaberg fra 2 år', async () => {
+  it('viser alder og kombinerer flere aldersvalg', async () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(screen.getByRole('button', { name: 'Alle tilbud' }));
@@ -179,8 +214,8 @@ describe('aktivitetsoversikten', () => {
     expect(screen.queryByRole('heading', { name: 'Fortellerstund på Haugesund folkebibliotek' })).toBeNull();
     const biblobarn = screen.getByRole('heading', { name: 'Biblobarn – småbarnssang på Haugesund folkebibliotek' }).closest('article');
     expect(within(biblobarn).getByText('Alder: 1–2 år')).toBeTruthy();
-    expect(screen.getByRole('heading', { name: 'Svømmetilbud for større barn på Havnaberg' })).toBeTruthy();
-    expect(screen.queryByRole('region', { name: 'Sjekk alder hos arrangøren' })).toBeNull();
+    const unknownAge = screen.getByRole('region', { name: 'Sjekk alder hos arrangøren' });
+    expect(within(unknownAge).getByRole('heading', { name: 'Familielørdag på Tysværtunet' })).toBeTruthy();
     await user.click(screen.getByRole('checkbox', { name: '1–2 år' }));
     await user.click(screen.getByRole('checkbox', { name: '3–5 år' }));
     expect(screen.queryByRole('heading', { name: 'Biblobarn – småbarnssang på Haugesund folkebibliotek' })).toBeNull();

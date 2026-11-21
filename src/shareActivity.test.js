@@ -76,10 +76,11 @@ it('markerer lenken for manuell kopiering når nettleseren avviser kopiering', a
 
 it('tar med oversiktsfiltre tilbake når brukeren kom fra forsiden', () => {
   document.body.innerHTML = '<a class="activity-back" href="/?tilbud=all#aktiviteter">Tilbake</a>';
-  initOverviewBack(document, `${window.location.origin}/?sted=Karm%C3%B8y&alder=baby&alder=preschool&aktivitet=old&kontakt=1`);
+  initOverviewBack(document, `${window.location.origin}/?sted=Karm%C3%B8y&alder=baby&alder=preschool&permisjon=1&aktivitet=old&kontakt=1`);
   const url = new URL(document.querySelector('.activity-back').href);
   expect(url.searchParams.get('sted')).toBe('Karmøy');
   expect(url.searchParams.getAll('alder')).toEqual(['baby', 'preschool']);
+  expect(url.searchParams.get('permisjon')).toBe('1');
   expect(url.searchParams.has('aktivitet')).toBe(false);
   expect(url.searchParams.has('kontakt')).toBe(false);
   expect(url.hash).toBe('#aktiviteter');

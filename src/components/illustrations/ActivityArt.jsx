@@ -2,6 +2,7 @@ import tripScenes from './TripScenes.jsx';
 import cafeScenes from './CafeScenes.jsx';
 import discoveryScenes from './DiscoveryScenes.jsx';
 import genericScenes from './GenericScenes.jsx';
+import recentActivityScenes from './RecentActivityScenes.jsx';
 
 const scenes = {
   iceSkating: <>
@@ -32,6 +33,7 @@ const scenes = {
   ...cafeScenes,
   ...discoveryScenes,
   ...genericScenes,
+  ...recentActivityScenes,
   adventure: <>
       <path d="M0 132q90-15 180 0t180-8v56H0Z" fill="#b9c8b2" />
       <path d="M98 180q8-34 67-43t73-29" fill="none" stroke="#eadfc6" strokeWidth="20" />
@@ -226,6 +228,21 @@ const scenes = {
       <circle cx="200" cy="81" r="10" fill="#e0bb8e"/>
       <circle cx="264" cy="127" r="22" fill="#9eae89"/>
       <path d="M244 119q20 9 40 0M264 105q-13 22 0 44" fill="none" stroke="#e2e6cf" strokeWidth="3"/>
+    </>,
+  babyMassage: <>
+      <ellipse cx="180" cy="151" rx="112" ry="13" fill="#d8c9bc"/>
+      <rect x="91" y="57" width="178" height="91" rx="28" fill="#f7efe7"/>
+      <circle cx="180" cy="83" r="17" fill="#ddb38f"/>
+      <path d="M168 81q4-18 19-11 9 5 8 16-11-7-27-5Z" fill="#735d50"/>
+      <path d="M159 104q21-13 42 0l13 31h-68Z" fill="#a8b69e"/>
+      <path d="M160 111 126 96M200 111l34-15" fill="none" stroke="#ddb38f" strokeWidth="10" strokeLinecap="round"/>
+      <path d="M145 91q-19-5-34 10m104-10q19-5 34 10" fill="none" stroke="#b98263" strokeWidth="11" strokeLinecap="round"/>
+      <path d="M111 101q9 12 22 15m116-15q-9 12-22 15" fill="none" stroke="#d7a77f" strokeWidth="7" strokeLinecap="round"/>
+      <circle cx="174" cy="83" r="1.5" fill="#4c4b42"/>
+      <circle cx="186" cy="83" r="1.5" fill="#4c4b42"/>
+      <path d="M175 91q5 4 10 0" fill="none" stroke="#9b6b5a" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M126 47q7-13 14 0 7-13 14 0 0 12-14 20-14-8-14-20Z" fill="#c98f7b"/>
+      <path d="M220 49q5-9 10 0 5-9 10 0 0 9-10 15-10-6-10-15Z" fill="#d3a28d"/>
     </>,
   music: <>
       <ellipse cx="182" cy="148" rx="91" ry="12" fill="#d2c2ac"/>

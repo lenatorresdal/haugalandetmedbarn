@@ -83,7 +83,7 @@ export function initOverviewBack(root = document, referrer = document.referrer) 
     const previous = new URL(referrer);
     if (previous.origin !== window.location.origin || previous.pathname !== '/') return;
     const destination = new URL('/', window.location.origin);
-    for (const key of ['tilbud', 'kategori', 'sted', 'favoritter', 'alder']) {
+    for (const key of ['tilbud', 'kategori', 'sted', 'favoritter', 'permisjon', 'alder']) {
       for (const value of previous.searchParams.getAll(key)) destination.searchParams.append(key, value);
     }
     destination.hash = 'aktiviteter';

@@ -5,29 +5,35 @@ import { activityViews } from './participation.js';
 
 const defaultFilters = {
   view: 'experiences', category: 'Alle aktiviteter', municipality: 'Alle steder',
-  onlySaved: false, selectedAges: [],
+  onlySaved: false, parentalLeaveOnly: false, selectedAges: [],
 };
 const municipalities = new Set(activities.map(activity => activity.municipality));
 
 function readFilters() {
   if (typeof window === 'undefined') return { ...defaultFilters, selectedAges: [] };
   const params = new URLSearchParams(window.location.search);
+  const parentalLeaveOnly = params.get('permisjon') === '1';
+  const requestedView = activityViews.some(view => view.value === params.get('tilbud'))
+    ? params.get('tilbud')
+    : defaultFilters.view;
   return {
-    view: activityViews.some(view => view.value === params.get('tilbud')) ? params.get('tilbud') : defaultFilters.view,
+    view: parentalLeaveOnly ? 'all' : requestedView,
     category: categories.includes(params.get('kategori')) ? params.get('kategori') : defaultFilters.category,
     municipality: municipalities.has(params.get('sted')) ? params.get('sted') : defaultFilters.municipality,
     onlySaved: params.get('favoritter') === '1',
+    parentalLeaveOnly,
     selectedAges: ageGroups.filter(group => group.value !== 'all' && params.getAll('alder').includes(group.value)).map(group => group.value),
   };
 }
 
 function filterUrl(filters) {
   const url = new URL(window.location.href);
-  for (const key of ['tilbud', 'kategori', 'sted', 'favoritter', 'alder']) url.searchParams.delete(key);
-  if (filters.view !== defaultFilters.view) url.searchParams.set('tilbud', filters.view);
+  for (const key of ['tilbud', 'kategori', 'sted', 'favoritter', 'permisjon', 'alder']) url.searchParams.delete(key);
+  if (!filters.parentalLeaveOnly && filters.view !== defaultFilters.view) url.searchParams.set('tilbud', filters.view);
   if (filters.category !== defaultFilters.category) url.searchParams.set('kategori', filters.category);
   if (filters.municipality !== defaultFilters.municipality) url.searchParams.set('sted', filters.municipality);
   if (filters.onlySaved) url.searchParams.set('favoritter', '1');
+  if (filters.parentalLeaveOnly) url.searchParams.set('permisjon', '1');
   for (const group of ageGroups) {
     if (group.value !== 'all' && filters.selectedAges.includes(group.value)) url.searchParams.append('alder', group.value);
   }
