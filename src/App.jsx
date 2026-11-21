@@ -325,6 +325,9 @@ export default function App() {
           <a href="/kurs/">Kurs og påmelding</a>
           <a href="/steder/">Aktiviteter etter sted</a>
           <a href="/personvern">Personvern</a>
+          <button type="button" className="footer-link-button" data-analytics-settings hidden>
+            Analyseinnstillinger
+          </button>
         </nav>
       </footer>
     </div>

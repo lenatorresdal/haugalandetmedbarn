@@ -28,6 +28,8 @@ describe('forhåndsgenererte innholdssider', () => {
       expect(document.querySelector('.action').getAttribute('href')).toBe(activity.url);
       expect(document.querySelector('.activity-back').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
       expect(document.querySelector('.activity-illustration svg').getAttribute('aria-hidden')).toBe('true');
+      expect(document.querySelector('script[src="/analytics-consent.js"]')).not.toBeNull();
+      expect(document.querySelector('[data-analytics-settings]')).not.toBeNull();
     }
   });
 
@@ -71,6 +73,8 @@ describe('forhåndsgenererte innholdssider', () => {
     expect(privacy.querySelector('.site-name img').getAttribute('src')).toBe('/logo.png');
     expect(privacy.querySelector('.activity-back').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
     expect(privacy.querySelector('.site-footer img')).toBeNull();
+    expect(privacy.querySelector('script[src="/analytics-consent.js"]')).not.toBeNull();
+    expect(privacy.querySelector('[data-analytics-settings]')).not.toBeNull();
   });
 
   it('har egne landemerker for navigasjon, hovedinnhold og footer', async () => {

@@ -198,6 +198,21 @@ h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
 /* Readable contrast and usable controls at narrow widths and high zoom. */
 .about p,.contact-privacy,.age-options p{color:#526158}
 .filter{border-color:#788577}
+
+/* Analysevalg vises likt på oversikten og de statiske innholdssidene. */
+.footer-link-button{appearance:none;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;min-height:44px;padding:0;text-decoration:underline;text-underline-offset:3px}
+.footer-link-button:hover{text-decoration-thickness:2px}
+.footer-link-button:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.analytics-consent{position:fixed;z-index:1000;right:clamp(16px,4vw,40px);bottom:clamp(16px,4vw,40px);width:min(calc(100% - 32px),680px);padding:clamp(20px,4vw,28px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(37,62,53,.2);color:var(--ink)}
+.analytics-consent h2{max-width:none;margin:0 0 8px;font-size:clamp(1.2rem,3vw,1.45rem);letter-spacing:-.02em}
+.analytics-consent p{margin:0;line-height:1.55}
+.analytics-consent a{color:inherit;font-weight:700;text-underline-offset:3px}
+.analytics-consent-current{margin-top:10px!important;font-weight:700}
+.analytics-consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.analytics-consent-button{appearance:none;min-height:48px;padding:11px 16px;border:2px solid #365c46;border-radius:10px;background:#fff;color:#253e35;cursor:pointer;font:700 1rem 'DM Sans',system-ui,sans-serif}
+.analytics-consent-button:hover{background:#365c46;color:#fff}
+.analytics-consent-button:focus-visible{outline:3px solid #253e35;outline-offset:3px}
+@media(max-width:480px){.analytics-consent-actions{grid-template-columns:1fr}}
 .age-options{max-height:min(70vh,32rem);max-height:min(70dvh,32rem);overflow:auto;overscroll-behavior:contain}
 .active-filters .filter{font-size:14px;min-height:44px}
 @media(forced-colors:active){

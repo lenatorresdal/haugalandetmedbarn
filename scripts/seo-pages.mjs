@@ -42,6 +42,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/innhold.css">
+    <script src="/analytics-consent.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#innhold">Hopp til innhold</a>
@@ -56,7 +57,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
       </header>
       <main id="innhold" tabindex="-1">${breadcrumbHtml}${body}</main>
       <footer class="site-footer">
-        <nav aria-label="Lenker nederst på siden"><a href="/kurs/">Kurs og påmelding</a><a href="/steder/">Aktiviteter etter sted</a><a href="/personvern">Personvern</a></nav>
+        <nav aria-label="Lenker nederst på siden"><a href="/kurs/">Kurs og påmelding</a><a href="/steder/">Aktiviteter etter sted</a><a href="/personvern">Personvern</a><button type="button" class="footer-link-button" data-analytics-settings hidden>Analyseinnstillinger</button></nav>
       </footer>
     </div>
   </body>
