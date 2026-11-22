@@ -23,6 +23,7 @@ describe('samtykke til besøksanalyse', () => {
 
     expect(document.querySelector('.analytics-consent')).not.toBeNull();
     expect(document.querySelector('script[data-google-analytics]')).toBeNull();
+    expect(window.dataLayer).toBeUndefined();
     expect(document.querySelector('[data-analytics-settings]').hidden).toBe(false);
   });
 
@@ -42,6 +43,10 @@ describe('samtykke til besøksanalyse', () => {
     expect(localStorage.getItem('hmb-analytics-consent')).toBe('granted');
     expect(document.querySelector('script[data-google-analytics]').src)
       .toBe('https://www.googletagmanager.com/gtm.js?id=GTM-KTGJ74W5');
+    expect(window.dataLayer).toContainEqual({
+      'gtm.start': expect.any(Number),
+      event: 'gtm.js',
+    });
   });
 
   it('lar den besøkende åpne innstillingene igjen fra footeren', () => {

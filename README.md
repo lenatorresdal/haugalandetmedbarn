@@ -31,7 +31,7 @@ nettleseren med samme nøkkel som i første versjon.
 - `src/components/illustrations/`: SVG-scener for aktivitetskort og toppillustrasjonen.
 - `src/use*.js`: nettlesertilstand for filtre og favoritter.
 - `scripts/prerender.mjs`: ferdig HTML og SEO-filer ved produksjonsbygg.
-- `public/`: logo og den selvstendige personvernsiden.
+- `public/`: logo, statiske nettleserskript og den selvstendige personvernsiden.
 
 `dist/` er generert produksjonskode og skal ikke redigeres direkte.
 Sites-konfigurasjonen i `.openai/hosting.json` publiserer denne mappen.
@@ -61,6 +61,38 @@ Uten `SITE_URL` varsler byggingen og utelater canonical og sitemap.
 
 Etter publisering kan sitemap sendes inn i Google Search Console. Oppsettet her
 verifiserer ikke domeneeierskap eller om Google har indeksert nettstedet.
+
+## Google Analytics og samtykke
+
+Nettstedet bruker Google-taggen `GTM-KTGJ74W5`. Implementasjonen ligger i
+`public/analytics-consent.js` og er inkludert på forsiden, personvernsiden og
+alle forhåndsgenererte innholdssider. Ikke lim inn Google-koden direkte i
+HTML-filene i tillegg; da kan taggen bli lastet flere ganger eller før samtykke.
+
+Google-taggen lastes først når den besøkende aktivt velger «Ja, jeg godtar
+analyse». «Nei, avvis analyse» hindrer lasting. Valget lagres lokalt med nøkkelen
+`hmb-analytics-consent`, og kan endres via «Analyseinnstillinger» i footeren.
+Ved tilbaketrekking sendes en oppdatering om avslått samtykke, og nettstedet
+forsøker å fjerne Google Analytics-informasjonskapsler.
+
+For å bytte Google-taggen må `GOOGLE_TAG_ID` i
+`public/analytics-consent.js` oppdateres. Tag-ID-en er offentlig og skal ikke
+legges i en hemmelig miljøvariabel. Oppdater samtidig personverninformasjonen
+dersom leverandør, formål eller databehandling endres.
+
+Etter publisering:
+
+1. Åpne nettstedet i et privat nettleservindu.
+2. Kontroller at ingen Google Analytics-forespørsel sendes før et valg er tatt.
+3. Velg «Ja, jeg godtar analyse» og kontroller besøket i Sanntid i Google
+   Analytics.
+4. Åpne «Analyseinnstillinger», avvis analyse og kontroller at valget blir husket
+   etter at siden lastes på nytt.
+5. Kontroller og dokumenter lagringstiden i Analytics-kontoen slik at teksten på
+   personvernsiden er korrekt.
+
+Samtykkeflyten er testet i `src/analyticsConsent.test.js`. Kjør `npm test`
+etter endringer i skriptet, knappetekstene eller HTML-malene.
 
 ## Kontakt og tips (Formspree)
 

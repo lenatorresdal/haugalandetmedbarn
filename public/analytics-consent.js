@@ -32,7 +32,10 @@
     if (document.querySelector(ANALYTICS_SCRIPT_SELECTOR)) return;
 
     prepareGtag();
-    window.gtag("js", new Date());
+    window.dataLayer.push({
+      "gtm.start": Date.now(),
+      event: "gtm.js",
+    });
 
     const script = document.createElement("script");
     script.async = true;
