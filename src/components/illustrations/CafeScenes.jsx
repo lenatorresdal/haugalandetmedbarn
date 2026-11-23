@@ -21,6 +21,15 @@ const cafeScenes = {
     <circle cx="145" cy="169" r="7" fill="#655b48" />
     <circle cx="200" cy="169" r="7" fill="#655b48" />
   </>,
+  crossfitTraining: <>
+    <path d="M0 134h360v46H0Z" fill="#c3cfbd" />
+    <ellipse cx="180" cy="143" rx="112" ry="10" fill="#aebda8" />
+    <rect x="79" y="96" width="202" height="9" rx="4" fill="#657f70" />
+    <rect x="99" y="80" width="13" height="41" rx="4" fill="#829377" />
+    <rect x="248" y="80" width="13" height="41" rx="4" fill="#829377" />
+    <rect x="112" y="67" width="19" height="67" rx="5" fill="#365c46" />
+    <rect x="229" y="67" width="19" height="67" rx="5" fill="#365c46" />
+  </>,
   parentTraining: <>
     <path d="M0 140h360v40H0Z" fill="#cbdcd1" />
     <rect x="65" y="140" width="230" height="22" rx="11" fill="#829377" />

@@ -1,6 +1,7 @@
 const parentalLeaveActivityIds = new Set([
   'babysvomming',
   'babysvomming-karmoyhallen',
+  'bading-vindafjordhallen',
   'apen',
   'sang',
   'babysang-rossabo',
@@ -22,10 +23,12 @@ const parentalLeaveActivityIds = new Set([
   'barselyoga-sentrum-yoga',
   'musikklek-baby-tysvaer',
   'trilletur-dnt-haugesund',
+  'vadhytta-vindafjord',
   'barselklatring-haugalandsveggen',
   'barseltrening-yes',
   'trening-baby-gymsalen',
   'trening-baby-crossfit-verftet',
+  'crossfit-ravn-fitness',
   'trening-baby-boost',
 ]);
 

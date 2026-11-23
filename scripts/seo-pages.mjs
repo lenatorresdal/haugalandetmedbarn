@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { activities } from '../src/activities.js';
+import { fitsParentalLeave } from '../src/parentalLeave.js';
 import { matchesView, participationTypes } from '../src/participation.js';
 
 const escape = value => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
@@ -8,6 +9,14 @@ const pathFor = activity => `/aktiviteter/${activity.id}/`;
 const placePhrase = place => `${place === 'Karmøy' ? 'på' : 'i'} ${place}`;
 const summary = text => text.length <= 155 ? text : `${text.slice(0, 155).replace(/\s+\S*$/, '')}…`;
 const activityLink = activity => `<li><a href="${escape(pathFor(activity))}">${escape(activity.title)}</a> · ${escape(activity.municipality)}</li>`;
+const parentalLeavePath = place => `/steder/${slug(place)}/permisjon/`;
+const parentalLeaveIntros = new Map([
+  ['Haugesund', 'I foreldrepermisjon i Haugesund? Bli med på babysang, babysvømming eller trilletur, eller møt andre foreldre på biblioteket. Her finner du også trening der babyen kan bli med.'],
+  ['Karmøy', 'I foreldrepermisjon på Karmøy? Finn babysvømming i Karmøyhallen, babysang blant annet i Norheim, på Avaldsnes og i Kopervik, eller ta en kafépause på Oasen.'],
+  ['Sveio', 'I foreldrepermisjon i Sveio? På babysong i Sveio soknehus kan du møte andre foreldre og babyer. Vil du ut på trilletur, kan du blant annet gå grusveien til Ryvarden eller ta turen til Golfstova.'],
+  ['Tysvær', 'I foreldrepermisjon i Tysvær? Her finner du barseltrening på Frakkagjerd, babysang i Aksdal kyrkje, musikklek og babymassasje.'],
+  ['Vindafjord', 'I foreldrepermisjon i Vindafjord? Trill grusveien fra Bjoa til Vadhytta, eller spør Vindafjordhallen når terapibassenget er tilgjengelig for bading med baby.'],
+]);
 
 export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderActivityArt = null) {
   const paths = [];
@@ -124,7 +133,29 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
   for (const place of places) {
     if (!slug(place)) throw new Error(`Missing location slug: ${place}`);
     const items = activities.filter(a => a.municipality === place);
-    await page(`/steder/${slug(place)}/`, `Aktiviteter for barn ${placePhrase(place)}`, `Finn aktiviteter for barn og familier ${placePhrase(place)}: turer, opplevelser og tilbud i nærområdet.`, `<h1>Aktiviteter for barn ${escape(placePhrase(place))}</h1><p class="intro">Her finner du forslag til aktiviteter og opplevelser for barn og familier ${escape(placePhrase(place))}. Velg en aktivitet for praktisk informasjon og lenke til arrangøren.</p><p><a class="filter-link" href="/?tilbud=all&amp;sted=${encodeURIComponent(place)}#aktiviteter">Filtrer aktiviteter ${escape(placePhrase(place))} etter alder og type</a></p><ul class="columns">${items.map(activityLink).join('')}</ul>`, [{ label: 'Steder', href: '/steder/' }]);
+    const placePath = `/steder/${slug(place)}/`;
+    const leaveIntro = parentalLeaveIntros.get(place);
+    const leaveLink = leaveIntro ? `<p><a class="filter-link" href="${parentalLeavePath(place)}">Aktiviteter i permisjon ${escape(placePhrase(place))}</a></p>` : '';
+    const placeBreadcrumbs = [{ label: 'Steder', href: '/steder/' }];
+    await page(placePath, `Aktiviteter for barn ${placePhrase(place)}`, `Finn aktiviteter for barn og familier ${placePhrase(place)}: turer, opplevelser og tilbud i nærområdet.`, `<h1>Aktiviteter for barn ${escape(placePhrase(place))}</h1><p class="intro">Her finner du forslag til aktiviteter og opplevelser for barn og familier ${escape(placePhrase(place))}. Velg en aktivitet for praktisk informasjon og lenke til arrangøren.</p><p><a class="filter-link" href="/?tilbud=all&amp;sted=${encodeURIComponent(place)}#aktiviteter">Filtrer aktiviteter ${escape(placePhrase(place))} etter alder og type</a></p>${leaveLink}<ul class="columns">${items.map(activityLink).join('')}</ul>`, placeBreadcrumbs);
+
+    if (leaveIntro) {
+      const title = `I permisjon ${placePhrase(place)} – aktiviteter med baby`;
+      const leaveItems = items.filter(fitsParentalLeave);
+      const outings = place === 'Sveio'
+        ? items.filter(activity => ['ryvarden', 'dagsturhyttene-sveio'].includes(activity.id))
+        : [];
+      await page(parentalLeavePath(place), title, summary(leaveIntro), `
+        <h1>${escape(title)}</h1>
+        <p class="intro">${escape(leaveIntro)}</p>
+        <section>
+          <h2>Tilbud for deg og babyen</h2>
+          <ul class="columns">${leaveItems.map(activityLink).join('')}</ul>
+        </section>
+        ${outings.length ? `<section><h2>Trilleturer i Sveio</h2><ul class="columns">${outings.map(activityLink).join('')}</ul></section>` : ''}
+        <p><a class="filter-link" href="/?permisjon=1&amp;sted=${encodeURIComponent(place)}#aktiviteter">Åpne permisjonsfilteret for ${escape(place)}</a></p>
+      `, [...placeBreadcrumbs, { label: place, href: placePath }]);
+    }
   }
   return paths;
 }

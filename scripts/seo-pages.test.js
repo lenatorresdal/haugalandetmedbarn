@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { writeSeoPages } from './seo-pages.mjs';
 import { activities } from '../src/activities.js';
+import { fitsParentalLeave } from '../src/parentalLeave.js';
 import { matchesView } from '../src/participation.js';
 
 let directory;
@@ -62,6 +63,31 @@ describe('forhåndsgenererte innholdssider', () => {
     expect(courses.querySelector('.page-nav a').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
     expect(courses.querySelector('.breadcrumbs a').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
     expect(courses.querySelector('.page-nav [aria-current="page"]').textContent).toBe('Kurs og påmelding');
+  });
+
+  it.each([
+    ['Haugesund', 'haugesund', 'i'],
+    ['Karmøy', 'karmoy', 'på'],
+    ['Sveio', 'sveio', 'i'],
+    ['Tysvær', 'tysvaer', 'i'],
+    ['Vindafjord', 'vindafjord', 'i'],
+  ])('lenker til en egen permisjonsoversikt for %s', async (place, slug, preposition) => {
+    const placePath = `/steder/${slug}/`;
+    const path = `${placePath}permisjon/`;
+    const placeDocument = await documentFor(placePath);
+    expect(placeDocument.querySelector(`main a[href="${path}"]`)).not.toBeNull();
+    expect(paths).toContain(path);
+
+    const document = await documentFor(path);
+    expect(document.querySelector('h1').textContent).toBe(`I permisjon ${preposition} ${place} – aktiviteter med baby`);
+    expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toBe(`https://example.no${path}`);
+    const links = [...document.querySelectorAll('main section:first-of-type .columns a')];
+    const expected = activities.filter(activity => activity.municipality === place && fitsParentalLeave(activity));
+    expect(expected.length).toBeGreaterThan(0);
+    expect(links.map(link => link.getAttribute('href'))).toEqual(expected.map(activity => `/aktiviteter/${activity.id}/`));
+    const filterUrl = new URL(document.querySelector('.filter-link').getAttribute('href'), 'https://example.no');
+    expect(filterUrl.searchParams.get('sted')).toBe(place);
+    expect(filterUrl.searchParams.get('permisjon')).toBe('1');
   });
 
   it('har samme navigasjon på personvernsiden og de øvrige innholdssidene', async () => {
