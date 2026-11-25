@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createServer, loadEnv } from 'vite';
 import { createElement } from 'react';
@@ -24,7 +25,11 @@ try {
   const renderActivityArt = activity => renderToStaticMarkup(createElement(ActivityArt, { scene: activity.scene, background: activity.bg }));
   const manifest = JSON.parse(await readFile('dist/.vite/manifest.json', 'utf8'));
   const ratingScript = manifest['src/activity-rating-entry.jsx'].file;
-  const seoPaths = await writeSeoPages(siteUrl, 'dist', renderActivityArt, `/${ratingScript}`);
+  const contentStyles = await readFile('dist/innhold.css');
+  const stylesHash = createHash('sha256').update(contentStyles).digest('hex').slice(0, 12);
+  const contentStylesPath = `/assets/innhold-${stylesHash}.css`;
+  await writeFile(`dist${contentStylesPath}`, contentStyles);
+  const seoPaths = await writeSeoPages(siteUrl, 'dist', renderActivityArt, `/${ratingScript}`, contentStylesPath);
   if (siteUrl) {
     const escapedSiteUrl = siteUrl.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
     const websiteData = JSON.stringify({

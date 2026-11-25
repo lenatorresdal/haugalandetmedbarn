@@ -18,7 +18,7 @@ const parentalLeaveIntros = new Map([
   ['Vindafjord', 'Se aktivitetsoversikten for tilbud for barn og familier i Vindafjord.'],
 ]);
 
-export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderActivityArt = null, ratingScript = null) {
+export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderActivityArt = null, ratingScript = null, contentStylesPath = "/innhold.css") {
   const paths = [];
   async function page(path, title, description, body, breadcrumbs = []) {
     const dir = `${outputDirectory}${path}`;
@@ -50,7 +50,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     <link rel="icon" type="image/png" href="/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/innhold.css">
+    <link rel="stylesheet" href="${escape(contentStylesPath)}">
     <script src="/analytics-consent.js" defer></script>
   </head>
   <body>
