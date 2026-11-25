@@ -13,7 +13,7 @@ const documentFor = async path => new DOMParser().parseFromString(await readFile
 
 beforeAll(async () => {
   directory = await mkdtemp(join(tmpdir(), 'haugalandet-seo-test-'));
-  paths = await writeSeoPages('https://example.no/', directory, () => '<svg aria-hidden="true"></svg>');
+  paths = await writeSeoPages('https://example.no/', directory, () => '<svg aria-hidden="true"></svg>', '/assets/activity-rating.js');
 });
 afterAll(async () => { if (directory) await rm(directory, { recursive: true, force: true }); });
 
@@ -29,6 +29,8 @@ describe('forhåndsgenererte innholdssider', () => {
       expect(document.querySelector('.action').getAttribute('href')).toBe(activity.url);
       expect(document.querySelector('.activity-back').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
       expect(document.querySelector('.activity-illustration svg').getAttribute('aria-hidden')).toBe('true');
+      expect(document.querySelector('[data-activity-rating]').dataset.activityRating).toBe(activity.id);
+      expect(document.querySelector('script[src="/assets/activity-rating.js"]')).not.toBeNull();
       expect(document.querySelector('script[src="/analytics-consent.js"]')).not.toBeNull();
       expect(document.querySelector('[data-analytics-settings]')).not.toBeNull();
     }
@@ -36,6 +38,7 @@ describe('forhåndsgenererte innholdssider', () => {
 
   it('viser alle kurs og lar stedssiden åpne hele oversikten med valgt sted', async () => {
     const courses = await documentFor('/kurs/');
+    expect(courses.querySelector('[data-activity-rating]')).toBeNull();
     const courseLinks = [...courses.querySelectorAll('.columns a')].map(link => link.getAttribute('href'));
     expect(courseLinks).toEqual(activities.filter(activity => matchesView(activity, 'courses')).map(activity => `/aktiviteter/${activity.id}/`));
     const karmoy = await documentFor('/steder/karmoy/');
@@ -81,9 +84,14 @@ describe('forhåndsgenererte innholdssider', () => {
     const document = await documentFor(path);
     expect(document.querySelector('h1').textContent).toBe(`I permisjon ${preposition} ${place} – aktiviteter med baby`);
     expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toBe(`https://example.no${path}`);
-    const links = [...document.querySelectorAll('main section:first-of-type .columns a')];
+    const links = [...document.querySelectorAll('main section .columns a')];
     const expected = activities.filter(activity => activity.municipality === place && fitsParentalLeave(activity));
-    expect(expected.length).toBeGreaterThan(0);
+    if (place === 'Vindafjord') {
+      expect(expected).toHaveLength(0);
+      expect(document.querySelector('main section').textContent).toContain('Ingen permisjonsaktiviteter');
+    } else {
+      expect(expected.length).toBeGreaterThan(0);
+    }
     expect(links.map(link => link.getAttribute('href'))).toEqual(expected.map(activity => `/aktiviteter/${activity.id}/`));
     const filterUrl = new URL(document.querySelector('.filter-link').getAttribute('href'), 'https://example.no');
     expect(filterUrl.searchParams.get('sted')).toBe(place);

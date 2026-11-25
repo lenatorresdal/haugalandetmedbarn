@@ -30,7 +30,7 @@ function seoPagesInDevelopment() {
       const directory = await mkdtemp(join(tmpdir(), 'haugalandet-pages-'));
       const { default: ActivityArt } = await server.ssrLoadModule('/src/components/illustrations/ActivityArt.jsx');
       const renderActivityArt = activity => renderToStaticMarkup(createElement(ActivityArt, { scene: activity.scene, background: activity.bg }));
-      const paths = new Set(await writeSeoPages(undefined, directory, renderActivityArt));
+      const paths = new Set(await writeSeoPages(undefined, directory, renderActivityArt, '/src/activity-rating-entry.jsx'));
       server.middlewares.use(async (req, res, next) => {
         const pathname = new URL(req.url, 'http://localhost').pathname;
         const path = pathname.endsWith('/') ? pathname : `${pathname}/`;
@@ -38,7 +38,7 @@ function seoPagesInDevelopment() {
         try {
           const html = await readFile(join(directory, path, 'index.html'), 'utf8');
           res.setHeader('Content-Type', 'text/html; charset=utf-8');
-          res.end(html);
+          res.end(await server.transformIndexHtml(path, html));
         } catch (error) { next(error); }
       });
       server.watcher.add(['src/activities.js', 'src/participation.js', 'src/components/illustrations', 'scripts/seo-pages.mjs']);
@@ -52,4 +52,10 @@ function seoPagesInDevelopment() {
   };
 }
 
-export default defineConfig({ plugins: [react(), seoPagesInDevelopment()] });
+export default defineConfig({
+  plugins: [react(), seoPagesInDevelopment()],
+  build: {
+    manifest: true,
+    rollupOptions: { input: ['index.html', 'src/activity-rating-entry.jsx'] },
+  },
+});

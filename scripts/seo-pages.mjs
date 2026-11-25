@@ -13,12 +13,12 @@ const parentalLeavePath = place => `/steder/${slug(place)}/permisjon/`;
 const parentalLeaveIntros = new Map([
   ['Haugesund', 'I foreldrepermisjon i Haugesund? Bli med på babysang, babysvømming eller trilletur, eller møt andre foreldre på biblioteket. Her finner du også trening der babyen kan bli med.'],
   ['Karmøy', 'I foreldrepermisjon på Karmøy? Finn babysvømming i Karmøyhallen, babysang blant annet i Norheim, på Avaldsnes og i Kopervik, eller ta en kafépause på Oasen.'],
-  ['Sveio', 'I foreldrepermisjon i Sveio? På babysong i Sveio soknehus kan du møte andre foreldre og babyer. Vil du ut på trilletur, kan du blant annet gå grusveien til Ryvarden eller ta turen til Golfstova.'],
+  ['Sveio', 'I foreldrepermisjon i Sveio? På babysong i Sveio soknehus kan du møte andre foreldre og babyer.'],
   ['Tysvær', 'I foreldrepermisjon i Tysvær? Her finner du barseltrening på Frakkagjerd, babysang i Aksdal kyrkje, musikklek og babymassasje.'],
-  ['Vindafjord', 'I foreldrepermisjon i Vindafjord? Trill grusveien fra Bjoa til Vadhytta, eller spør Vindafjordhallen når terapibassenget er tilgjengelig for bading med baby.'],
+  ['Vindafjord', 'Se aktivitetsoversikten for tilbud for barn og familier i Vindafjord.'],
 ]);
 
-export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderActivityArt = null) {
+export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderActivityArt = null, ratingScript = null) {
   const paths = [];
   async function page(path, title, description, body, breadcrumbs = []) {
     const dir = `${outputDirectory}${path}`;
@@ -119,6 +119,11 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
           ${activity.email ? `<p>Spørsmål og påmelding: <a href="mailto:${escape(activity.email)}">${escape(activity.email)}</a></p>` : ''}
           ${activity.additionalLinks?.length ? `<ul>${activity.additionalLinks.map(link => `<li><a href="${escape(link.url)}">${escape(link.label)}</a></li>`).join('')}</ul>` : ''}
         </section>
+        ${ratingScript ? `<section class="detail activity-rating-section" aria-labelledby="activity-rating-title">
+          <h2 id="activity-rating-title">Vurderinger</h2>
+          <div data-activity-rating="${escape(activity.id)}" data-activity-title="${escape(title)}"></div>
+          <script type="module" src="${escape(ratingScript)}"></script>
+        </section>` : ''}
         ${related.length ? `<section class="related-activities"><h2>Flere tips ${escape(placePhrase(activity.municipality))}</h2><ul class="columns">${related.map(activityLink).join('')}</ul></section>` : ''}
       </article>`;
     await page(pathFor(activity), title, description, body, [
@@ -142,17 +147,13 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     if (leaveIntro) {
       const title = `I permisjon ${placePhrase(place)} – aktiviteter med baby`;
       const leaveItems = items.filter(fitsParentalLeave);
-      const outings = place === 'Sveio'
-        ? items.filter(activity => ['ryvarden', 'dagsturhyttene-sveio'].includes(activity.id))
-        : [];
       await page(parentalLeavePath(place), title, summary(leaveIntro), `
         <h1>${escape(title)}</h1>
         <p class="intro">${escape(leaveIntro)}</p>
         <section>
           <h2>Tilbud for deg og babyen</h2>
-          <ul class="columns">${leaveItems.map(activityLink).join('')}</ul>
+          ${leaveItems.length ? `<ul class="columns">${leaveItems.map(activityLink).join('')}</ul>` : `<p>Ingen permisjonsaktiviteter er listet her ennå. <a href="${placePath}">Se alle aktiviteter ${escape(placePhrase(place))}</a>.</p>`}
         </section>
-        ${outings.length ? `<section><h2>Trilleturer i Sveio</h2><ul class="columns">${outings.map(activityLink).join('')}</ul></section>` : ''}
         <p><a class="filter-link" href="/?permisjon=1&amp;sted=${encodeURIComponent(place)}#aktiviteter">Åpne permisjonsfilteret for ${escape(place)}</a></p>
       `, [...placeBreadcrumbs, { label: place, href: placePath }]);
     }

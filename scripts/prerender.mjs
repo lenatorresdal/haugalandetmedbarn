@@ -22,7 +22,9 @@ try {
   html = html.replace('<div id="root"></div>', () => `<div id="root">${markup}</div>`);
   const { default: ActivityArt } = await viteServer.ssrLoadModule('/src/components/illustrations/ActivityArt.jsx');
   const renderActivityArt = activity => renderToStaticMarkup(createElement(ActivityArt, { scene: activity.scene, background: activity.bg }));
-  const seoPaths = await writeSeoPages(siteUrl, 'dist', renderActivityArt);
+  const manifest = JSON.parse(await readFile('dist/.vite/manifest.json', 'utf8'));
+  const ratingScript = manifest['src/activity-rating-entry.jsx'].file;
+  const seoPaths = await writeSeoPages(siteUrl, 'dist', renderActivityArt, `/${ratingScript}`);
   if (siteUrl) {
     const escapedSiteUrl = siteUrl.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
     const websiteData = JSON.stringify({

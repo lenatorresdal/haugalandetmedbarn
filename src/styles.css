@@ -145,7 +145,6 @@ h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
 .favorites-button{font-size:13px;padding:8px 10px}
 }
 
-.grid{align-items:stretch;grid-auto-rows:1fr}
 .card-overview-content{display:flow-root}
 .card .activity-age{width:fit-content;max-width:100%}
 .card h3,.activity-location{overflow-wrap:anywhere}
@@ -155,7 +154,6 @@ h2{font:500 31px Manrope,sans-serif;letter-spacing:-1px;margin:10px 0}
 .card h3{margin:8px 0 10px}
 .card .participation{margin-bottom:10px;font-size:13px}
 .card .activity-age{margin-bottom:12px;padding:4px 8px;font-size:13px;line-height:1.5}
-.card-overview{margin-bottom:16px}
 
 .shared-activity-notice{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;font-size:14px}
 

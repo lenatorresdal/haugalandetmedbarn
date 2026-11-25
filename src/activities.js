@@ -12,7 +12,8 @@ export const activities = [
     place: "Rambaskårsfjellet · turstart fra Kvalavåg",
     distance: "Ca. 2 km tur–retur.",
     price: "Gratis",
-    description: "Gjør en kort familietur til en flyekspedisjon. Fra Rambaskårsfjellet ser dere mot Haugesund lufthavn og kan følge med på fly som lander eller tar av. Sjekk flytidene før dere går, og ta med niste og gjerne en kikkert. Turen går i terreng; tilpass til barnas erfaring og dagens føre.",
+    description:
+      "Gjør en kort familietur til en flyekspedisjon. Fra Rambaskårsfjellet ser dere mot Haugesund lufthavn og kan følge med på fly som lander eller tar av. Sjekk flytidene før dere går, og ta med niste og gjerne en kikkert. Turen går i terreng; tilpass til barnas erfaring og dagens føre.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-turtips/turtips-karmoy/",
     link: "Se DNTs turbeskrivelse fra Kvalavåg",
     scene: "planeSpotting",
@@ -29,8 +30,10 @@ export const activities = [
     place: "Karmsund folkemuseum · Skåregata 142, Haugesund",
     time: "I museets åpningstid · sjekk dagens tider før besøket",
     price: "Gratis for barn under 16 år · se museets priser for voksne",
-    stroller: "Det er trapper mellom utstillingene. Avklar tilgjengelighet med museet ved behov.",
-    description: "Gå på skattejakt blant gamle gjenstander og oppdag hvordan folk levde på Haugalandet. Museet har en lekekrok for barna, en lesekrok og enkel kafé. Et alternativ for en rolig regnværsdag i sentrum; spør i resepsjonen om skattejakten når dere kommer.",
+    stroller:
+      "Det er trapper mellom utstillingene. Avklar tilgjengelighet med museet ved behov.",
+    description:
+      "Gå på skattejakt blant gamle gjenstander og oppdag hvordan folk levde på Haugalandet. Museet har en lekekrok for barna, en lesekrok og enkel kafé. Et alternativ for en rolig regnværsdag i sentrum; spør i resepsjonen om skattejakten når dere kommer.",
     url: "https://haugalandmuseet.no/museum/karmsund-folkemuseum/",
     link: "Se åpningstider, priser og tilbud for barn",
     scene: "museumTreasure",
@@ -47,7 +50,8 @@ export const activities = [
     place: "Tjelltjørn · i tilknytning til Djupadalen, Haugesund",
     distance: "Velg kortere eller lengre rute etter turstart og barnas tempo.",
     price: "Gratis",
-    description: "La rasteplassen bli selve turmålet. Ved Tjelltjørn finnes naturlekeplass og flere steder å spise niste. Sett av tid til å utforske skogen og leke underveis, fremfor å gå lengst mulig. Hold små barn tett ved dere langs vannet, og velg rute etter føre og barnas ferdigheter.",
+    description:
+      "La rasteplassen bli selve turmålet. Ved Tjelltjørn finnes naturlekeplass og flere steder å spise niste. Sett av tid til å utforske skogen og leke underveis, fremfor å gå lengst mulig. Hold små barn tett ved dere langs vannet, og velg rute etter føre og barnas ferdigheter.",
     url: "https://www.fjordnorway.com/no/reiseinspirasjon/turforslag-for-barnefamilier-i-haugesund-og-omegn",
     link: "Les om Tjelltjørn og familieturer i området",
     scene: "naturePlay",
@@ -62,9 +66,11 @@ export const activities = [
     title: "Kort tur og bekkelek ved Speiderplassen",
     category: "Ut på tur",
     place: "Speiderplassen i Åkramarka · adkomst via Myrdalvegen",
-    distance: "Gå turveien til Speiderplassen og tilbake · hele rundturen er ikke nødvendig.",
+    distance:
+      "Gå turveien til Speiderplassen og tilbake · hele rundturen er ikke nødvendig.",
     price: "Gratis",
-    description: "Fra parkeringen via Myrdalvegen følger dere turveien inn til Speiderplassen. Her er det bord og benker, og en bekk like ved som kan bli utgangspunkt for små oppdagelser sammen med en voksen. Ta med niste og klær som tåler litt søl. DNT beskriver også en lengre tur videre inn i marka for dem som vil gå mer.",
+    description:
+      "Fra parkeringen via Myrdalvegen følger dere turveien inn til Speiderplassen. Her er det bord og benker, og en bekk like ved som kan bli utgangspunkt for små oppdagelser sammen med en voksen. Ta med niste og klær som tåler litt søl. DNT beskriver også en lengre tur videre inn i marka for dem som vil gå mer.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-turtips/turtips-karmoy/",
     link: "Se adkomst og turforslag i Åkramarka",
     scene: "creekPlay",
@@ -81,10 +87,16 @@ export const activities = [
     place: "Dragavika · Høievegen, ved Førresfjorden",
     time: "Utflukt i eget tempo · strandliv og krabbefangst passer best i den varme årstiden",
     price: "Gratis",
-    description: "Ta med bøtte og hov og let etter krabber sammen. Dragavika har langgrunn strand, gresslette, svaberg, brygge, turvei og offentlige toaletter. Her er det også grillmuligheter, så dere kan kombinere strandturen med et måltid ute. Stor parkering ligger omtrent 150 meter ovenfor stranden. Følg skilting og lokale brannrestriksjoner før grilling, og hold barna under oppsyn ved sjøen.",
+    description:
+      "Ta med bøtte og hov og let etter krabber sammen. Dragavika har langgrunn strand, gresslette, svaberg, brygge, turvei og offentlige toaletter. Her er det også grillmuligheter, så dere kan kombinere strandturen med et måltid ute. Stor parkering ligger omtrent 150 meter ovenfor stranden. Følg skilting og lokale brannrestriksjoner før grilling, og hold barna under oppsyn ved sjøen.",
     url: "https://www.frivest.no/lokalt/tysvaer/dragavika",
     link: "Se adkomst og fasiliteter i Dragavika",
-    additionalLinks: [{ url: "https://www.visitnorway.no/listings/dragavika-friluftsomrade-og-badeplass/225483/", label: "Les om strand og krabbefangst" }],
+    additionalLinks: [
+      {
+        url: "https://www.visitnorway.no/listings/dragavika-friluftsomrade-og-badeplass/225483/",
+        label: "Les om strand og krabbefangst",
+      },
+    ],
     scene: "crabBeach",
     bg: "#d9e6e3",
   },
@@ -98,8 +110,10 @@ export const activities = [
     category: "Ut på tur",
     place: "Sandbekken · Sandbekken 198, Aksdal",
     distance: "Valgfri turlengde på områdets turveier og stier.",
-    price: "Utflukt i friluftsområdet er gratis · leie av bygg og utstyr avtales separat",
-    description: "Utforsk bygdetunet og stiene, og ta en pause ved stranden ved Storavatnet. Ved vannet finnes gapahuk og benker. Kommunen oppgir at det er grill og volleyballnett ved kanobygget; ta med eget grillkull og ball. Avklar eventuell bruk sammen med utleie med kommunen. Følg skilting og lokale brannrestriksjoner før grilling, og hold små barn tett ved dere langs vannet.",
+    price:
+      "Utflukt i friluftsområdet er gratis · leie av bygg og utstyr avtales separat",
+    description:
+      "Utforsk bygdetunet og stiene, og ta en pause ved stranden ved Storavatnet. Ved vannet finnes gapahuk og benker. Kommunen oppgir at det er grill og volleyballnett ved kanobygget; ta med eget grillkull og ball. Avklar eventuell bruk sammen med utleie med kommunen. Følg skilting og lokale brannrestriksjoner før grilling, og hold små barn tett ved dere langs vannet.",
     url: "https://www.tysver.kommune.no/kultur-idrett-og-fritid/friluftsliv/sandbekken/",
     link: "Se fasiliteter, adkomst og kontaktinformasjon",
     scene: "lakesideGrill",
@@ -116,10 +130,16 @@ export const activities = [
     place: "Skattkammeret · Haraldsgata 192, Haugesund",
     time: "Utlån i åpningstiden · sjekk tider og tilgjengelig utstyr før dere drar",
     price: "Gratis utlån for barn og unge opp til 25 år",
-    description: "Har dere lyst til å prøve en ny aktivitet uten å kjøpe utstyr? Skattkammeret låner ut fritidsutstyr til barn og unge. Se hva som finnes i riktig størrelse, avklar lånevilkår og planlegg henting og levering. Dette er et utlånstilbud som kan gjøre familieturen eller aktivitetsdagen enklere.",
+    description:
+      "Har dere lyst til å prøve en ny aktivitet uten å kjøpe utstyr? Skattkammeret låner ut fritidsutstyr til barn og unge. Se hva som finnes i riktig størrelse, avklar lånevilkår og planlegg henting og levering. Dette er et utlånstilbud som kan gjøre familieturen eller aktivitetsdagen enklere.",
     url: "https://kirkensbymisjon.no/tilbud-skattkammeret/kontaktinformasjon/haugesund/",
     link: "Se åpningstider og kontakt Skattkammeret",
-    additionalLinks: [{ url: "https://bua.no/finn-bua/skattkammeret-haugesund", label: "Se utlånsutstyr hos BUA" }],
+    additionalLinks: [
+      {
+        url: "https://bua.no/finn-bua/skattkammeret-haugesund",
+        label: "Se utlånsutstyr hos BUA",
+      },
+    ],
     scene: "gearLibrary",
     bg: "#eee1cf",
   },
@@ -653,6 +673,23 @@ export const activities = [
     bg: "#e9d7c7",
   },
   {
+    id: "babysang-veavagen",
+    participation: "check",
+    age: "Baby",
+    ageRange: { minMonths: 0, maxMonths: 12 },
+    municipality: "Karmøy",
+    title: "Babysang i Veavågen kirke",
+    category: "Sang & musikk",
+    place: "Veavågen kirke",
+    time: "Torsdager kl. 11.00",
+    description:
+      "Babysang for de minste sammen med en voksen. Meld deg inn i Facebook-gruppen «Babysang Veavågen kirke» for å se når og hvor neste samling er.",
+    url: "https://www.facebook.com/groups/242643506174933",
+    link: "Se Facebook-gruppen",
+    scene: "music",
+    bg: "#e2dfe9",
+  },
+  {
     id: "babysang-aksdal",
     participation: "course",
     age: "0–1 år",
@@ -768,8 +805,10 @@ export const activities = [
     category: "Lek & fellesskap",
     place: "Snurrevarden gård · Smidjebergvegen 25, Håvik",
     time: "Utvalgte dager, oftest vår og sommer, kl. 13.00–16.00 · se annonserte datoer og billettsalg",
-    price: "Se gårdens nettside for inngang og tillegg for ridning og hestekjøring",
-    stroller: "Gården oppgir at området er tilrettelagt for barnevogn og rullestol.",
+    price:
+      "Se gårdens nettside for inngang og tillegg for ridning og hestekjøring",
+    stroller:
+      "Gården oppgir at området er tilrettelagt for barnevogn og rullestol.",
     description:
       "Hils på gårdsdyrene og bli med på en familiedag på tunet. På Åpen gård kan det være ridning, hest og kjerre, hopping i høyet, sandkasse og mini-traktorer. Kaféen selger mat og drikke, og medbrakt er velkommen. Barn deltar med voksen; enkelte aktiviteter kan ha egne aldersgrenser. Tilbudet gjelder annonserte arrangementsdager; sjekk dato, aktiviteter og billetter før besøket.",
     url: "https://snurrevardengard.com/tilbud-og-tjenester/apengard",
@@ -883,7 +922,8 @@ export const activities = [
     title: "Blomster og treskulpturer i Rex Garden",
     category: "Ut på tur",
     place: "Rex Garden · Lauvneset, Førde i Sveio",
-    distance: "Valgfri turlengde · kombiner parken med strandpromenaden og Strando.",
+    distance:
+      "Valgfri turlengde · kombiner parken med strandpromenaden og Strando.",
     stroller:
       "Parken har grusunderlag, men fremkommelighet med barnevogn på alle stiene er ikke bekreftet. Velg rute etter underlag og føre.",
     description:
@@ -1147,7 +1187,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Varierende, barnevognvennlige turmål i Haugesund",
     time: "Dato og oppmøtested publiseres fortløpende · sjekk aktivitetskalenderen",
-    stroller: "Turen legges til rette for barnevogn. Sjekk den enkelte turen for underlag og lengde.",
+    stroller:
+      "Turen legges til rette for barnevogn. Sjekk den enkelte turen for underlag og lengde.",
     description:
       "Bli med andre som er hjemme med små barn på en sosial trilletur i rolig tempo. Haugesund Turistforening arrangerer trilleturer gjennom Barnas Turlag; rute, dato og eventuell påmelding varierer fra tur til tur.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-aktiviteter/barnas-turlag/",
@@ -1166,7 +1207,8 @@ export const activities = [
     place: "Haugalandsveggen · Haugesund",
     time: "Onsdager fra kl. 11.00 · sjekk aktuelle tider hos arrangøren",
     price: "Vanlig drop-in · barnet er med gratis",
-    description: "Klatre og møt andre foreldre i permisjon mens barna er med. På barselklatringen er det gjerne roligere i hallen og musikken dempes. Følg hallens sikkerhetsregler og avklar hvordan barnet skal passes mens du klatrer.",
+    description:
+      "Klatre og møt andre foreldre i permisjon mens barna er med. På barselklatringen er det gjerne roligere i hallen og musikken dempes. Følg hallens sikkerhetsregler og avklar hvordan barnet skal passes mens du klatrer.",
     url: "https://aktivihaugesund.no/aktiviteter/barselklatring",
     link: "Les om barselklatring",
     scene: "climbing",
@@ -1364,7 +1406,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Varierer i Haugesund · se aktivitetskalenderen",
     time: "Turer og aktiviteter gjennom året · sjekk kalenderen",
-    price: "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
+    price:
+      "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
     description:
       "Bli med andre barnefamilier på tur, utelek og enkle friluftsaktiviteter. Barnas Turlag er for barn fra 0 til 12 år sammen med en ansvarlig voksen; turmål og eventuell påmelding varierer.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-aktiviteter/barnas-turlag/",
@@ -1382,7 +1425,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Varierer på Karmøy · se aktivitetskalenderen",
     time: "Turer og aktiviteter gjennom året · sjekk kalenderen",
-    price: "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
+    price:
+      "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
     description:
       "Bli med andre barnefamilier på tur, utelek og enkle friluftsaktiviteter. Barnas Turlag er for barn fra 0 til 12 år sammen med en ansvarlig voksen; turmål og eventuell påmelding varierer.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-aktiviteter/barnas-turlag/",
@@ -1400,7 +1444,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Varierer i Tysvær · se aktivitetskalenderen",
     time: "Turer og aktiviteter gjennom året · sjekk kalenderen",
-    price: "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
+    price:
+      "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
     description:
       "Bli med andre barnefamilier på tur, utelek og enkle friluftsaktiviteter. Barnas Turlag er for barn fra 0 til 12 år sammen med en ansvarlig voksen; turmål og eventuell påmelding varierer.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-aktiviteter/barnas-turlag/",
@@ -1418,7 +1463,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Varierer i Vindafjord · se aktivitetskalenderen",
     time: "Turer og aktiviteter gjennom året · sjekk kalenderen",
-    price: "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
+    price:
+      "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
     description:
       "Bli med andre barnefamilier på tur, utelek og enkle friluftsaktiviteter. Barnas Turlag er for barn fra 0 til 12 år sammen med en ansvarlig voksen; turmål og eventuell påmelding varierer.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-aktiviteter/barnas-turlag/",
@@ -1436,7 +1482,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Varierer i Sveio · se aktivitetskalenderen",
     time: "Turer og aktiviteter gjennom året · sjekk kalenderen",
-    price: "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
+    price:
+      "Åpent for medlemmer og ikke-medlemmer · noen aktiviteter kan kreve påmelding",
     description:
       "Bli med andre barnefamilier på tur, utelek og enkle friluftsaktiviteter. Barnas Turlag er for barn fra 0 til 12 år sammen med en ansvarlig voksen; turmål og eventuell påmelding varierer.",
     url: "https://www.dnt.no/dnt-der-du-er/haugesund-turistforening/lokale-aktiviteter/barnas-turlag/",
@@ -1553,7 +1600,8 @@ export const activities = [
     category: "Ut på tur",
     place: "Vadhytta · adkomst fra Bjoa eller Ølensvåg",
     time: "Fra Bjoa ca. 40 minutter tur–retur · fra Ølensvåg ca. 2 timer",
-    distance: "Fra Bjoa ca. 2,8 km tur–retur · fra Ølensvåg ca. 7,3 km tur–retur.",
+    distance:
+      "Fra Bjoa ca. 2,8 km tur–retur · fra Ølensvåg ca. 7,3 km tur–retur.",
     price: "Gratis",
     stroller:
       "Grusveien fra Bjoa er tilrettelagt for barnevogn og rullestol. Fra Ølensvåg er det bratt i starten.",

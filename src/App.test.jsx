@@ -93,6 +93,7 @@ describe('aktivitetsoversikten', () => {
     expect(screen.getByRole('heading', { name: 'Babykino på Edda' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Babymassasje hos Atlas' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Kafépause på Totalen' })).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Familiebading i Vindafjordhallen' })).toBeNull();
     expect(screen.queryByRole('heading', { name: 'Fortellerstund på Haugesund folkebibliotek' })).toBeNull();
 
     await user.selectOptions(screen.getByLabelText('Sted'), 'Karmøy');

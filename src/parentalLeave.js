@@ -1,19 +1,20 @@
 const parentalLeaveActivityIds = new Set([
+  'crossfit-ravn-fitness',
   'babysvomming',
   'babysvomming-karmoyhallen',
-  'bading-vindafjordhallen',
   'apen',
   'sang',
   'babysang-rossabo',
-  'babysang-var-frelsers',
-  'babysang-norheim',
   'babysang-udland',
+  'babysang-norheim',
+  'babysang-var-frelsers',
   'babysang-avaldsnes',
   'babysang-torvastad',
   'babysang-kopervik',
-  'babysang-akra',
-  'babysang-aksdal',
   'babysang-sveio',
+  'babysang-aksdal',
+  'babysang-akra',
+  'babysang-veavagen',
   'biblobaby',
   'biblobarn',
   'pappatreff',
@@ -23,15 +24,17 @@ const parentalLeaveActivityIds = new Set([
   'barselyoga-sentrum-yoga',
   'musikklek-baby-tysvaer',
   'trilletur-dnt-haugesund',
-  'vadhytta-vindafjord',
   'barselklatring-haugalandsveggen',
-  'barseltrening-yes',
-  'trening-baby-gymsalen',
   'trening-baby-crossfit-verftet',
-  'crossfit-ravn-fitness',
+  'trening-baby-gymsalen',
+  'barseltrening-yes',
   'trening-baby-boost',
+  'oasen-familiepause',
+  'kaffe',
+  'hos-carlos-biblioteket',
+  'hos-carlos-slaktehuset',
 ]);
 
 export function fitsParentalLeave(activity) {
-  return activity.category === 'Kafé & kos' || parentalLeaveActivityIds.has(activity.id);
+  return parentalLeaveActivityIds.has(activity.id);
 }

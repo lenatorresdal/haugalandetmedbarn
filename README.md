@@ -142,3 +142,17 @@ e-post; det lagrer ingen utkast lokalt og ber brukeren unngå sensitive opplysni
 
 Dokumentasjon: https://formspree.io/guides/framer/ og
 https://help.formspree.io/articles/building-your-form/honeypot-spam-filtering/
+
+## Stjernevurderinger
+
+Produksjonsbygget leser `VITE_SUPABASE_URL` og den offentlige
+`VITE_SUPABASE_PUBLISHABLE_KEY` fra `.env.production`. For lokal utvikling,
+kopier Supabase-variablene derfra til `.env.local`. Vite bygger verdiene inn
+i nettleserkoden, så bruk bare en publishable key.
+
+Supabase-prosjektet må ha anonym innlogging aktivert. De eksisterende
+tilgangsreglene må tillate at både besøkende og autentiserte brukere leser
+`activity_rating_stats`, og at autentiserte brukere kan lese, opprette og
+oppdatere og slette sine egne rader i `activity_ratings`. Statistikken må også
+oppdateres når en stemme slettes. Appen bruker eksisterende
+aktivitets-ID-er og leser statistikken som databasen beregner.
