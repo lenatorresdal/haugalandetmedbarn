@@ -296,6 +296,7 @@ export default function App() {
       <footer className="site-footer">
         <nav aria-label="Lenker nederst på siden">
           <a href="/personvern">Personvern</a>
+          <a href="https://www.instagram.com/haugalandetmedbarn/">Instagram</a>
           <button type="button" className="footer-link-button" data-analytics-settings hidden>
             Analyseinnstillinger
           </button>

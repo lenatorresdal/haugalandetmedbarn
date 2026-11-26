@@ -79,7 +79,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
       </header>
       <main id="innhold" tabindex="-1">${breadcrumbHtml}${body}</main>
       <footer class="site-footer">
-        <nav aria-label="Lenker nederst på siden"><a href="/personvern">Personvern</a><button type="button" class="footer-link-button" data-analytics-settings hidden>Analyseinnstillinger</button></nav>
+        <nav aria-label="Lenker nederst på siden"><a href="/personvern">Personvern</a><a href="https://www.instagram.com/haugalandetmedbarn/">Instagram</a><button type="button" class="footer-link-button" data-analytics-settings hidden>Analyseinnstillinger</button></nav>
       </footer>
     </div>
   </body>
