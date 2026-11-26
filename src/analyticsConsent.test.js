@@ -60,8 +60,8 @@ describe('samtykke til besøksanalyse', () => {
       .toContain('Analyse er deaktivert');
   });
 
-  it('kobler til innstillingsknappen når React har tegnet footeren', async () => {
-    document.body.innerHTML = '<div id="root"></div>';
+  it('kobler til innstillinger på nytt når React erstatter den forhåndsgenererte footeren', async () => {
+    document.body.innerHTML = '<div id="root"><footer><button data-analytics-settings hidden>Analyseinnstillinger</button></footer></div>';
     localStorage.setItem('hmb-analytics-consent', 'denied');
     runConsentScript();
 

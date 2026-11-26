@@ -113,18 +113,17 @@
       <div class="analytics-consent-content">
         <h2 id="analytics-consent-title">Kan vi bruke besøksstatistikk?</h2>
         <p>
-          Vi ønsker å bruke Google Analytics for å forstå hvordan nettstedet brukes.
-          Analyse aktiveres bare hvis du godtar. Du kan endre valget senere.
+          Vi bruker Google Analytics hvis du godtar. Du kan endre valget senere.
           <a href="/personvern#analyse">Les om personvern</a>.
         </p>
         ${currentChoiceText}
       </div>
       <div class="analytics-consent-actions">
         <button type="button" class="analytics-consent-button" data-consent-choice="granted">
-          Ja, jeg godtar analyse
+          Godta analyse
         </button>
         <button type="button" class="analytics-consent-button" data-consent-choice="denied">
-          Nei, avvis analyse
+          Avvis analyse
         </button>
       </div>
     `;
@@ -148,14 +147,14 @@
       button.dataset.analyticsSettingsReady = "true";
       button.addEventListener("click", () => showConsentPanel(button));
     });
-    return buttons.length > 0;
   };
 
-  if (!prepareSettingsButtons()) {
-    const settingsObserver = new MutationObserver(() => {
-      if (prepareSettingsButtons()) settingsObserver.disconnect();
-    });
-    settingsObserver.observe(document.body, { childList: true, subtree: true });
+  prepareSettingsButtons();
+  const appRoot = document.getElementById("root");
+  if (appRoot) {
+    // React can replace the prerendered footer when mounting the overview.
+    const settingsObserver = new MutationObserver(prepareSettingsButtons);
+    settingsObserver.observe(appRoot, { childList: true });
   }
 
   const savedConsent = readConsent();

@@ -69,8 +69,8 @@ Nettstedet bruker Google-taggen `GTM-KTGJ74W5`. Implementasjonen ligger i
 alle forhåndsgenererte innholdssider. Ikke lim inn Google-koden direkte i
 HTML-filene i tillegg; da kan taggen bli lastet flere ganger eller før samtykke.
 
-Google-taggen lastes først når den besøkende aktivt velger «Ja, jeg godtar
-analyse». «Nei, avvis analyse» hindrer lasting. Valget lagres lokalt med nøkkelen
+Google-taggen lastes først når den besøkende aktivt velger «Godta analyse».
+«Avvis analyse» hindrer lasting. Valget lagres lokalt med nøkkelen
 `hmb-analytics-consent`, og kan endres via «Analyseinnstillinger» i footeren.
 Ved tilbaketrekking sendes en oppdatering om avslått samtykke, og nettstedet
 forsøker å fjerne Google Analytics-informasjonskapsler.
@@ -84,7 +84,7 @@ Etter publisering:
 
 1. Åpne nettstedet i et privat nettleservindu.
 2. Kontroller at ingen Google Analytics-forespørsel sendes før et valg er tatt.
-3. Velg «Ja, jeg godtar analyse» og kontroller besøket i Sanntid i Google
+3. Velg «Godta analyse» og kontroller besøket i Sanntid i Google
    Analytics.
 4. Åpne «Analyseinnstillinger», avvis analyse og kontroller at valget blir husket
    etter at siden lastes på nytt.
