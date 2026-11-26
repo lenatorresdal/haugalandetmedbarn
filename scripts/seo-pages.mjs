@@ -20,18 +20,30 @@ const parentalLeaveIntros = new Map([
 
 export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderActivityArt = null, ratingScript = null, contentStylesPath = "/innhold.css") {
   const paths = [];
-  async function page(path, title, description, body, breadcrumbs = []) {
+  async function page(path, title, description, body, breadcrumbs = [], searchTitle = title) {
     const dir = `${outputDirectory}${path}`;
     await mkdir(dir, { recursive: true });
     const canonical = siteUrl ? new URL(path, siteUrl).href : null;
-    const fullTitle = `${title} | Haugalandet med barn`;
+    const fullTitle = `${searchTitle} | Haugalandet med barn`;
     const trail = [{ label: 'Alle aktiviteter', href: '/?tilbud=all#aktiviteter' }, ...breadcrumbs, { label: title }];
     const breadcrumbHtml = `<nav class="breadcrumbs" aria-label="Du er her"><ol>${trail.map(item => `<li>${item.href ? `<a href="${escape(item.href)}">${escape(item.label)}</a>` : `<span aria-current="page">${escape(item.label)}</span>`}</li>`).join('')}</ol></nav>`;
     const navItem = (href, label) => `<a href="${href}"${path === href ? ' aria-current="page"' : ''}>${label}</a>`;
+    const breadcrumbData = canonical ? JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: trail.map(({ label, href }, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: label,
+        item: index === 0 ? new URL('/', siteUrl).href : href ? new URL(href, siteUrl).href : canonical,
+      })),
+    }).replaceAll('<', '\\u003c') : '';
     const socialUrl = canonical
       ? `<link rel="canonical" href="${escape(canonical)}">
     <meta property="og:url" content="${escape(canonical)}">
-    <meta property="og:image" content="${escape(new URL('/logo.png', siteUrl).href)}">`
+    <meta property="og:image" content="${escape(new URL('/logo.png', siteUrl).href)}">
+    <meta property="og:image:alt" content="Haugalandet med barn">
+    <script type="application/ld+json">${breadcrumbData}</script>`
       : '';
     const html = `<!doctype html>
 <html lang="nb">
@@ -78,7 +90,10 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
   for (const activity of activities) {
     if (!/^[a-z0-9-]+$/.test(activity.id)) throw new Error(`Invalid activity id: ${activity.id}`);
     const title = activity.title;
-    const description = summary(`${activity.title} · ${activity.municipality}. ${activity.description}`);
+    const searchTitle = title.toLocaleLowerCase('nb-NO').includes(activity.municipality.toLocaleLowerCase('nb-NO'))
+      ? title
+      : `${title} – ${activity.municipality}`;
+    const description = summary(`${activity.municipality} · ${activity.description}`);
     const locations = activity.locations ?? [{ place: activity.place, time: activity.time }];
     const { booking, registration, ticket } = participationTypes[activity.participation];
     const row = (label, value) => value ? `<dt>${escape(label)}</dt><dd>${escape(value)}</dd>` : '';
@@ -87,7 +102,11 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
       + row('Bestilling', booking) + row('Påmelding', registration) + row('Billett', ticket)
       + row('Tur', activity.distance) + row('Barnevogn', activity.stroller)
       + (activity.changingTable !== undefined ? row('Stellebord', activity.changingTable === null ? 'Ikke bekreftet' : activity.changingTable ? 'Ja' : 'Nei') : '');
-    const related = activities.filter(a => a.id !== activity.id && a.municipality === activity.municipality && a.category === activity.category).slice(0, 3);
+    const nearby = activities.filter(a => a.id !== activity.id && a.municipality === activity.municipality);
+    const related = [
+      ...nearby.filter(a => a.category === activity.category),
+      ...nearby.filter(a => a.category !== activity.category),
+    ].slice(0, 3);
     const illustration = renderActivityArt ? renderActivityArt(activity) : '';
     const share = `<div class="share-activity" data-share-path="${escape(pathFor(activity))}"><button type="button" class="share-activity-button" aria-expanded="false" aria-controls="activity-share-panel" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>Del aktivitet</button><div class="share-activity-panel" id="activity-share-panel" hidden>
                 <label for="activity-share-url">Lenke til aktiviteten</label>
@@ -135,7 +154,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     await page(pathFor(activity), title, description, body, [
       { label: 'Steder', href: '/steder/' },
       { label: activity.municipality, href: `/steder/${slug(activity.municipality)}/` },
-    ]);
+    ], searchTitle);
   }
   const courses = activities.filter(activity => matchesView(activity, 'courses'));
   await page('/kurs/', 'Kurs og faste aktiviteter for barn på Haugalandet', 'Finn babysang, babysvømming og andre kurs og faste aktiviteter for barn og familier på Haugalandet.', `<h1>Kurs og faste aktiviteter for barn på Haugalandet</h1><p class="intro">Her finner du kurs og faste tilbud for barn og familier. Sjekk aktuelle datoer, ledige plasser og påmelding hos arrangøren.</p><p><a class="filter-link" href="/?tilbud=courses#aktiviteter">Filtrer kurs etter sted og alder</a></p><ul class="columns">${courses.map(activityLink).join('')}</ul>`);

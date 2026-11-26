@@ -19,12 +19,19 @@ afterAll(async () => { if (directory) await rm(directory, { recursive: true, for
 
 describe('forhåndsgenererte innholdssider', () => {
   it('gir hver aktivitet en side med korrekt canonical og synlig innhold', async () => {
+    const descriptions = new Set();
     for (const activity of activities) {
       const path = `/aktiviteter/${activity.id}/`;
       expect(paths).toContain(path);
       const document = await documentFor(path);
       expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toBe(`https://example.no${path}`);
       expect(document.querySelector('h1').textContent).toBe(activity.title);
+      expect(document.title).toContain(activity.title);
+      expect(document.title.toLocaleLowerCase('nb-NO')).toContain(activity.municipality.toLocaleLowerCase('nb-NO'));
+      const description = document.querySelector('meta[name="description"]').content;
+      expect(description).toMatch(new RegExp(`^${activity.municipality} · `));
+      expect(descriptions.has(description)).toBe(false);
+      descriptions.add(description);
       expect(document.querySelector('.intro').textContent).toBe(activity.description);
       expect(document.querySelector('.detail > .action:last-child').getAttribute('href')).toBe(activity.url);
       expect([...document.querySelectorAll('.detail dt')].map(term => term.textContent)).not.toContain('Tilbud');
@@ -72,6 +79,14 @@ describe('forhåndsgenererte innholdssider', () => {
     ]);
     expect(trail.querySelector('[aria-current="page"]').textContent).toBe('Babysvømming på Havnaberg');
     expect(trail.querySelector('a[href="/steder/haugesund/"]')).not.toBeNull();
+    const breadcrumbs = JSON.parse(activity.querySelector('script[type="application/ld+json"]').textContent);
+    expect(breadcrumbs['@type']).toBe('BreadcrumbList');
+    expect(breadcrumbs.itemListElement.map(({ position, name, item }) => [position, name, item])).toEqual([
+      [1, 'Alle aktiviteter', 'https://example.no/'],
+      [2, 'Steder', 'https://example.no/steder/'],
+      [3, 'Haugesund', 'https://example.no/steder/haugesund/'],
+      [4, 'Babysvømming på Havnaberg', 'https://example.no/aktiviteter/babysvomming/'],
+    ]);
     const places = await documentFor('/steder/karmoy/');
     expect(places.querySelector('.page-nav [aria-current]')).toBeNull();
     expect(activity.querySelector('.page-nav [aria-current]')).toBeNull();
