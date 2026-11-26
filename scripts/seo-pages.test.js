@@ -26,7 +26,12 @@ describe('forhåndsgenererte innholdssider', () => {
       expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toBe(`https://example.no${path}`);
       expect(document.querySelector('h1').textContent).toBe(activity.title);
       expect(document.querySelector('.intro').textContent).toBe(activity.description);
-      expect(document.querySelector('.action').getAttribute('href')).toBe(activity.url);
+      expect(document.querySelector('.detail > .action:last-child').getAttribute('href')).toBe(activity.url);
+      expect([...document.querySelectorAll('.detail dt')].map(term => term.textContent)).not.toContain('Tilbud');
+      if (activity.age) {
+        const age = [...document.querySelectorAll('.detail dt')].find(term => term.textContent === 'Alder');
+        expect(age?.nextElementSibling.textContent).toBe(activity.age);
+      }
       expect(document.querySelector('.activity-back').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
       expect(document.querySelector('.activity-illustration svg').getAttribute('aria-hidden')).toBe('true');
       expect(document.querySelector('[data-activity-rating]').dataset.activityRating).toBe(activity.id);
@@ -47,6 +52,17 @@ describe('forhåndsgenererte innholdssider', () => {
     expect(href.searchParams.get('tilbud')).toBe('all');
     expect(href.searchParams.get('sted')).toBe('Karmøy');
     expect(karmoy.querySelector('.skip-link').getAttribute('href')).toBe('#innhold');
+  });
+
+  it.each([
+    ['padling-eivindsvatnet', 'Bestilling', 'Kreves'],
+    ['bowling-lucky-bowl', 'Bestilling', 'Valgfri'],
+    ['rush-trampolinepark', 'Bestilling', 'Sjekk med arrangøren'],
+    ['babysvomming-karmoyhallen', 'Påmelding', 'Kreves'],
+  ])('viser bestillingsinformasjon i praktisk informasjon for %s', async (id, label, value) => {
+    const document = await documentFor(`/aktiviteter/${id}/`);
+    const field = [...document.querySelectorAll('.detail dt')].find(term => term.textContent === label);
+    expect(field?.nextElementSibling.textContent).toBe(value);
   });
   it('viser en tydelig sti og markerer riktig navigasjon på underliggende sider', async () => {
     const activity = await documentFor('/aktiviteter/babysvomming/');
@@ -98,13 +114,17 @@ describe('forhåndsgenererte innholdssider', () => {
     expect(filterUrl.searchParams.get('permisjon')).toBe('1');
   });
 
-  it('har samme navigasjon på personvernsiden og de øvrige innholdssidene', async () => {
+  it('deler hovednavigasjon og utelater personvernlenken på selve personvernsiden', async () => {
     const privacy = new DOMParser().parseFromString(await readFile('public/personvern/index.html', 'utf8'), 'text/html');
     const activity = await documentFor('/aktiviteter/babysvomming/');
     const links = (doc, selector) => [...doc.querySelectorAll(selector)].map(a => [a.textContent.trim(), a.getAttribute('href')]);
     expect(links(privacy, '.page-nav a')).toEqual(links(activity, '.page-nav a'));
-    expect(links(privacy, '.site-footer a')).toEqual(links(activity, '.site-footer a'));
-    expect(privacy.querySelector('.site-name img').getAttribute('src')).toBe('/logo.png');
+    expect(privacy.querySelector('.site-footer a[href="/personvern"]')).toBeNull();
+    expect(activity.querySelector('.site-footer a[href="/personvern"]')).not.toBeNull();
+    for (const page of [privacy, activity]) {
+      expect(page.querySelector('.site-name img').getAttribute('src')).toBe('/logo.svg');
+      expect(page.querySelector('link[rel="icon"][type="image/svg+xml"]').getAttribute('href')).toBe('/favicon-kysttur.svg?v=3');
+    }
     expect(privacy.querySelector('.activity-back').getAttribute('href')).toBe('/?tilbud=all#aktiviteter');
     expect(privacy.querySelector('.site-footer img')).toBeNull();
     expect(privacy.querySelector('script[src="/analytics-consent.js"]')).not.toBeNull();

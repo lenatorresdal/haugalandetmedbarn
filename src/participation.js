@@ -1,19 +1,25 @@
 export const participationTypes = {
-  planned: { label: "Under planlegging", view: "courses" },
-  open: { label: "Åpent tilbud", view: "experiences" },
-  booking: { label: "Bestill besøk", view: "experiences" },
-  bookingSession: { label: "Bestill time", view: "experiences" },
-  course: { label: "Kurs med påmelding", view: "courses" },
-  signup: { label: "Påmelding", view: "courses" },
-  check: { label: "Sjekk påmelding", view: "courses" },
+  planned: { view: "courses" },
+  open: { view: "experiences" },
+  booking: { view: "experiences", booking: "Sjekk med arrangøren" },
+  bookingOptional: { view: "experiences", booking: "Valgfri" },
+  bookingRequired: { view: "experiences", booking: "Kreves" },
+  bookingSession: { view: "experiences", booking: "Bestill time hos arrangøren" },
+  course: { view: "courses", registration: "Kreves" },
+  signup: { view: "courses", registration: "Kreves" },
+  ticketed: { view: "courses", ticket: "Kreves" },
+  check: { view: "courses", registration: "Sjekk med arrangøren" },
 };
 
 export const activityViews = [
-  { value: "experiences", label: "Opplevelser og åpne tilbud" },
+  { value: "all", label: "Alle aktiviteter" },
+  { value: "experiences", label: "Opplevelser" },
   { value: "courses", label: "Kurs og påmelding" },
-  { value: "all", label: "Alle tilbud" },
 ];
 
 export function matchesView(activity, view) {
-  return view === "all" || participationTypes[activity.participation].view === view;
+  const activityView = activity.category === "Trening med baby" && activity.id !== "barselklatring-haugalandsveggen"
+    ? "courses"
+    : participationTypes[activity.participation].view;
+  return view === "all" || activityView === view;
 }

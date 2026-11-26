@@ -2,6 +2,7 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ActivityCard from './ActivityCard.jsx';
+import { activities } from '../activities.js';
 
 afterEach(cleanup);
 
@@ -15,10 +16,17 @@ it('viser nøkkelinformasjon og lenker direkte til aktivitetens side', () => {
   render(<ActivityCard activity={activity} saved={false} onToggleFavorite={() => {}} />);
   const card = screen.getByRole('article');
   expect(within(card).getByText('Alder: Alle aldre')).toBeTruthy();
+  expect(card.querySelector('.participation')).toBeNull();
   expect(within(card).queryByText('Gratis')).toBeNull();
   expect(within(card).getByText(/Tursted · Adresse 1/)).toBeTruthy();
   expect(within(card).getByRole('link', { name: 'Familietur' }).getAttribute('href')).toBe('/aktiviteter/first/');
   expect(card.querySelector('details')).toBeNull();
+});
+
+it.each(['padling-eivindsvatnet', 'bowling-lucky-bowl'])('viser kortet for %s uten bestillingsfelt', (id) => {
+  const activity = activities.find(item => item.id === id);
+  render(<ActivityCard activity={activity} saved={false} onToggleFavorite={() => {}} />);
+  expect(screen.getByRole('article').querySelector('.participation')).toBeNull();
 });
 
 

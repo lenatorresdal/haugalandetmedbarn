@@ -181,7 +181,7 @@ export const activities = [
   },
   {
     id: "bowling-lucky-bowl",
-    participation: "booking",
+    participation: "bookingOptional",
     age: "Fra 3 år med voksen",
     ageRange: { minMonths: 36, maxMonths: null },
     municipality: "Haugesund",
@@ -543,9 +543,9 @@ export const activities = [
     title: "Babysang i Rossabø kirke",
     category: "Sang & musikk",
     place: "Siloen i kontorbygget ved Rossabø kirke",
-    time: "Onsdager kl. 11.00 (ca. 6–12+ måneder) og kl. 12.00 (ca. 1–6 måneder)",
+    time: "Kurs over sju samlinger · onsdager kl. 11.00 (ca. 6–12+ måneder) og kl. 12.00 (ca. 1–6 måneder)",
     description:
-      "Sang, regler og rytmer for babyer og foreldre. Kurs over sju samlinger, med mulighet for nistelunsj og prat i kirkestuen. Ta med teppe til babyen. Påmelding hos menigheten.",
+      "Sang, regler og rytmer for babyer og foreldre, med mulighet for nistelunsj og prat i kirkestuen. Ta med teppe til babyen. Påmelding hos menigheten.",
     price: "200 kr per kurs · gratisplass kan velges ved behov",
     url: "https://www.kirken.no/nb-NO/fellesrad/haugesund-kirkelige-fellesrad/menigheter/rossaboe-menighet/virksomhetsomrader/barn-og-ungdom/0-5/babysang2/",
     link: "Info og påmelding",
@@ -1060,7 +1060,7 @@ export const activities = [
   },
   {
     id: "padling-eivindsvatnet",
-    participation: "booking",
+    participation: "bookingRequired",
     age: "Barn med voksen · avklar egnethet og veststørrelser med utleier",
     ageRange: { minMonths: 0, maxMonths: null },
     municipality: "Haugesund",
@@ -1168,7 +1168,7 @@ export const activities = [
     title: "Musikklek for baby i Tysvær",
     category: "Sang & musikk",
     place: "Musikkloftet · Tysværtunet, Aksdalsvegen 157",
-    time: "Oppstart 12. november 2026 kl. 12.00–13.00 · kurset varer i fire uker",
+    time: "Kontakt kulturskolen for neste oppstart og aktuelle kurstider",
     price: "480 kr for kurset",
     description:
       "Syng, lek og utforsk lyd og små instrumenter sammen med babyen. Etterpå kan dere ta en matpause og møte andre foreldre. Musikkloftet har heis og adkomst med vogn. Nye deltakere kan bli med dersom gruppen har ledig plass; kontakt kulturskolen for å avtale.",
@@ -1546,7 +1546,7 @@ export const activities = [
   },
   {
     id: "familieverksted-haugalandmuseet",
-    participation: "open",
+    participation: "ticketed",
     age: "Fra 5 år med voksen",
     ageRange: { minMonths: 60, maxMonths: null },
     municipality: "Haugesund",
@@ -1554,7 +1554,7 @@ export const activities = [
     category: "Kultur & historie",
     place: "Haugalandmuseets arenaer i Haugesund · se hvert arrangement",
     time: "Utvalgte dager gjennom året · se kalenderen",
-    price: "Pris og eventuell billettbestilling varierer med verkstedet",
+    price: "Se pris og billettsalg for hvert verksted",
     description:
       "Lag noe sammen på kreative verksteder med ulike kunstuttrykk, historiske tema og aktiviteter. Verkstedene passer fra 5 år og arrangeres blant annet på Karmsund folkemuseum, i Dokken, Haugesund billedgalleri og Wrangellhuset.",
     url: "https://haugalandmuseet.no/program/arsprogram/",

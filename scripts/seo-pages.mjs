@@ -47,7 +47,8 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     <meta property="og:description" content="${escape(description)}">
     ${socialUrl}
     <meta name="twitter:card" content="summary">
-    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-kysttur.png?v=3">
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon-kysttur.svg?v=3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${escape(contentStylesPath)}">
@@ -57,7 +58,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     <a class="skip-link" href="#innhold">Hopp til innhold</a>
     <div class="site-shell">
       <header class="site-header">
-        <a class="site-name" href="/" aria-label="Haugalandet med barn – til forsiden"><img src="/logo.png" alt="" width="48" height="48"><span>Haugalandet <span>med barn</span></span></a>
+        <a class="site-name" href="/" aria-label="Haugalandet med barn – til forsiden"><img src="/logo.svg" alt="" width="503" height="100"></a>
         <nav class="page-nav" aria-label="Hovednavigasjon">
           ${navItem('/?tilbud=all#aktiviteter', 'Alle aktiviteter')}
           ${navItem('/kurs/', 'Kurs og påmelding')}
@@ -66,7 +67,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
       </header>
       <main id="innhold" tabindex="-1">${breadcrumbHtml}${body}</main>
       <footer class="site-footer">
-        <nav aria-label="Lenker nederst på siden"><a href="/kurs/">Kurs og påmelding</a><a href="/steder/">Aktiviteter etter sted</a><a href="/personvern">Personvern</a><button type="button" class="footer-link-button" data-analytics-settings hidden>Analyseinnstillinger</button></nav>
+        <nav aria-label="Lenker nederst på siden"><a href="/personvern">Personvern</a><button type="button" class="footer-link-button" data-analytics-settings hidden>Analyseinnstillinger</button></nav>
       </footer>
     </div>
   </body>
@@ -79,8 +80,13 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
     const title = activity.title;
     const description = summary(`${activity.title} · ${activity.municipality}. ${activity.description}`);
     const locations = activity.locations ?? [{ place: activity.place, time: activity.time }];
+    const { booking, registration, ticket } = participationTypes[activity.participation];
     const row = (label, value) => value ? `<dt>${escape(label)}</dt><dd>${escape(value)}</dd>` : '';
-    const details = locations.map(location => row('Sted', location.place) + row('Tid', location.time)).join('') + row('Alder', activity.age) + row('Pris', activity.price) + row('Tilbud', participationTypes[activity.participation].label) + row('Tur', activity.distance) + row('Barnevogn', activity.stroller) + (activity.changingTable !== undefined ? row('Stellebord', activity.changingTable === null ? 'Ikke bekreftet' : activity.changingTable ? 'Ja' : 'Nei') : '');
+    const details = locations.map(location => row('Sted', location.place) + row('Tid', location.time)).join('')
+      + row('Alder', activity.age) + row('Pris', activity.price)
+      + row('Bestilling', booking) + row('Påmelding', registration) + row('Billett', ticket)
+      + row('Tur', activity.distance) + row('Barnevogn', activity.stroller)
+      + (activity.changingTable !== undefined ? row('Stellebord', activity.changingTable === null ? 'Ikke bekreftet' : activity.changingTable ? 'Ja' : 'Nei') : '');
     const related = activities.filter(a => a.id !== activity.id && a.municipality === activity.municipality && a.category === activity.category).slice(0, 3);
     const illustration = renderActivityArt ? renderActivityArt(activity) : '';
     const share = `<div class="share-activity" data-share-path="${escape(pathFor(activity))}"><button type="button" class="share-activity-button" aria-expanded="false" aria-controls="activity-share-panel" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>Del aktivitet</button><div class="share-activity-panel" id="activity-share-panel" hidden>
@@ -92,7 +98,7 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
                 </div>
                 <div class="share-activity-notice" role="status"></div>
               </div></div><script type="module" src="/del-aktivitet.js"></script>`;
-    const body = `<a class="activity-back" href="/?tilbud=all#aktiviteter">Tilbake til aktivitetsoversikten</a>
+    const body = `<a class="activity-back" href="/?tilbud=all#aktiviteter"><img src="/tilbakepil.svg" width="18" height="18" alt="">Tilbake til aktivitetsoversikten</a>
       <article class="activity-page">
         <header class="activity-hero" style="--activity-background: ${escape(activity.bg)}">
           <div class="activity-hero-heading">
@@ -115,9 +121,9 @@ export async function writeSeoPages(siteUrl, outputDirectory = "dist", renderAct
           <h2>Praktisk informasjon</h2>
           <dl>${details}</dl>
           <p>Sjekk oppdaterte tider, priser og eventuell påmelding hos arrangøren før dere drar.</p>
-          <a class="action" href="${escape(activity.url)}">${escape(activity.link)}</a>
           ${activity.email ? `<p>Spørsmål og påmelding: <a href="mailto:${escape(activity.email)}">${escape(activity.email)}</a></p>` : ''}
           ${activity.additionalLinks?.length ? `<ul>${activity.additionalLinks.map(link => `<li><a href="${escape(link.url)}">${escape(link.label)}</a></li>`).join('')}</ul>` : ''}
+          <a class="action" href="${escape(activity.url)}">${escape(activity.link)}</a>
         </section>
         ${ratingScript ? `<section class="detail activity-rating-section" aria-labelledby="activity-rating-title">
           <h2 id="activity-rating-title">Vurderinger</h2>

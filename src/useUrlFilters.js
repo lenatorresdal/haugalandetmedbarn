@@ -4,7 +4,7 @@ import { ageGroups } from './ageFilters.js';
 import { activityViews } from './participation.js';
 
 const defaultFilters = {
-  view: 'experiences', category: 'Alle aktiviteter', municipality: 'Alle steder',
+  view: 'all', category: 'Alle aktiviteter', municipality: 'Alle steder',
   onlySaved: false, parentalLeaveOnly: false, selectedAges: [],
 };
 const municipalities = new Set(activities.map(activity => activity.municipality));
@@ -16,20 +16,25 @@ function readFilters() {
   const requestedView = activityViews.some(view => view.value === params.get('tilbud'))
     ? params.get('tilbud')
     : defaultFilters.view;
+  const selectedAges = new Set(params.getAll('alder'));
+  if (selectedAges.has('toddler')) {
+    selectedAges.add('age-1');
+    selectedAges.add('age-2');
+  }
   return {
-    view: parentalLeaveOnly ? 'all' : requestedView,
+    view: requestedView,
     category: categories.includes(params.get('kategori')) ? params.get('kategori') : defaultFilters.category,
     municipality: municipalities.has(params.get('sted')) ? params.get('sted') : defaultFilters.municipality,
     onlySaved: params.get('favoritter') === '1',
     parentalLeaveOnly,
-    selectedAges: ageGroups.filter(group => group.value !== 'all' && params.getAll('alder').includes(group.value)).map(group => group.value),
+    selectedAges: ageGroups.filter(group => group.value !== 'all' && selectedAges.has(group.value)).map(group => group.value),
   };
 }
 
 function filterUrl(filters) {
   const url = new URL(window.location.href);
   for (const key of ['tilbud', 'kategori', 'sted', 'favoritter', 'permisjon', 'alder']) url.searchParams.delete(key);
-  if (!filters.parentalLeaveOnly && filters.view !== defaultFilters.view) url.searchParams.set('tilbud', filters.view);
+  if (filters.view !== defaultFilters.view) url.searchParams.set('tilbud', filters.view);
   if (filters.category !== defaultFilters.category) url.searchParams.set('kategori', filters.category);
   if (filters.municipality !== defaultFilters.municipality) url.searchParams.set('sted', filters.municipality);
   if (filters.onlySaved) url.searchParams.set('favoritter', '1');

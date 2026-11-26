@@ -1,7 +1,8 @@
 export const ageGroups = [
   { value: "all", label: "Alle aldre", minMonths: 0, maxMonths: Infinity },
   { value: "baby", label: "Under 1 år", minMonths: 0, maxMonths: 12 },
-  { value: "toddler", label: "1–2 år", minMonths: 12, maxMonths: 36 },
+  { value: "age-1", label: "1 år", minMonths: 12, maxMonths: 24 },
+  { value: "age-2", label: "2 år", minMonths: 24, maxMonths: 36 },
   { value: "preschool", label: "3–5 år", minMonths: 36, maxMonths: 72 },
   { value: "school", label: "6–9 år", minMonths: 72, maxMonths: 120 },
   { value: "older", label: "10 år og eldre", minMonths: 120, maxMonths: Infinity },

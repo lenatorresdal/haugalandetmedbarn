@@ -46,3 +46,10 @@ it('beholder valg ved ny innlasting og støtter tilbake og frem', async () => {
   });
   expect(window.location.search).toBe('');
 });
+
+it('beholder betydningen av eldre lenker med aldersvalget 1–2 år', () => {
+  window.history.replaceState(null, '', '/?alder=toddler&alder=age-2');
+  const { result } = renderHook(useUrlFilters);
+  expect(result.current[0].selectedAges).toEqual(['age-1', 'age-2']);
+  expect(new URLSearchParams(window.location.search).getAll('alder')).toEqual(['age-1', 'age-2']);
+});

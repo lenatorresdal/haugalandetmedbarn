@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import ActivityArt from './illustrations/ActivityArt.jsx';
 import HeartIcon from './icons/HeartIcon.jsx';
-import { participationTypes } from '../participation.js';
 
 export default function ActivityCard({ activity, saved, onToggleFavorite, initiallyOpen = false }) {
   const cardRef = useRef(null);
@@ -33,9 +32,6 @@ export default function ActivityCard({ activity, saved, onToggleFavorite, initia
           <div className="card-overview-content">
             <div className="category">{activity.category}</div>
             <h3><a className="card-link" href={`/aktiviteter/${activity.id}/`}>{activity.title}</a></h3>
-            <div className={`participation participation-${activity.participation}`}>
-              {participationTypes[activity.participation].label}
-            </div>
             {activity.age && <div className="activity-age">Alder: {activity.age}</div>}
             <div className="meta">
               {locations.map((location) => (
