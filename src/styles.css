@@ -7,7 +7,7 @@ button{cursor:pointer}
 .home-main{width:100%;display:flex;flex-direction:column;flex:1}
 .explore{padding:12px 0 40px}
 h2{font-size:31px;letter-spacing:-1px;margin:10px 0}
-.filter{background:transparent;border:1px solid #dfe3d6;border-radius:30px;padding:10px 18px;font-size:14px;min-height:44px;color:var(--ink)}
+.filter{background:transparent;border:1px solid var(--control-line);border-radius:30px;padding:10px 18px;font-size:14px;min-height:44px;color:var(--ink)}
 .filter.active{background:var(--green);border-color:var(--green);color:white}
 .count{font-size:14px;color:var(--muted);line-height:1.6}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
@@ -25,8 +25,8 @@ h2{font-size:31px;letter-spacing:-1px;margin:10px 0}
 .meta{font-size:14px;line-height:1.9;color:var(--muted)}
 .location-icon{width:15px;height:15px;vertical-align:-3px}
 .activity-location + .activity-location{margin-top:16px}
-.empty{grid-column:1/-1;padding:50px;text-align:center;border:1px dashed #c6cebd;border-radius:10px}
-.about{width:100%;align-self:center;margin:20px 0 28px;padding:16px 20px;background:#eaf0e3;border-radius:10px;text-align:center}
+.empty{grid-column:1/-1;padding:50px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.about{width:100%;align-self:center;margin:20px 0 28px;padding:16px 20px;background:#eaf0e3;border:1px solid var(--line);border-radius:10px;text-align:center}
 .about h2{font-size:18px;line-height:1.4;letter-spacing:-.4px;margin:0 0 6px}
 .about p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 auto 10px}
 .about .primary-button{font-size:14px;min-height:44px;padding:8px 14px}
@@ -49,7 +49,7 @@ h2{font-size:31px;letter-spacing:-1px;margin:10px 0}
 .contact{width:100%;max-width:680px;margin:32px auto 48px;scroll-margin-top:24px}
 .contact fieldset{border:0;padding:0;margin:0;min-width:0}
 .contact label{display:block;font-size:14px;font-weight:600;margin:24px 0 10px}
-.contact input,.contact select,.contact textarea{display:block;width:100%;min-height:48px;border:1px solid #7b8578;border-radius:8px;padding:12px;background:white;color:var(--ink);font:inherit;font-size:16px}
+.contact input,.contact select,.contact textarea{display:block;width:100%;min-height:48px;border:1px solid var(--control-line);border-radius:8px;padding:12px;background:white;color:var(--ink);font:inherit;font-size:16px}
 .contact textarea{resize:vertical}
 .contact .primary-button{margin-top:24px}
 .honeypot{display:none}
@@ -57,7 +57,7 @@ h2{font-size:31px;letter-spacing:-1px;margin:10px 0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}.card:hover{transform:none}}
 
 .filter-controls>label,.age-control{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:14px;font-weight:600}
-.filter-controls select{width:100%;min-height:48px;border:1px solid #7b8578;border-radius:8px;background:white;padding:10px 12px;font:inherit;color:var(--ink)}
+.filter-controls select{width:100%;min-height:48px;border:1px solid var(--control-line);border-radius:8px;background:white;padding:10px 12px;font:inherit;color:var(--ink)}
 .active-filters,.empty-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:0 0 24px}
 .active-filters .filter{background:var(--sand);border-color:var(--sand-accent);overflow-wrap:anywhere;max-width:100%}
 .reset-filters{border:0;background:transparent;color:var(--ink);text-decoration:underline;text-underline-offset:4px;min-height:44px;font:inherit;font-size:14px}
@@ -73,7 +73,7 @@ h2{font-size:31px;letter-spacing:-1px;margin:10px 0}
 .favorites-button{display:inline-flex;align-items:center;gap:8px;background:white}
 @media(max-width:580px){.results-actions{gap:8px;margin-left:0}}
 .age-picker{position:relative}
-.age-picker summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;border:1px solid #7b8578;border-radius:8px;background:white;padding:10px 12px;cursor:pointer;list-style:none}
+.age-picker summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;border:1px solid var(--control-line);border-radius:8px;background:white;padding:10px 12px;cursor:pointer;list-style:none}
 .age-picker summary::-webkit-details-marker{display:none}
 .age-options{position:absolute;top:calc(100% + 8px);left:0;z-index:10;width:320px;max-width:calc(100vw - 44px);margin:0;padding:16px;border:1px solid var(--line);border-radius:8px;background:white;box-shadow:0 8px 24px #253e3526}
 .age-options legend{float:left;width:100%;font-size:14px;margin-bottom:8px}
@@ -146,9 +146,6 @@ h2{font-size:31px;letter-spacing:-1px;margin:10px 0}
 .card .picture{z-index:2;pointer-events:none}
 .card .heart{pointer-events:auto}
 .card:hover .card-link,.card-link:focus-visible{text-decoration-color:currentColor}
-
-/* Readable contrast and usable controls at narrow widths and high zoom. */
-.filter{border-color:#788577}
 
 .age-options{max-height:min(70vh,32rem);max-height:min(70dvh,32rem);overflow:auto;overscroll-behavior:contain}
 @media(hover:hover){
